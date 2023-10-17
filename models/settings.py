@@ -76,9 +76,12 @@ class Settings(QObject):
             json.dump(self.to_dict(), file, indent=4)
 
     def load(self) -> None:
-        with open("settings.json", "r") as file:
-            data = json.load(file)
-            self.from_dict(data)
+        try:
+            with open("settings.json", "r") as file:
+                data = json.load(file)
+                self.from_dict(data)
+        except FileNotFoundError:
+            self.save()
 
     def to_dict(self) -> Dict[str, str]:
         return {
