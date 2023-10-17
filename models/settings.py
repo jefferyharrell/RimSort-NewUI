@@ -26,8 +26,6 @@ class Settings(QObject):
             Settings.SortingAlgorithm.ALPHABETICAL
         )
 
-        self.load()
-
     @property
     def game_folder(self) -> str:
         return self._game_folder
@@ -68,7 +66,6 @@ class Settings(QObject):
     def sorting_algorithm(self, value: "Settings.SortingAlgorithm") -> None:
         if self._sorting_algorithm != value:
             self._sorting_algorithm = value
-            self.save()
             self.settings_changed.emit()
 
     def save(self) -> None:
