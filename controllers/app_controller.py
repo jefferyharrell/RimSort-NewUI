@@ -10,9 +10,6 @@ from views.preferences_dialog import PreferencesDialog
 
 class AppController:
     def __init__(self) -> None:
-        if hasattr(self, "app"):
-            return
-
         self.app = QApplication(sys.argv)
 
         if SystemInfo.operating_system() == SystemInfo.OperatingSystem.WINDOWS:
