@@ -31,9 +31,7 @@ class MainWindow(QMainWindow):
         app_menu = self.menuBar().addMenu("AppName")  # This title is ignored on macOS
 
         settings_action = QAction("Settings", self)
-        settings_action.triggered.connect(
-            self.app_controller.show_settings_dialog
-        )
+        settings_action.triggered.connect(self.app_controller.show_settings_dialog)
         app_menu.addAction(settings_action)
         app_menu.addSeparator()
 
@@ -42,8 +40,6 @@ class MainWindow(QMainWindow):
 
         settings_action = QAction("Settings", self)
         settings_action.setShortcut(QKeySequence.StandardKey.Preferences)
-        settings_action.triggered.connect(
-            self.app_controller.show_settings_dialog
-        )
+        settings_action.triggered.connect(self.app_controller.show_settings_dialog)
         file_menu.addAction(settings_action)
         file_menu.addSeparator()

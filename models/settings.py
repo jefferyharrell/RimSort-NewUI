@@ -84,6 +84,4 @@ class Settings:
         self._config_folder = data["config_folder"]
         self._steam_mods_folder = data["steam_mods_folder"]
         self._local_mods_folder = data["local_mods_folder"]
-        self._sorting_algorithm = Settings.SortingAlgorithm[
-            data["sorting_algorithm"]
-        ]
+        self._sorting_algorithm = Settings.SortingAlgorithm[data["sorting_algorithm"]]
