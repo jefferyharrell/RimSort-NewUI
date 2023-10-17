@@ -57,6 +57,7 @@ class SettingsDialog(QDialog):
             self.stacked_widget, 8
         )  # 80% of the space
 
+        self._do_folders_page()
         self._do_sorting_page()
 
         self.list_widget.currentRowChanged.connect(self.stacked_widget.setCurrentIndex)
@@ -82,6 +83,17 @@ class SettingsDialog(QDialog):
 
         # Add button layout to the main layout
         main_layout.addLayout(button_layout)
+
+    def _do_folders_page(self) -> None:
+        self.list_widget.addItem("Folders")
+
+        page = QWidget(self)
+        page_layout = QVBoxLayout(page)
+        page_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+
+        page_layout.setContentsMargins(0, 0, 0, 0)
+
+        self.stacked_widget.addWidget(page)
 
     def _do_sorting_page(self) -> None:
         self.list_widget.addItem("Sorting")
