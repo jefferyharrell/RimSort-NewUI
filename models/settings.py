@@ -2,7 +2,7 @@ import json
 from enum import Enum, unique, auto
 from typing import Dict
 
-from PySide6.QtCore import QObject
+from PySide6.QtCore import QObject, Signal
 
 
 class Settings(QObject):
@@ -10,6 +10,9 @@ class Settings(QObject):
     class SortingAlgorithm(Enum):
         ALPHABETICAL = auto()
         TOPOLOGICAL = auto()
+        RADIOLOGICAL = auto()
+
+    settings_changed = Signal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -22,6 +25,8 @@ class Settings(QObject):
         self._sorting_algorithm: "Settings.SortingAlgorithm" = (
             Settings.SortingAlgorithm.ALPHABETICAL
         )
+
+        self.load()
 
     @property
     def game_folder(self) -> str:
@@ -61,7 +66,10 @@ class Settings(QObject):
 
     @sorting_algorithm.setter
     def sorting_algorithm(self, value: "Settings.SortingAlgorithm") -> None:
-        self._sorting_algorithm = value
+        if self._sorting_algorithm != value:
+            self._sorting_algorithm = value
+            self.save()
+            self.settings_changed.emit()
 
     def save(self) -> None:
         with open("settings.json", "w") as file:

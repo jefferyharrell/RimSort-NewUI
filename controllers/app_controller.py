@@ -28,7 +28,9 @@ class AppController(QObject):
         self.main_window = MainWindow(app_controller=self)
 
         self.settings = Settings()
-        self.settings_dialog = SettingsDialog(parent=self.main_window)
+        self.settings_dialog = SettingsDialog(
+            settings=self.settings, parent=self.main_window
+        )
 
     def run(self) -> int:
         self.main_window.show()
