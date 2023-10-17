@@ -3,10 +3,10 @@ import sys
 from PySide6.QtCore import Slot, QObject
 from PySide6.QtWidgets import QApplication
 
-from models.preferences import Preferences
+from models.settings import Settings
 from utilities.system_info import SystemInfo
 from views.main_window import MainWindow
-from views.preferences_dialog import PreferencesDialog
+from views.settings_dialog import SettingsDialog
 
 
 class AppController(QObject):
@@ -27,13 +27,13 @@ class AppController(QObject):
 
         self.main_window = MainWindow(app_controller=self)
 
-        self.preferences = Preferences()
-        self.preferences_dialog = PreferencesDialog(parent=self.main_window)
+        self.settings = Settings()
+        self.settings_dialog = SettingsDialog(parent=self.main_window)
 
     def run(self) -> int:
         self.main_window.show()
         return self.app.exec()
 
     @Slot()
-    def show_preferences_dialog(self) -> None:
-        self.preferences_dialog.exec()
+    def show_settings_dialog(self) -> None:
+        self.settings_dialog.exec()

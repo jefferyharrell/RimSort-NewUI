@@ -15,20 +15,14 @@ from PySide6.QtWidgets import (
 )
 
 
-if TYPE_CHECKING:
-    from controllers.app_controller import AppController
-
-
-class PreferencesDialog(QDialog):
-    def __init__(
-        self, parent: Optional[QWidget] = None
-    ) -> None:
+class SettingsDialog(QDialog):
+    def __init__(self, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
 
         close_shortcut = QShortcut(QKeySequence.StandardKey.Close, self)
         close_shortcut.activated.connect(self.close)
 
-        self.setWindowTitle("Preferences")
+        self.setWindowTitle("Settings")
 
         self.resize(768, 480)
 

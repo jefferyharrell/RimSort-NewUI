@@ -30,20 +30,20 @@ class MainWindow(QMainWindow):
     def _do_main_menu_macos(self) -> None:
         app_menu = self.menuBar().addMenu("AppName")  # This title is ignored on macOS
 
-        preferences_action = QAction("Preferences", self)
-        preferences_action.triggered.connect(
-            self.app_controller.show_preferences_dialog
+        settings_action = QAction("Settings", self)
+        settings_action.triggered.connect(
+            self.app_controller.show_settings_dialog
         )
-        app_menu.addAction(preferences_action)
+        app_menu.addAction(settings_action)
         app_menu.addSeparator()
 
     def _do_main_menu_non_macos(self) -> None:
         file_menu = self.menuBar().addMenu("File")
 
-        preferences_action = QAction("Preferences", self)
-        preferences_action.setShortcut(QKeySequence.StandardKey.Preferences)
-        preferences_action.triggered.connect(
-            self.app_controller.show_preferences_dialog
+        settings_action = QAction("Settings", self)
+        settings_action.setShortcut(QKeySequence.StandardKey.Preferences)
+        settings_action.triggered.connect(
+            self.app_controller.show_settings_dialog
         )
-        file_menu.addAction(preferences_action)
+        file_menu.addAction(settings_action)
         file_menu.addSeparator()

@@ -3,7 +3,7 @@ from enum import Enum, unique, auto
 from typing import Dict
 
 
-class Preferences:
+class Settings:
     @unique
     class SortingAlgorithm(Enum):
         ALPHABETICAL = auto()
@@ -17,8 +17,8 @@ class Preferences:
         self._steam_mods_folder: str = ""
         self._local_mods_folder: str = ""
 
-        self._sorting_algorithm: "Preferences.SortingAlgorithm" = (
-            Preferences.SortingAlgorithm.ALPHABETICAL
+        self._sorting_algorithm: "Settings.SortingAlgorithm" = (
+            Settings.SortingAlgorithm.ALPHABETICAL
         )
 
     @property
@@ -54,19 +54,19 @@ class Preferences:
         self._local_mods_folder = value
 
     @property
-    def sorting_algorithm(self) -> "Preferences.SortingAlgorithm":
+    def sorting_algorithm(self) -> "Settings.SortingAlgorithm":
         return self._sorting_algorithm
 
     @sorting_algorithm.setter
-    def sorting_algorithm(self, value: "Preferences.SortingAlgorithm") -> None:
+    def sorting_algorithm(self, value: "Settings.SortingAlgorithm") -> None:
         self._sorting_algorithm = value
 
     def save(self) -> None:
-        with open("preferences.json", "w") as file:
+        with open("settings.json", "w") as file:
             json.dump(self.to_dict(), file, indent=4)
 
     def load(self) -> None:
-        with open("preferences.json", "r") as file:
+        with open("settings.json", "r") as file:
             data = json.load(file)
             self.from_dict(data)
 
@@ -84,6 +84,6 @@ class Preferences:
         self._config_folder = data["config_folder"]
         self._steam_mods_folder = data["steam_mods_folder"]
         self._local_mods_folder = data["local_mods_folder"]
-        self._sorting_algorithm = Preferences.SortingAlgorithm[
+        self._sorting_algorithm = Settings.SortingAlgorithm[
             data["sorting_algorithm"]
         ]
