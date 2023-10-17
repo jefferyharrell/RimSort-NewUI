@@ -1,6 +1,6 @@
-from typing import Optional, TYPE_CHECKING
+from typing import Optional
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Slot
 from PySide6.QtGui import QShortcut, QKeySequence
 from PySide6.QtWidgets import (
     QDialog,
@@ -12,6 +12,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QGroupBox,
     QRadioButton,
+    QPushButton,
 )
 
 from models.settings import Settings
@@ -21,6 +22,7 @@ class SettingsDialog(QDialog):
     def __init__(self, settings: Settings, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
         self.settings = settings
+        settings.load()
 
         self.settings.settings_changed.connect(self.on_settings_changed)
 
@@ -31,22 +33,46 @@ class SettingsDialog(QDialog):
 
         self.resize(768, 480)
 
-        layout = QHBoxLayout(self)
+        list_and_stacked_layout = QHBoxLayout()
 
         self.list_widget = QListWidget(self)
-        layout.addWidget(self.list_widget)
+        list_and_stacked_layout.addWidget(self.list_widget)
 
         self.stacked_widget = QStackedWidget(self)
-        layout.addWidget(self.stacked_widget)
+        list_and_stacked_layout.addWidget(self.stacked_widget)
 
-        layout.setStretchFactor(self.list_widget, 2)  # 20% of the space
-        layout.setStretchFactor(self.stacked_widget, 8)  # 80% of the space
+        list_and_stacked_layout.setStretchFactor(
+            self.list_widget, 2
+        )  # 20% of the space
+        list_and_stacked_layout.setStretchFactor(
+            self.stacked_widget, 8
+        )  # 80% of the space
 
         self._do_sorting_page()
 
         self.list_widget.currentRowChanged.connect(self.stacked_widget.setCurrentIndex)
 
         self.list_widget.setCurrentRow(0)
+
+        # New layout for buttons
+        button_layout = QHBoxLayout()
+        button_layout.addStretch(1)
+
+        self.cancel_button = QPushButton("Cancel", self)
+        self.cancel_button.clicked.connect(self.close)
+        button_layout.addWidget(self.cancel_button)
+
+        self.apply_button = QPushButton("Apply", self)
+        self.apply_button.setDefault(True)
+        self.apply_button.clicked.connect(self._apply_settings)
+        button_layout.addWidget(self.apply_button)
+
+        # Main layout for the entire dialog
+        main_layout = QVBoxLayout(self)
+        main_layout.addLayout(list_and_stacked_layout)
+        main_layout.addLayout(button_layout)
+
+        self.setLayout(main_layout)
 
     def _do_sorting_page(self) -> None:
         self.list_widget.addItem("Sorting")
@@ -99,6 +125,10 @@ class SettingsDialog(QDialog):
         page_layout.addWidget(sorting_group)
 
         self.stacked_widget.addWidget(page)
+
+    def _apply_settings(self) -> None:
+        self.settings.save()
+        self.close()
 
     def _on_sorting_algorithm_button_toggled(self, checked: bool) -> None:
         if checked:
