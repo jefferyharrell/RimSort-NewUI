@@ -17,46 +17,48 @@ class Settings(QObject):
     def __init__(self) -> None:
         super().__init__()
 
-        self._game_folder: str = ""
-        self._config_folder: str = ""
-        self._steam_mods_folder: str = ""
-        self._local_mods_folder: str = ""
+        self._game_location: str = ""
+        self._config_folder_location: str = ""
+        self._steam_mods_folder_location: str = ""
+        self._local_mods_folder_location: str = ""
 
         self._sorting_algorithm: "Settings.SortingAlgorithm" = (
             Settings.SortingAlgorithm.ALPHABETICAL
         )
 
     @property
-    def game_folder(self) -> str:
-        return self._game_folder
+    def game_location(self) -> str:
+        return self._game_location
 
-    @game_folder.setter
-    def game_folder(self, value: str) -> None:
-        self._game_folder = value
-
-    @property
-    def config_folder(self) -> str:
-        return self._config_folder
-
-    @config_folder.setter
-    def config_folder(self, value: str) -> None:
-        self._config_folder = value
+    @game_location.setter
+    def game_location(self, value: str) -> None:
+        if self._game_location != value:
+            self._game_location = value
+            self.settings_changed.emit()
 
     @property
-    def steam_mods_folder(self) -> str:
-        return self._steam_mods_folder
+    def config_folder_location(self) -> str:
+        return self._config_folder_location
 
-    @steam_mods_folder.setter
-    def steam_mods_folder(self, value: str) -> None:
-        self._steam_mods_folder = value
+    @config_folder_location.setter
+    def config_folder_location(self, value: str) -> None:
+        self._config_folder_location = value
 
     @property
-    def local_mods_folder(self) -> str:
-        return self._local_mods_folder
+    def steam_mods_folder_location(self) -> str:
+        return self._steam_mods_folder_location
 
-    @local_mods_folder.setter
-    def local_mods_folder(self, value: str) -> None:
-        self._local_mods_folder = value
+    @steam_mods_folder_location.setter
+    def steam_mods_folder_location(self, value: str) -> None:
+        self._steam_mods_folder_location = value
+
+    @property
+    def local_mods_folder_location(self) -> str:
+        return self._local_mods_folder_location
+
+    @local_mods_folder_location.setter
+    def local_mods_folder_location(self, value: str) -> None:
+        self._local_mods_folder_location = value
 
     @property
     def sorting_algorithm(self) -> "Settings.SortingAlgorithm":
@@ -82,16 +84,16 @@ class Settings(QObject):
 
     def to_dict(self) -> Dict[str, str]:
         return {
-            "game_folder": self._game_folder,
-            "config_folder": self._config_folder,
-            "steam_mods_folder": self._steam_mods_folder,
-            "local_mods_folder": self._local_mods_folder,
+            "game_location": self._game_location,
+            "config_folder_location": self._config_folder_location,
+            "steam_mods_folder_location": self._steam_mods_folder_location,
+            "local_mods_folder_location": self._local_mods_folder_location,
             "sorting_algorithm": self._sorting_algorithm.name,
         }
 
     def from_dict(self, data: Dict[str, str]) -> None:
-        self._game_folder = data["game_folder"]
-        self._config_folder = data["config_folder"]
-        self._steam_mods_folder = data["steam_mods_folder"]
-        self._local_mods_folder = data["local_mods_folder"]
+        self._game_location = data["game_location"]
+        self._config_folder_location = data["config_folder_location"]
+        self._steam_mods_folder_location = data["steam_mods_folder_location"]
+        self._local_mods_folder_location = data["local_mods_folder_location"]
         self._sorting_algorithm = Settings.SortingAlgorithm[data["sorting_algorithm"]]
