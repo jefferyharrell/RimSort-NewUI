@@ -2,8 +2,10 @@ import json
 from enum import Enum, unique, auto
 from typing import Dict
 
+from PySide6.QtCore import QObject
 
-class Settings:
+
+class Settings(QObject):
     @unique
     class SortingAlgorithm(Enum):
         ALPHABETICAL = auto()
