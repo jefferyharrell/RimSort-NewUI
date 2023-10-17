@@ -3,7 +3,6 @@ import sys
 from PySide6.QtCore import Slot, QObject
 from PySide6.QtWidgets import QApplication
 
-from controllers.preferences_controller import PreferencesController
 from models.preferences import Preferences
 from utilities.system_info import SystemInfo
 from views.main_window import MainWindow
