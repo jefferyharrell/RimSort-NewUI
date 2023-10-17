@@ -1,6 +1,6 @@
 import sys
 
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, QObject
 from PySide6.QtWidgets import QApplication
 
 from utilities.system_info import SystemInfo
@@ -8,8 +8,10 @@ from views.main_window import MainWindow
 from views.preferences_dialog import PreferencesDialog
 
 
-class AppController:
+class AppController(QObject):
     def __init__(self) -> None:
+        super().__init__()
+
         self.app = QApplication(sys.argv)
 
         if SystemInfo.operating_system() == SystemInfo.OperatingSystem.WINDOWS:
@@ -31,5 +33,4 @@ class AppController:
 
     @Slot()
     def show_preferences_dialog(self) -> None:
-        """Slot to show the preferences dialog."""
         self.preferences_dialog.exec()
