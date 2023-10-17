@@ -3,6 +3,8 @@ import sys
 from PySide6.QtCore import Slot, QObject
 from PySide6.QtWidgets import QApplication
 
+from controllers.preferences_controller import PreferencesController
+from models.preferences import Preferences
 from utilities.system_info import SystemInfo
 from views.main_window import MainWindow
 from views.preferences_dialog import PreferencesDialog
@@ -24,8 +26,10 @@ class AppController(QObject):
         # Uncomment to debug the UI
         # self.app.setStyleSheet("QWidget { border: 1px solid red; }")
 
-        self.main_window = MainWindow(self)
-        self.preferences_dialog = PreferencesDialog(self, self.main_window)
+        self.main_window = MainWindow(app_controller=self)
+
+        self.preferences = Preferences()
+        self.preferences_dialog = PreferencesDialog(parent=self.main_window)
 
     def run(self) -> int:
         self.main_window.show()
