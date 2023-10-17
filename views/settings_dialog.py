@@ -161,6 +161,21 @@ class SettingsDialog(QDialog):
         )
         group_box_layout.addLayout(steam_mods_folder_location_layout)
 
+        # Local Mods Folder Location Row
+        local_mods_folder_location_label = QLabel(
+            "Local Mods Folder Location", group_box
+        )
+        group_box_layout.addWidget(local_mods_folder_location_label)
+        (
+            local_mods_folder_location_layout,
+            self.local_mods_folder_location,
+        ) = create_hbox_layout(
+            "Local Mods Folder Location",
+            self.settings.local_mods_folder_location,
+            self._on_choose_local_mods_folder_location,
+        )
+        group_box_layout.addLayout(local_mods_folder_location_layout)
+
         # Add the QGroupBox to the main QVBoxLayout
         page_layout.addWidget(group_box)
         self.stacked_widget.addWidget(page)
@@ -236,6 +251,11 @@ class SettingsDialog(QDialog):
         if steam_mods_folder_location != "":
             self.settings.steam_mods_folder_location = steam_mods_folder_location
 
+    def _on_choose_local_mods_folder_location(self) -> None:
+        local_mods_folder_location = QFileDialog.getExistingDirectory(self)
+        if local_mods_folder_location != "":
+            self.settings.local_mods_folder_location = local_mods_folder_location
+
     def _on_sorting_algorithm_button_toggled(self, checked: bool) -> None:
         if checked:
             if self.sender() == self.alphabetical_button:
@@ -251,7 +271,9 @@ class SettingsDialog(QDialog):
         self.steam_mods_folder_location.setText(
             self.settings.steam_mods_folder_location
         )
-        # self.local_mods_folder_location.setText(self.settings.local_mods_folder_location)
+        self.local_mods_folder_location.setText(
+            self.settings.local_mods_folder_location
+        )
 
         if self.settings.sorting_algorithm == Settings.SortingAlgorithm.ALPHABETICAL:
             self.alphabetical_button.setChecked(True)
