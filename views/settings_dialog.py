@@ -81,7 +81,7 @@ class SettingsDialog(QDialog):
         button_layout.addWidget(self.apply_button)
 
         # Add button layout to the main layout
-        self.layout().addLayout(button_layout)
+        main_layout.addLayout(button_layout)
 
     def _do_sorting_page(self) -> None:
         self.list_widget.addItem("Sorting")
