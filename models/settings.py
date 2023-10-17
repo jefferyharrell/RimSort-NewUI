@@ -42,7 +42,9 @@ class Settings(QObject):
 
     @config_folder_location.setter
     def config_folder_location(self, value: str) -> None:
-        self._config_folder_location = value
+        if self._config_folder_location != value:
+            self._config_folder_location = value
+            self.settings_changed.emit()
 
     @property
     def steam_mods_folder_location(self) -> str:
@@ -50,7 +52,9 @@ class Settings(QObject):
 
     @steam_mods_folder_location.setter
     def steam_mods_folder_location(self, value: str) -> None:
-        self._steam_mods_folder_location = value
+        if self._steam_mods_folder_location != value:
+            self._steam_mods_folder_location = value
+            self.settings_changed.emit()
 
     @property
     def local_mods_folder_location(self) -> str:
@@ -58,7 +62,9 @@ class Settings(QObject):
 
     @local_mods_folder_location.setter
     def local_mods_folder_location(self, value: str) -> None:
-        self._local_mods_folder_location = value
+        if self._local_mods_folder_location != value:
+            self._local_mods_folder_location = value
+            self.settings_changed.emit()
 
     @property
     def sorting_algorithm(self) -> "Settings.SortingAlgorithm":
