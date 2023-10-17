@@ -1,7 +1,6 @@
 from typing import Optional
 
-from PySide6.QtCore import Qt, Slot
-from PySide6.QtGui import QShortcut, QKeySequence
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog,
     QHBoxLayout,
@@ -22,17 +21,27 @@ class SettingsDialog(QDialog):
     def __init__(self, settings: Settings, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
         self.settings = settings
-        settings.load()
 
+        # Load settings and connect signals
+        self._setup_settings()
+
+        # Setup UI components
+        self._setup_ui()
+
+    def _setup_settings(self) -> None:
+        """Load settings and connect related signals."""
+        self.settings.load()
         self.settings.settings_changed.connect(self.on_settings_changed)
 
-        close_shortcut = QShortcut(QKeySequence.StandardKey.Close, self)
-        close_shortcut.activated.connect(self.close)
-
+    def _setup_ui(self) -> None:
+        """Setup main UI components."""
         self.setWindowTitle("Settings")
-
         self.resize(768, 480)
 
+        main_layout = QVBoxLayout(self)
+        self.setLayout(main_layout)
+
+        # List and Stacked Widgets layout
         list_and_stacked_layout = QHBoxLayout()
 
         self.list_widget = QListWidget(self)
@@ -51,28 +60,28 @@ class SettingsDialog(QDialog):
         self._do_sorting_page()
 
         self.list_widget.currentRowChanged.connect(self.stacked_widget.setCurrentIndex)
-
         self.list_widget.setCurrentRow(0)
 
-        # New layout for buttons
-        button_layout = QHBoxLayout()
-        button_layout.addStretch(1)
+        # Add the main layout to the dialog
+        main_layout.addLayout(list_and_stacked_layout)
 
+        # "Cancel" and "Apply" buttons layout
+        button_layout = QHBoxLayout()
+        button_layout.addStretch(1)  # Push buttons to the right
+
+        # Cancel button
         self.cancel_button = QPushButton("Cancel", self)
         self.cancel_button.clicked.connect(self.close)
         button_layout.addWidget(self.cancel_button)
 
+        # Apply button
         self.apply_button = QPushButton("Apply", self)
         self.apply_button.setDefault(True)
         self.apply_button.clicked.connect(self._apply_settings)
         button_layout.addWidget(self.apply_button)
 
-        # Main layout for the entire dialog
-        main_layout = QVBoxLayout(self)
-        main_layout.addLayout(list_and_stacked_layout)
-        main_layout.addLayout(button_layout)
-
-        self.setLayout(main_layout)
+        # Add button layout to the main layout
+        self.layout().addLayout(button_layout)
 
     def _do_sorting_page(self) -> None:
         self.list_widget.addItem("Sorting")
