@@ -21,11 +21,9 @@ if TYPE_CHECKING:
 
 class PreferencesDialog(QDialog):
     def __init__(
-        self, app_controller: "AppController", parent: Optional[QWidget] = None
+        self, parent: Optional[QWidget] = None
     ) -> None:
         super().__init__(parent)
-
-        self.app_controller = app_controller
 
         close_shortcut = QShortcut(QKeySequence.StandardKey.Close, self)
         close_shortcut.activated.connect(self.close)
@@ -56,9 +54,7 @@ class PreferencesDialog(QDialog):
 
         page = QWidget(self)
         page_layout = QVBoxLayout(page)
-        page_layout.setAlignment(
-            Qt.AlignmentFlag.AlignTop
-        )
+        page_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         page_layout.setContentsMargins(0, 0, 0, 0)
 
