@@ -51,11 +51,11 @@ class SettingsDialog(QDialog):
         self.setLayout(main_layout)
 
         # Initialize the QTabWidget
-        self.tab_widget = QTabWidget(self)
-        main_layout.addWidget(self.tab_widget)
+        self._tab_widget = QTabWidget(self)
+        main_layout.addWidget(self._tab_widget)
 
-        self._do_general_page()
-        self._do_sorting_page()
+        self._do_general_tab()
+        self._do_sorting_tab()
 
         # "Cancel" and "Apply" buttons layout
         button_layout = QHBoxLayout()
@@ -75,10 +75,10 @@ class SettingsDialog(QDialog):
         # Add button layout to the main layout
         main_layout.addLayout(button_layout)
 
-    def _do_general_page(self) -> None:
-        page = QWidget(self)
-        page_layout = QVBoxLayout(page)
-        page_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+    def _do_general_tab(self) -> None:
+        tab = QWidget(self)
+        tab_layout = QVBoxLayout(tab)
+        tab_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         # Helper function to create a QHBoxLayout with a label, spacer, and button
         def create_hbox_layout(
@@ -112,27 +112,27 @@ class SettingsDialog(QDialog):
         # Game Location Row
         game_location_label = QLabel("Game Location")
         game_location_label.setFont(self.emphasis_font)
-        page_layout.addWidget(game_location_label)
+        tab_layout.addWidget(game_location_label)
         game_location_layout, self.game_location = create_hbox_layout(
             "Game Location", self.settings.game_location, self._on_choose_game_location
         )
-        page_layout.addLayout(game_location_layout)
+        tab_layout.addLayout(game_location_layout)
 
         # Config Folder Location Row
         config_folder_location_label = QLabel("Config Folder Location")
         config_folder_location_label.setFont(self.emphasis_font)
-        page_layout.addWidget(config_folder_location_label)
+        tab_layout.addWidget(config_folder_location_label)
         config_folder_location_layout, self.config_folder_location = create_hbox_layout(
             "Config Folder Location",
             self.settings.config_folder_location,
             self._on_choose_config_folder_location,
         )
-        page_layout.addLayout(config_folder_location_layout)
+        tab_layout.addLayout(config_folder_location_layout)
 
         # Steam Mods Folder Location Row
         steam_mods_folder_location_label = QLabel("Steam Mods Folder Location")
         steam_mods_folder_location_label.setFont(self.emphasis_font)
-        page_layout.addWidget(steam_mods_folder_location_label)
+        tab_layout.addWidget(steam_mods_folder_location_label)
         (
             steam_mods_folder_location_layout,
             self.steam_mods_folder_location,
@@ -141,12 +141,12 @@ class SettingsDialog(QDialog):
             self.settings.steam_mods_folder_location,
             self._on_choose_steam_mods_folder_location,
         )
-        page_layout.addLayout(steam_mods_folder_location_layout)
+        tab_layout.addLayout(steam_mods_folder_location_layout)
 
         # Local Mods Folder Location Row
         local_mods_folder_location_label = QLabel("Local Mods Folder Location")
         local_mods_folder_location_label.setFont(self.emphasis_font)
-        page_layout.addWidget(local_mods_folder_location_label)
+        tab_layout.addWidget(local_mods_folder_location_label)
         (
             local_mods_folder_location_layout,
             self.local_mods_folder_location,
@@ -155,53 +155,53 @@ class SettingsDialog(QDialog):
             self.settings.local_mods_folder_location,
             self._on_choose_local_mods_folder_location,
         )
-        page_layout.addLayout(local_mods_folder_location_layout)
+        tab_layout.addLayout(local_mods_folder_location_layout)
 
         # Create a QHBoxLayout for the buttons
         buttons_layout = QHBoxLayout()
         buttons_layout.addStretch(1)
 
         # Create the "Clear" button and connect its signal
-        clear_button = QPushButton("Clear", page)
+        clear_button = QPushButton("Clear", tab)
         clear_button.clicked.connect(self._on_clear_button_clicked)
         buttons_layout.addWidget(clear_button)
 
         # Create the "Autodetect" button and connect its signal
-        autodetect_button = QPushButton("Autodetect", page)
+        autodetect_button = QPushButton("Autodetect", tab)
         autodetect_button.clicked.connect(self._on_autodetect_button_clicked)
         buttons_layout.addWidget(autodetect_button)
 
         # Add the buttons layout to the main QVBoxLayout
-        page_layout.addLayout(buttons_layout)
+        tab_layout.addLayout(buttons_layout)
 
-        self.tab_widget.addTab(page, "General")
+        self._tab_widget.addTab(tab, "General")
 
-    def _do_sorting_page(self) -> None:
-        page = QWidget(self)
-        page_layout = QVBoxLayout(page)
-        page_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+    def _do_sorting_tab(self) -> None:
+        tab = QWidget(self)
+        tab_layout = QVBoxLayout(tab)
+        tab_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         sorting_label = QLabel("Sort Mods")
         sorting_label.setFont(self.emphasis_font)
-        page_layout.addWidget(sorting_label)
+        tab_layout.addWidget(sorting_label)
 
         self.alphabetical_button = QRadioButton("Alphabetically")
         self.alphabetical_button.toggled.connect(
             self._on_sorting_algorithm_button_toggled
         )
-        page_layout.addWidget(self.alphabetical_button)
+        tab_layout.addWidget(self.alphabetical_button)
 
         self.topological_button = QRadioButton("Topologically")
         self.topological_button.toggled.connect(
             self._on_sorting_algorithm_button_toggled
         )
-        page_layout.addWidget(self.topological_button)
+        tab_layout.addWidget(self.topological_button)
 
         self.radiological_button = QRadioButton("Radiologically")
         self.radiological_button.toggled.connect(
             self._on_sorting_algorithm_button_toggled
         )
-        page_layout.addWidget(self.radiological_button)
+        tab_layout.addWidget(self.radiological_button)
 
         if self.settings.sorting_algorithm == Settings.SortingAlgorithm.ALPHABETICAL:
             self.alphabetical_button.setChecked(True)
@@ -210,7 +210,7 @@ class SettingsDialog(QDialog):
         elif self.settings.sorting_algorithm == Settings.SortingAlgorithm.RADIOLOGICAL:
             self.radiological_button.setChecked(True)
 
-        page_layout.addStretch(1)  # Push buttons to the right
+        tab_layout.addStretch(1)  # Push buttons to the right
 
         explanatory_text = (
             "Alphabetical sorting sorts mods alphabetically. "
@@ -219,9 +219,9 @@ class SettingsDialog(QDialog):
         )
         explanatory_label = QLabel(explanatory_text)
         explanatory_label.setWordWrap(True)
-        page_layout.addWidget(explanatory_label)
+        tab_layout.addWidget(explanatory_label)
 
-        self.tab_widget.addTab(page, "Sorting")
+        self._tab_widget.addTab(tab, "Sorting")
 
     def _apply_settings(self) -> None:
         self.settings.save()
