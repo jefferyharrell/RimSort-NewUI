@@ -1,8 +1,10 @@
 import json
 from enum import Enum, unique, auto
+from pathlib import Path
 from typing import Dict
 
 from PySide6.QtCore import QObject, Signal
+from platformdirs import user_data_dir
 
 
 class Settings(QObject):
@@ -16,6 +18,10 @@ class Settings(QObject):
 
     def __init__(self) -> None:
         super().__init__()
+
+        user_data_folder_location: Path = Path(user_data_dir("NewUI"))
+        user_data_folder_location.mkdir(exist_ok=True)
+        self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
 
         self._game_location: str = ""
         self._config_folder_location: str = ""
@@ -77,12 +83,12 @@ class Settings(QObject):
             self.settings_changed.emit()
 
     def save(self) -> None:
-        with open("/tmp/settings.json", "w") as file:
+        with open(str(self.settings_file_path), "w") as file:
             json.dump(self.to_dict(), file, indent=4)
 
     def load(self) -> None:
         try:
-            with open("/tmp/settings.json", "r") as file:
+            with open(str(self.settings_file_path), "r") as file:
                 data = json.load(file)
                 self.from_dict(data)
         except FileNotFoundError:
