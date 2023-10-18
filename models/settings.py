@@ -77,12 +77,12 @@ class Settings(QObject):
             self.settings_changed.emit()
 
     def save(self) -> None:
-        with open("settings.json", "w") as file:
+        with open("/tmp/settings.json", "w") as file:
             json.dump(self.to_dict(), file, indent=4)
 
     def load(self) -> None:
         try:
-            with open("settings.json", "r") as file:
+            with open("/tmp/settings.json", "r") as file:
                 data = json.load(file)
                 self.from_dict(data)
         except FileNotFoundError:
