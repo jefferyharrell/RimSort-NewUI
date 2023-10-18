@@ -14,6 +14,10 @@ class SettingsDialogController(QObject):
 
         self.settings = model
         self.settings_dialog = view
+
+        self.user_home_path: Path = Path.home()
+
+        # Global "Cancel" and "Apply" buttons
         self.settings_dialog.global_cancel_button.clicked.connect(
             self.settings_dialog.close
         )
@@ -92,25 +96,33 @@ class SettingsDialogController(QObject):
         self.settings_dialog.close()
 
     def _on_choose_game_location(self) -> None:
-        game_location, _ = QFileDialog.getOpenFileName(self.settings_dialog)
+        game_location, _ = QFileDialog.getOpenFileName(
+            parent=self.settings_dialog,
+            dir=str(self.user_home_path),
+        )
         if game_location != "":
             self.settings.game_location = game_location
 
     def _on_choose_config_folder_location(self) -> None:
-        config_folder_location = QFileDialog.getExistingDirectory(self.settings_dialog)
+        config_folder_location = QFileDialog.getExistingDirectory(
+            parent=self.settings_dialog,
+            dir=str(self.user_home_path),
+        )
         if config_folder_location != "":
             self.settings.config_folder_location = config_folder_location
 
     def _on_choose_steam_mods_folder_location(self) -> None:
         steam_mods_folder_location = QFileDialog.getExistingDirectory(
-            self.settings_dialog
+            parent=self.settings_dialog,
+            dir=str(self.user_home_path),
         )
         if steam_mods_folder_location != "":
             self.settings.steam_mods_folder_location = steam_mods_folder_location
 
     def _on_choose_local_mods_folder_location(self) -> None:
         local_mods_folder_location = QFileDialog.getExistingDirectory(
-            self.settings_dialog
+            parent=self.settings_dialog,
+            dir=str(self.user_home_path),
         )
         if local_mods_folder_location != "":
             self.settings.local_mods_folder_location = local_mods_folder_location
