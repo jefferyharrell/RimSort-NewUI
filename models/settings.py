@@ -22,8 +22,11 @@ class Settings(QObject):
         user_data_folder_location: Path = Path(user_data_dir("NewUI"))
         user_data_folder_location.mkdir(parents=True, exist_ok=True)
         self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
-        print(f"Settings file path: {self.settings_file_path}")
 
+        self._set_default_values()
+
+    def _set_default_values(self) -> None:
+        # Default settings
         self._game_location: str = ""
         self._config_folder_location: str = ""
         self._steam_mods_folder_location: str = ""
