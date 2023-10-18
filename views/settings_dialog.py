@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Optional, Callable, Tuple
 
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QDialog,
     QHBoxLayout,
@@ -132,6 +133,9 @@ class SettingsDialog(QDialog):
 
         # Game Location Row
         game_location_label = QLabel("Game Location", group_box)
+        font = game_location_label.font()
+        font.setWeight(QFont.Weight.DemiBold)
+        game_location_label.setFont(font)
         group_box_layout.addWidget(game_location_label)
         game_location_layout, self.game_location = create_hbox_layout(
             "Game Location", self.settings.game_location, self._on_choose_game_location
@@ -140,6 +144,9 @@ class SettingsDialog(QDialog):
 
         # Config Folder Location Row
         config_folder_location_label = QLabel("Config Folder Location", group_box)
+        font = config_folder_location_label.font()
+        font.setWeight(QFont.Weight.DemiBold)
+        config_folder_location_label.setFont(font)
         group_box_layout.addWidget(config_folder_location_label)
         config_folder_location_layout, self.config_folder_location = create_hbox_layout(
             "Config Folder Location",
@@ -152,6 +159,9 @@ class SettingsDialog(QDialog):
         steam_mods_folder_location_label = QLabel(
             "Steam Mods Folder Location", group_box
         )
+        font = steam_mods_folder_location_label.font()
+        font.setWeight(QFont.Weight.DemiBold)
+        steam_mods_folder_location_label.setFont(font)
         group_box_layout.addWidget(steam_mods_folder_location_label)
         (
             steam_mods_folder_location_layout,
@@ -167,6 +177,9 @@ class SettingsDialog(QDialog):
         local_mods_folder_location_label = QLabel(
             "Local Mods Folder Location", group_box
         )
+        font = local_mods_folder_location_label.font()
+        font.setWeight(QFont.Weight.DemiBold)
+        local_mods_folder_location_label.setFont(font)
         group_box_layout.addWidget(local_mods_folder_location_label)
         (
             local_mods_folder_location_layout,
@@ -212,7 +225,10 @@ class SettingsDialog(QDialog):
         sorting_group = QGroupBox("", page)  # No title set
         group_layout = QVBoxLayout(sorting_group)
 
-        sorting_label = QLabel("Sort mods", sorting_group)
+        sorting_label = QLabel("Sort Mods", sorting_group)
+        font = sorting_label.font()
+        font.setWeight(QFont.Weight.DemiBold)
+        sorting_label.setFont(font)
         group_layout.addWidget(sorting_label)
 
         self.alphabetical_button = QRadioButton("Alphabetically", sorting_group)
