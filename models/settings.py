@@ -32,6 +32,8 @@ class Settings(QObject):
             Settings.SortingAlgorithm.ALPHABETICAL
         )
 
+        self._debug_logging: bool = False
+
     @property
     def game_location(self) -> str:
         return self._game_location
@@ -82,6 +84,16 @@ class Settings(QObject):
             self._sorting_algorithm = value
             self.settings_changed.emit()
 
+    @property
+    def debug_logging(self) -> bool:
+        return self._debug_logging
+
+    @debug_logging.setter
+    def debug_logging(self, value: bool) -> None:
+        if self._debug_logging != value:
+            self._debug_logging = value
+            self.settings_changed.emit()
+
     def save(self) -> None:
         with open(str(self.settings_file_path), "w") as file:
             json.dump(self.to_dict(), file, indent=4)
@@ -101,11 +113,38 @@ class Settings(QObject):
             "steam_mods_folder_location": self._steam_mods_folder_location,
             "local_mods_folder_location": self._local_mods_folder_location,
             "sorting_algorithm": self._sorting_algorithm.name,
+            "debug_logging": self._debug_logging,
         }
 
     def from_dict(self, data: Dict[str, str]) -> None:
-        self._game_location = data["game_location"]
-        self._config_folder_location = data["config_folder_location"]
-        self._steam_mods_folder_location = data["steam_mods_folder_location"]
-        self._local_mods_folder_location = data["local_mods_folder_location"]
-        self._sorting_algorithm = Settings.SortingAlgorithm[data["sorting_algorithm"]]
+        try:
+            self._game_location = data["game_location"]
+        except KeyError:
+            self._game_location = ""
+
+        try:
+            self._config_folder_location = data["config_folder_location"]
+        except KeyError:
+            self._config_folder_location = ""
+
+        try:
+            self._steam_mods_folder_location = data["steam_mods_folder_location"]
+        except KeyError:
+            self._steam_mods_folder_location = ""
+
+        try:
+            self._local_mods_folder_location = data["local_mods_folder_location"]
+        except KeyError:
+            self._local_mods_folder_location = ""
+
+        try:
+            self._sorting_algorithm = Settings.SortingAlgorithm[
+                data["sorting_algorithm"]
+            ]
+        except KeyError:
+            self._sorting_algorithm = Settings.SortingAlgorithm.ALPHABETICAL
+
+        try:
+            self._debug_logging = data["debug_logging"]
+        except KeyError:
+            self._debug_logging = False

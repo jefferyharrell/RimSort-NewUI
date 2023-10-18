@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QApplication,
     QTabWidget,
+    QCheckBox,
 )
 
 from models.settings import Settings
@@ -56,6 +57,7 @@ class SettingsDialog(QDialog):
 
         self._do_general_tab()
         self._do_sorting_tab()
+        self._do_advanced_tab()
 
         # "Cancel" and "Apply" buttons layout
         button_layout = QHBoxLayout()
@@ -223,6 +225,17 @@ class SettingsDialog(QDialog):
 
         self._tab_widget.addTab(tab, "Sorting")
 
+    def _do_advanced_tab(self) -> None:
+        tab = QWidget(self)
+        tab_layout = QVBoxLayout(tab)
+        tab_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+
+        debug_checkbox = QCheckBox("Enable debug logging", tab)
+        debug_checkbox.toggled.connect(self._on_debug_logging_button_toggled)
+        tab_layout.addWidget(debug_checkbox)
+
+        self._tab_widget.addTab(tab, "Advanced")
+
     def _apply_settings(self) -> None:
         self.settings.save()
         self.close()
@@ -319,6 +332,12 @@ class SettingsDialog(QDialog):
                 self.settings.sorting_algorithm = Settings.SortingAlgorithm.TOPOLOGICAL
             elif self.sender() == self.radiological_button:
                 self.settings.sorting_algorithm = Settings.SortingAlgorithm.RADIOLOGICAL
+
+    def _on_debug_logging_button_toggled(self, checked: bool) -> None:
+        if checked:
+            self.settings.debug_logging = True
+        else:
+            self.settings.debug_logging = False
 
     def on_settings_changed(self) -> None:
         self.game_location.setText(self.settings.game_location)

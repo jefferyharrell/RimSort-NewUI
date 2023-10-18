@@ -31,6 +31,10 @@ class TestSettings(TestCase):
             self.prefs.sorting_algorithm, Settings.SortingAlgorithm.TOPOLOGICAL
         )
 
+    def test_debug_logging(self) -> None:
+        self.prefs.debug_logging = True
+        self.assertEqual(self.prefs.debug_logging, True)
+
     def test_save(self) -> None:
         m = mock_open()
         with patch("builtins.open", m):
