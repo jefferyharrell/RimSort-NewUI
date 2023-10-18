@@ -71,7 +71,7 @@ class SettingsDialog(QDialog):
         # Apply button
         self.apply_button = QPushButton("Apply", self)
         self.apply_button.setDefault(True)
-        self.apply_button.clicked.connect(self._apply_settings)
+        self.apply_button.clicked.connect(self._on_apply_button_clicked)
         button_layout.addWidget(self.apply_button)
 
         # Add button layout to the main layout
@@ -236,7 +236,7 @@ class SettingsDialog(QDialog):
 
         self._tab_widget.addTab(tab, "Advanced")
 
-    def _apply_settings(self) -> None:
+    def _on_apply_button_clicked(self) -> None:
         self.settings.save()
         self.close()
 
