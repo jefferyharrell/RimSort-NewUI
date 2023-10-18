@@ -118,33 +118,33 @@ class Settings(QObject):
 
     def from_dict(self, data: Dict[str, str]) -> None:
         try:
-            self._game_location = data["game_location"]
+            self.game_location = data["game_location"]
         except KeyError:
-            self._game_location = ""
+            self.game_location = ""
 
         try:
-            self._config_folder_location = data["config_folder_location"]
+            self.config_folder_location = data["config_folder_location"]
         except KeyError:
-            self._config_folder_location = ""
+            self.config_folder_location = ""
 
         try:
-            self._steam_mods_folder_location = data["steam_mods_folder_location"]
+            self.steam_mods_folder_location = data["steam_mods_folder_location"]
         except KeyError:
-            self._steam_mods_folder_location = ""
+            self.steam_mods_folder_location = ""
 
         try:
-            self._local_mods_folder_location = data["local_mods_folder_location"]
+            self.local_mods_folder_location = data["local_mods_folder_location"]
         except KeyError:
-            self._local_mods_folder_location = ""
+            self.local_mods_folder_location = ""
 
         try:
-            self._sorting_algorithm = Settings.SortingAlgorithm[
+            self.sorting_algorithm = Settings.SortingAlgorithm[
                 data["sorting_algorithm"]
             ]
         except KeyError:
-            self._sorting_algorithm = Settings.SortingAlgorithm.ALPHABETICAL
+            self.sorting_algorithm = Settings.SortingAlgorithm.ALPHABETICAL
 
         try:
-            self._debug_logging = data["debug_logging"]
+            self.debug_logging = data["debug_logging"]
         except KeyError:
-            self._debug_logging = False
+            self.debug_logging = False
