@@ -230,9 +230,11 @@ class SettingsDialog(QDialog):
         tab_layout = QVBoxLayout(tab)
         tab_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        debug_checkbox = QCheckBox("Enable debug logging", tab)
-        debug_checkbox.toggled.connect(self._on_debug_logging_button_toggled)
-        tab_layout.addWidget(debug_checkbox)
+        self.debug_logging_checkbox = QCheckBox("Enable debug logging", tab)
+        self.debug_logging_checkbox.toggled.connect(
+            self._on_debug_logging_button_toggled
+        )
+        tab_layout.addWidget(self.debug_logging_checkbox)
 
         self._tab_widget.addTab(tab, "Advanced")
 
@@ -353,3 +355,6 @@ class SettingsDialog(QDialog):
             self.alphabetical_button.setChecked(True)
         elif self.settings.sorting_algorithm == Settings.SortingAlgorithm.TOPOLOGICAL:
             self.topological_button.setChecked(True)
+
+        if self.settings.debug_logging:
+            self.debug_logging_checkbox.setChecked(True)
