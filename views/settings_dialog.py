@@ -210,9 +210,12 @@ class SettingsDialog(QDialog):
         elif self.settings.sorting_algorithm == Settings.SortingAlgorithm.RADIOLOGICAL:
             self.radiological_button.setChecked(True)
 
+        page_layout.addStretch(1)  # Push buttons to the right
+
         explanatory_text = (
             "Alphabetical sorting sorts mods alphabetically. "
-            "If I knew what topological sorting did, I'd explain it here."
+            "If I knew what topological sorting did, I'd explain it here. "
+            "Radiological sorting isn't a real thing. It's just there for demonstration purposes."
         )
         explanatory_label = QLabel(explanatory_text)
         explanatory_label.setWordWrap(True)
