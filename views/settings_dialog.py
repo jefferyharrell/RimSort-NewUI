@@ -91,7 +91,7 @@ class SettingsDialog(QDialog):
 
         self._tab_widget.addTab(tab, "General")
 
-    def _do_game_location_area(self, tab_layout):
+    def _do_game_location_area(self, tab_layout: QVBoxLayout) -> None:
         section_label = QLabel("Game Location")
         section_label.setFont(self.emphasis_font)
         tab_layout.addWidget(section_label)
@@ -116,7 +116,7 @@ class SettingsDialog(QDialog):
 
         tab_layout.addLayout(box_layout)
 
-    def _do_config_folder_location_area(self, tab_layout):
+    def _do_config_folder_location_area(self, tab_layout: QVBoxLayout) -> None:
         section_label = QLabel("Config Folder Location")
         section_label.setFont(self.emphasis_font)
         tab_layout.addWidget(section_label)
@@ -141,7 +141,7 @@ class SettingsDialog(QDialog):
 
         tab_layout.addLayout(box_layout)
 
-    def _do_steam_mods_folder_location_area(self, tab_layout):
+    def _do_steam_mods_folder_location_area(self, tab_layout: QVBoxLayout) -> None:
         section_label = QLabel("Steam Mods Folder Location")
         section_label.setFont(self.emphasis_font)
         tab_layout.addWidget(section_label)
@@ -166,7 +166,7 @@ class SettingsDialog(QDialog):
 
         tab_layout.addLayout(box_layout)
 
-    def _do_local_mods_folder_location_area(self, tab_layout):
+    def _do_local_mods_folder_location_area(self, tab_layout: QVBoxLayout) -> None:
         section_label = QLabel("Local Mods Folder Location")
         section_label.setFont(self.emphasis_font)
         tab_layout.addWidget(section_label)

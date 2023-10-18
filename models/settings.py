@@ -1,7 +1,7 @@
 import json
 from enum import Enum, unique, auto
 from pathlib import Path
-from typing import Dict
+from typing import Dict, Any
 
 from PySide6.QtCore import QObject, Signal
 from platformdirs import user_data_dir
@@ -22,6 +22,7 @@ class Settings(QObject):
         user_data_folder_location: Path = Path(user_data_dir("NewUI"))
         user_data_folder_location.mkdir(parents=True, exist_ok=True)
         self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
+        print(f"Settings file path: {self.settings_file_path}")
 
         self._game_location: str = ""
         self._config_folder_location: str = ""
@@ -106,7 +107,7 @@ class Settings(QObject):
         except FileNotFoundError:
             self.save()
 
-    def to_dict(self) -> Dict[str, str]:
+    def to_dict(self) -> Dict[str, Any]:
         return {
             "game_location": self._game_location,
             "config_folder_location": self._config_folder_location,
@@ -145,6 +146,6 @@ class Settings(QObject):
             self.sorting_algorithm = Settings.SortingAlgorithm.ALPHABETICAL
 
         try:
-            self.debug_logging = data["debug_logging"]
+            self.debug_logging = bool(data["debug_logging"])
         except KeyError:
             self.debug_logging = False
