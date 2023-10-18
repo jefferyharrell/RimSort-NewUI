@@ -20,7 +20,7 @@ class Settings(QObject):
         super().__init__()
 
         user_data_folder_location: Path = Path(user_data_dir("NewUI"))
-        user_data_folder_location.mkdir(exist_ok=True)
+        user_data_folder_location.mkdir(parents=True, exist_ok=True)
         self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
 
         self._game_location: str = ""
