@@ -134,7 +134,7 @@ class SettingsDialog(QDialog):
         # Game Location Row
         game_location_label = QLabel("Game Location", group_box)
         font = game_location_label.font()
-        font.setWeight(QFont.Weight.DemiBold)
+        font.setWeight(QFont.Weight.Bold)
         game_location_label.setFont(font)
         group_box_layout.addWidget(game_location_label)
         game_location_layout, self.game_location = create_hbox_layout(
@@ -145,7 +145,7 @@ class SettingsDialog(QDialog):
         # Config Folder Location Row
         config_folder_location_label = QLabel("Config Folder Location", group_box)
         font = config_folder_location_label.font()
-        font.setWeight(QFont.Weight.DemiBold)
+        font.setWeight(QFont.Weight.Bold)
         config_folder_location_label.setFont(font)
         group_box_layout.addWidget(config_folder_location_label)
         config_folder_location_layout, self.config_folder_location = create_hbox_layout(
@@ -160,7 +160,7 @@ class SettingsDialog(QDialog):
             "Steam Mods Folder Location", group_box
         )
         font = steam_mods_folder_location_label.font()
-        font.setWeight(QFont.Weight.DemiBold)
+        font.setWeight(QFont.Weight.Bold)
         steam_mods_folder_location_label.setFont(font)
         group_box_layout.addWidget(steam_mods_folder_location_label)
         (
@@ -178,7 +178,7 @@ class SettingsDialog(QDialog):
             "Local Mods Folder Location", group_box
         )
         font = local_mods_folder_location_label.font()
-        font.setWeight(QFont.Weight.DemiBold)
+        font.setWeight(QFont.Weight.Bold)
         local_mods_folder_location_label.setFont(font)
         group_box_layout.addWidget(local_mods_folder_location_label)
         (
@@ -227,7 +227,7 @@ class SettingsDialog(QDialog):
 
         sorting_label = QLabel("Sort Mods", sorting_group)
         font = sorting_label.font()
-        font.setWeight(QFont.Weight.DemiBold)
+        font.setWeight(QFont.Weight.Bold)
         sorting_label.setFont(font)
         group_layout.addWidget(sorting_label)
 
