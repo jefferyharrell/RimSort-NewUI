@@ -6,18 +6,16 @@ from PySide6.QtGui import QFont
 from PySide6.QtWidgets import (
     QDialog,
     QHBoxLayout,
-    QListWidget,
-    QStackedWidget,
     QLabel,
     QWidget,
     QVBoxLayout,
-    QGroupBox,
     QRadioButton,
     QPushButton,
     QFileDialog,
     QSpacerItem,
     QSizePolicy,
     QApplication,
+    QTabWidget,
 )
 
 from models.settings import Settings
@@ -52,30 +50,12 @@ class SettingsDialog(QDialog):
         main_layout = QVBoxLayout(self)
         self.setLayout(main_layout)
 
-        # List and Stacked Widgets layout
-        list_and_stacked_layout = QHBoxLayout()
-
-        self.list_widget = QListWidget(self)
-        list_and_stacked_layout.addWidget(self.list_widget)
-
-        self.stacked_widget = QStackedWidget(self)
-        list_and_stacked_layout.addWidget(self.stacked_widget)
-
-        list_and_stacked_layout.setStretchFactor(
-            self.list_widget, 2
-        )  # 20% of the space
-        list_and_stacked_layout.setStretchFactor(
-            self.stacked_widget, 8
-        )  # 80% of the space
+        # Initialize the QTabWidget
+        self.tab_widget = QTabWidget(self)
+        main_layout.addWidget(self.tab_widget)
 
         self._do_general_page()
         self._do_sorting_page()
-
-        self.list_widget.currentRowChanged.connect(self.stacked_widget.setCurrentIndex)
-        self.list_widget.setCurrentRow(0)
-
-        # Add the main layout to the dialog
-        main_layout.addLayout(list_and_stacked_layout)
 
         # "Cancel" and "Apply" buttons layout
         button_layout = QHBoxLayout()
@@ -96,22 +76,15 @@ class SettingsDialog(QDialog):
         main_layout.addLayout(button_layout)
 
     def _do_general_page(self) -> None:
-        self.list_widget.addItem("General")
-
         page = QWidget(self)
         page_layout = QVBoxLayout(page)
         page_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
-        page_layout.setContentsMargins(0, 0, 0, 0)
-
-        group_box = QGroupBox(page)
-        group_box_layout = QVBoxLayout(group_box)
-        group_box_layout.setSpacing(0)
 
         # Helper function to create a QHBoxLayout with a label, spacer, and button
         def create_hbox_layout(
             label_text: str, settings_value: str, button_callback: Callable[[], None]
         ) -> Tuple[QHBoxLayout, QLabel]:
-            label = QLabel(settings_value, group_box)
+            label = QLabel(settings_value)
             label.setWordWrap(True)
             font_metrics = label.fontMetrics()
             min_height = font_metrics.lineSpacing() * 3
@@ -122,7 +95,7 @@ class SettingsDialog(QDialog):
                 spacer_width, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum
             )
 
-            button = QPushButton("Choose…", group_box)
+            button = QPushButton("Choose…")
             button.setFixedWidth(button.sizeHint().width())
             button.clicked.connect(button_callback)
 
@@ -137,31 +110,29 @@ class SettingsDialog(QDialog):
             )  # Return the layout and label for further use if needed
 
         # Game Location Row
-        game_location_label = QLabel("Game Location", group_box)
+        game_location_label = QLabel("Game Location")
         game_location_label.setFont(self.emphasis_font)
-        group_box_layout.addWidget(game_location_label)
+        page_layout.addWidget(game_location_label)
         game_location_layout, self.game_location = create_hbox_layout(
             "Game Location", self.settings.game_location, self._on_choose_game_location
         )
-        group_box_layout.addLayout(game_location_layout)
+        page_layout.addLayout(game_location_layout)
 
         # Config Folder Location Row
-        config_folder_location_label = QLabel("Config Folder Location", group_box)
+        config_folder_location_label = QLabel("Config Folder Location")
         config_folder_location_label.setFont(self.emphasis_font)
-        group_box_layout.addWidget(config_folder_location_label)
+        page_layout.addWidget(config_folder_location_label)
         config_folder_location_layout, self.config_folder_location = create_hbox_layout(
             "Config Folder Location",
             self.settings.config_folder_location,
             self._on_choose_config_folder_location,
         )
-        group_box_layout.addLayout(config_folder_location_layout)
+        page_layout.addLayout(config_folder_location_layout)
 
         # Steam Mods Folder Location Row
-        steam_mods_folder_location_label = QLabel(
-            "Steam Mods Folder Location", group_box
-        )
+        steam_mods_folder_location_label = QLabel("Steam Mods Folder Location")
         steam_mods_folder_location_label.setFont(self.emphasis_font)
-        group_box_layout.addWidget(steam_mods_folder_location_label)
+        page_layout.addWidget(steam_mods_folder_location_label)
         (
             steam_mods_folder_location_layout,
             self.steam_mods_folder_location,
@@ -170,14 +141,12 @@ class SettingsDialog(QDialog):
             self.settings.steam_mods_folder_location,
             self._on_choose_steam_mods_folder_location,
         )
-        group_box_layout.addLayout(steam_mods_folder_location_layout)
+        page_layout.addLayout(steam_mods_folder_location_layout)
 
         # Local Mods Folder Location Row
-        local_mods_folder_location_label = QLabel(
-            "Local Mods Folder Location", group_box
-        )
+        local_mods_folder_location_label = QLabel("Local Mods Folder Location")
         local_mods_folder_location_label.setFont(self.emphasis_font)
-        group_box_layout.addWidget(local_mods_folder_location_label)
+        page_layout.addWidget(local_mods_folder_location_label)
         (
             local_mods_folder_location_layout,
             self.local_mods_folder_location,
@@ -186,10 +155,7 @@ class SettingsDialog(QDialog):
             self.settings.local_mods_folder_location,
             self._on_choose_local_mods_folder_location,
         )
-        group_box_layout.addLayout(local_mods_folder_location_layout)
-
-        # Add the QGroupBox to the main QVBoxLayout
-        page_layout.addWidget(group_box)
+        page_layout.addLayout(local_mods_folder_location_layout)
 
         # Create a QHBoxLayout for the buttons
         buttons_layout = QHBoxLayout()
@@ -208,41 +174,34 @@ class SettingsDialog(QDialog):
         # Add the buttons layout to the main QVBoxLayout
         page_layout.addLayout(buttons_layout)
 
-        self.stacked_widget.addWidget(page)
+        self.tab_widget.addTab(page, "General")
 
     def _do_sorting_page(self) -> None:
-        self.list_widget.addItem("Sorting")
-
         page = QWidget(self)
         page_layout = QVBoxLayout(page)
         page_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        page_layout.setContentsMargins(0, 0, 0, 0)
-
-        sorting_group = QGroupBox("", page)  # No title set
-        group_layout = QVBoxLayout(sorting_group)
-
-        sorting_label = QLabel("Sort Mods", sorting_group)
+        sorting_label = QLabel("Sort Mods")
         sorting_label.setFont(self.emphasis_font)
-        group_layout.addWidget(sorting_label)
+        page_layout.addWidget(sorting_label)
 
-        self.alphabetical_button = QRadioButton("Alphabetically", sorting_group)
+        self.alphabetical_button = QRadioButton("Alphabetically")
         self.alphabetical_button.toggled.connect(
             self._on_sorting_algorithm_button_toggled
         )
-        group_layout.addWidget(self.alphabetical_button)
+        page_layout.addWidget(self.alphabetical_button)
 
-        self.topological_button = QRadioButton("Topologically", sorting_group)
+        self.topological_button = QRadioButton("Topologically")
         self.topological_button.toggled.connect(
             self._on_sorting_algorithm_button_toggled
         )
-        group_layout.addWidget(self.topological_button)
+        page_layout.addWidget(self.topological_button)
 
-        self.radiological_button = QRadioButton("Radiologically", sorting_group)
+        self.radiological_button = QRadioButton("Radiologically")
         self.radiological_button.toggled.connect(
             self._on_sorting_algorithm_button_toggled
         )
-        group_layout.addWidget(self.radiological_button)
+        page_layout.addWidget(self.radiological_button)
 
         if self.settings.sorting_algorithm == Settings.SortingAlgorithm.ALPHABETICAL:
             self.alphabetical_button.setChecked(True)
@@ -255,13 +214,11 @@ class SettingsDialog(QDialog):
             "Alphabetical sorting sorts mods alphabetically. "
             "If I knew what topological sorting did, I'd explain it here."
         )
-        explanatory_label = QLabel(explanatory_text, sorting_group)
+        explanatory_label = QLabel(explanatory_text)
         explanatory_label.setWordWrap(True)
-        group_layout.addWidget(explanatory_label)
+        page_layout.addWidget(explanatory_label)
 
-        page_layout.addWidget(sorting_group)
-
-        self.stacked_widget.addWidget(page)
+        self.tab_widget.addTab(page, "Sorting")
 
     def _apply_settings(self) -> None:
         self.settings.save()
