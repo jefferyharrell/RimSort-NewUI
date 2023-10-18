@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from PySide6.QtCore import QObject
-from PySide6.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QFileDialog, QMessageBox
 
 from models.settings import Settings
 from utilities.system_info import SystemInfo
@@ -174,6 +174,17 @@ class SettingsDialogController(QObject):
             )
 
     def _on_general_clear_button_clicked(self) -> None:
+        message_box = QMessageBox(self.settings_dialog)
+        message_box.setWindowTitle("Clear all locations")
+        message_box.setText("Are you sure you want to clear all locations?")
+        message_box.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        message_box.setDefaultButton(QMessageBox.StandardButton.No)
+        pressed_button = message_box.exec()
+        if pressed_button == QMessageBox.StandardButton.No:
+            return
+
         self.settings.game_location = ""
         self.settings.config_folder_location = ""
         self.settings.steam_mods_folder_location = ""
