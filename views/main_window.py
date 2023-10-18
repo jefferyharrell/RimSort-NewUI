@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         file_menu = self.menuBar().addMenu("File")
 
         settings_action = QAction("Settings", self)
-        settings_action.setShortcut(QKeySequence.StandardKey.Preferences)
+        settings_action.setShortcut(QKeySequence("Ctrl+,"))
         settings_action.triggered.connect(self.app_controller.show_settings_dialog)
         file_menu.addAction(settings_action)
         file_menu.addSeparator()
