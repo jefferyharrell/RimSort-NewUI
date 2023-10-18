@@ -23,10 +23,9 @@ class Settings(QObject):
         user_data_folder_location.mkdir(parents=True, exist_ok=True)
         self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
 
-        self._set_default_values()
+        self._apply_default_settings()
 
-    def _set_default_values(self) -> None:
-        # Default settings
+    def _apply_default_settings(self) -> None:
         self._game_location: str = ""
         self._config_folder_location: str = ""
         self._steam_mods_folder_location: str = ""
@@ -37,6 +36,9 @@ class Settings(QObject):
         )
 
         self._debug_logging: bool = False
+
+    def apply_default_settings(self) -> None:
+        self._apply_default_settings()
 
     @property
     def game_location(self) -> str:

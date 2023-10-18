@@ -17,12 +17,18 @@ class SettingsDialogController(QObject):
 
         self.user_home_path: Path = Path.home()
 
-        # Global "Cancel" and "Apply" buttons
+        # Global buttons
+        self.settings_dialog.global_reset_to_defaults_button.clicked.connect(
+            self._on_global_reset_to_defaults_button_clicked
+        )
         self.settings_dialog.global_cancel_button.clicked.connect(
             self.settings_dialog.close
         )
         self.settings_dialog.global_apply_button.clicked.connect(
             self._on_global_apply_button_clicked
+        )
+        self.settings_dialog.global_ok_button.clicked.connect(
+            self._on_global_ok_button_clicked
         )
 
         # General tab
@@ -90,8 +96,29 @@ class SettingsDialogController(QObject):
         # Advanced tab
         if self.settings.debug_logging:
             self.settings_dialog.debug_logging_checkbox.setChecked(True)
+        else:
+            self.settings_dialog.debug_logging_checkbox.setChecked(False)
+
+    def _on_global_reset_to_defaults_button_clicked(self) -> None:
+        message_box = QMessageBox(self.settings_dialog)
+        message_box.setWindowTitle("Reset to defaults")
+        message_box.setText(
+            "Are you sure you want to reset all settings to their default values?"
+        )
+        message_box.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        message_box.setDefaultButton(QMessageBox.StandardButton.No)
+        pressed_button = message_box.exec()
+        if pressed_button == QMessageBox.StandardButton.No:
+            return
+
+        self.settings.apply_default_settings()
 
     def _on_global_apply_button_clicked(self) -> None:
+        self.settings.save()
+
+    def _on_global_ok_button_clicked(self) -> None:
         self.settings.save()
         self.settings_dialog.close()
 

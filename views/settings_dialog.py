@@ -47,6 +47,10 @@ class SettingsDialog(QDialog):
 
         # "Cancel" and "Apply" buttons layout
         button_layout = QHBoxLayout()
+
+        self.global_reset_to_defaults_button = QPushButton("Reset to Defaults", self)
+        button_layout.addWidget(self.global_reset_to_defaults_button)
+
         button_layout.addStretch(1)  # Push buttons to the right
 
         # Cancel button
@@ -55,8 +59,12 @@ class SettingsDialog(QDialog):
 
         # Apply button
         self.global_apply_button = QPushButton("Apply", self)
-        self.global_apply_button.setDefault(True)
         button_layout.addWidget(self.global_apply_button)
+
+        # OK button
+        self.global_ok_button = QPushButton("OK", self)
+        self.global_ok_button.setDefault(True)
+        button_layout.addWidget(self.global_ok_button)
 
         # Add button layout to the main layout
         main_layout.addLayout(button_layout)
