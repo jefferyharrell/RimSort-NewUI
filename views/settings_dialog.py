@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Optional, Callable, Tuple
 
 from PySide6.QtCore import Qt
@@ -18,6 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 from models.settings import Settings
+from utilities.system_info import SystemInfo
 
 
 class SettingsDialog(QDialog):
@@ -178,6 +180,24 @@ class SettingsDialog(QDialog):
 
         # Add the QGroupBox to the main QVBoxLayout
         page_layout.addWidget(group_box)
+
+        # Create a QHBoxLayout for the buttons
+        buttons_layout = QHBoxLayout()
+        buttons_layout.addStretch(1)
+
+        # Create the "Clear" button and connect its signal
+        clear_button = QPushButton("Clear", page)
+        clear_button.clicked.connect(self._on_clear_button_clicked)
+        buttons_layout.addWidget(clear_button)
+
+        # Create the "Autodetect" button and connect its signal
+        autodetect_button = QPushButton("Autodetect", page)
+        autodetect_button.clicked.connect(self._on_autodetect_button_clicked)
+        buttons_layout.addWidget(autodetect_button)
+
+        # Add the buttons layout to the main QVBoxLayout
+        page_layout.addLayout(buttons_layout)
+
         self.stacked_widget.addWidget(page)
 
     def _do_sorting_page(self) -> None:
@@ -255,6 +275,70 @@ class SettingsDialog(QDialog):
         local_mods_folder_location = QFileDialog.getExistingDirectory(self)
         if local_mods_folder_location != "":
             self.settings.local_mods_folder_location = local_mods_folder_location
+
+    def _on_autodetect_button_clicked(self) -> None:
+        if SystemInfo.operating_system() == SystemInfo.OperatingSystem.WINDOWS:
+            self._autodetect_locations_windows()
+        elif SystemInfo.operating_system() == SystemInfo.OperatingSystem.LINUX:
+            self._autodetect_locations_linux()
+        elif SystemInfo.operating_system() == SystemInfo.OperatingSystem.MACOS:
+            self._autodetect_locations_macos()
+
+    def _autodetect_locations_windows(self) -> None:
+        self.settings.game_location = ""
+        self.settings.config_folder_location = ""
+        self.settings.steam_mods_folder_location = ""
+        self.settings.local_mods_folder_location = ""
+
+    def _autodetect_locations_linux(self) -> None:
+        self.settings.game_location = ""
+        self.settings.config_folder_location = ""
+        self.settings.steam_mods_folder_location = ""
+        self.settings.local_mods_folder_location = ""
+
+    def _autodetect_locations_macos(self) -> None:
+        self.settings.game_location = ""
+        self.settings.config_folder_location = ""
+        self.settings.steam_mods_folder_location = ""
+        self.settings.local_mods_folder_location = ""
+
+        home_folder_path: Path = Path.home()
+        steam_folder_candidate_path: Path = (
+            home_folder_path / "Library/Application Support/Steam"
+        )
+        app_support_candidate_path: Path = Path.home() / "Library/Application Support"
+
+        game_location_candidate: Path = (
+            steam_folder_candidate_path / "steamapps/common/RimWorld/RimWorldMac.app"
+        )
+        if game_location_candidate.exists():
+            self.settings.game_location = str(game_location_candidate)
+
+        config_folder_location_candidate: Path = (
+            app_support_candidate_path / "RimWorld/Config"
+        )
+        if config_folder_location_candidate.exists():
+            self.settings.config_folder_location = str(config_folder_location_candidate)
+
+        steam_mods_folder_location_candidate: Path = (
+            steam_folder_candidate_path / "steamapps/workshop/content/294100"
+        )
+        if steam_mods_folder_location_candidate.exists():
+            self.settings.steam_mods_folder_location = str(
+                steam_mods_folder_location_candidate
+            )
+
+        local_mods_folder_location_candidate: Path = game_location_candidate / "Mods"
+        if local_mods_folder_location_candidate.exists():
+            self.settings.local_mods_folder_location = str(
+                local_mods_folder_location_candidate
+            )
+
+    def _on_clear_button_clicked(self) -> None:
+        self.settings.game_location = ""
+        self.settings.config_folder_location = ""
+        self.settings.steam_mods_folder_location = ""
+        self.settings.local_mods_folder_location = ""
 
     def _on_sorting_algorithm_button_toggled(self, checked: bool) -> None:
         if checked:
