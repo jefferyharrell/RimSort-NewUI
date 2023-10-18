@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QSpacerItem,
     QSizePolicy,
+    QApplication,
 )
 
 from models.settings import Settings
@@ -43,6 +44,10 @@ class SettingsDialog(QDialog):
         """Setup main UI components."""
         self.setWindowTitle("Settings")
         self.resize(768, 480)
+
+        self.default_font = QApplication.font()
+        self.emphasis_font = self.default_font
+        self.emphasis_font.setWeight(QFont.Weight.Bold)
 
         main_layout = QVBoxLayout(self)
         self.setLayout(main_layout)
@@ -133,9 +138,7 @@ class SettingsDialog(QDialog):
 
         # Game Location Row
         game_location_label = QLabel("Game Location", group_box)
-        font = game_location_label.font()
-        font.setWeight(QFont.Weight.Bold)
-        game_location_label.setFont(font)
+        game_location_label.setFont(self.emphasis_font)
         group_box_layout.addWidget(game_location_label)
         game_location_layout, self.game_location = create_hbox_layout(
             "Game Location", self.settings.game_location, self._on_choose_game_location
@@ -144,9 +147,7 @@ class SettingsDialog(QDialog):
 
         # Config Folder Location Row
         config_folder_location_label = QLabel("Config Folder Location", group_box)
-        font = config_folder_location_label.font()
-        font.setWeight(QFont.Weight.Bold)
-        config_folder_location_label.setFont(font)
+        config_folder_location_label.setFont(self.emphasis_font)
         group_box_layout.addWidget(config_folder_location_label)
         config_folder_location_layout, self.config_folder_location = create_hbox_layout(
             "Config Folder Location",
@@ -159,9 +160,7 @@ class SettingsDialog(QDialog):
         steam_mods_folder_location_label = QLabel(
             "Steam Mods Folder Location", group_box
         )
-        font = steam_mods_folder_location_label.font()
-        font.setWeight(QFont.Weight.Bold)
-        steam_mods_folder_location_label.setFont(font)
+        steam_mods_folder_location_label.setFont(self.emphasis_font)
         group_box_layout.addWidget(steam_mods_folder_location_label)
         (
             steam_mods_folder_location_layout,
@@ -177,9 +176,7 @@ class SettingsDialog(QDialog):
         local_mods_folder_location_label = QLabel(
             "Local Mods Folder Location", group_box
         )
-        font = local_mods_folder_location_label.font()
-        font.setWeight(QFont.Weight.Bold)
-        local_mods_folder_location_label.setFont(font)
+        local_mods_folder_location_label.setFont(self.emphasis_font)
         group_box_layout.addWidget(local_mods_folder_location_label)
         (
             local_mods_folder_location_layout,
@@ -226,9 +223,7 @@ class SettingsDialog(QDialog):
         group_layout = QVBoxLayout(sorting_group)
 
         sorting_label = QLabel("Sort Mods", sorting_group)
-        font = sorting_label.font()
-        font.setWeight(QFont.Weight.Bold)
-        sorting_label.setFont(font)
+        sorting_label.setFont(self.emphasis_font)
         group_layout.addWidget(sorting_label)
 
         self.alphabetical_button = QRadioButton("Alphabetically", sorting_group)
