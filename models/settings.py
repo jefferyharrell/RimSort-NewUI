@@ -39,6 +39,7 @@ class Settings(QObject):
 
     def apply_default_settings(self) -> None:
         self._apply_default_settings()
+        self.settings_changed.emit()
 
     @property
     def game_location(self) -> str:
