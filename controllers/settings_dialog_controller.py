@@ -22,7 +22,7 @@ class SettingsDialogController(QObject):
             self._on_global_reset_to_defaults_button_clicked
         )
         self.settings_dialog.global_cancel_button.clicked.connect(
-            self.settings_dialog.close
+            self._on_global_cancel_button_clicked
         )
         self.settings_dialog.global_apply_button.clicked.connect(
             self._on_global_apply_button_clicked
@@ -67,10 +67,15 @@ class SettingsDialogController(QObject):
             self._on_debug_logging_button_toggled
         )
 
-        self.settings.settings_changed.connect(self._on_settings_changed)
+        self.settings.changed.connect(self._on_settings_changed)
         self.settings.load()
+        self._update_view_from_model()
 
     def _on_settings_changed(self) -> None:
+        self._update_view_from_model()
+        self.settings_dialog.global_apply_button.setEnabled(True)
+
+    def _update_view_from_model(self) -> None:
         # General tab
         self.settings_dialog.game_location_value_label.setText(
             self.settings.game_location
@@ -115,12 +120,18 @@ class SettingsDialogController(QObject):
 
         self.settings.apply_default_settings()
 
+    def _on_global_cancel_button_clicked(self) -> None:
+        self.settings_dialog.close()
+        self.settings_dialog.global_apply_button.setEnabled(False)
+
     def _on_global_apply_button_clicked(self) -> None:
         self.settings.save()
+        self.settings_dialog.global_apply_button.setEnabled(False)
 
     def _on_global_ok_button_clicked(self) -> None:
         self.settings.save()
         self.settings_dialog.close()
+        self.settings_dialog.global_apply_button.setEnabled(False)
 
     def _on_choose_game_location(self) -> None:
         game_location, _ = QFileDialog.getOpenFileName(

@@ -14,7 +14,7 @@ class Settings(QObject):
         TOPOLOGICAL = auto()
         RADIOLOGICAL = auto()
 
-    settings_changed = Signal()
+    changed = Signal()
 
     def __init__(self) -> None:
         super().__init__()
@@ -39,7 +39,7 @@ class Settings(QObject):
 
     def apply_default_settings(self) -> None:
         self._apply_default_settings()
-        self.settings_changed.emit()
+        self.changed.emit()
 
     @property
     def game_location(self) -> str:
@@ -49,7 +49,7 @@ class Settings(QObject):
     def game_location(self, value: str) -> None:
         if self._game_location != value:
             self._game_location = value
-            self.settings_changed.emit()
+            self.changed.emit()
 
     @property
     def config_folder_location(self) -> str:
@@ -59,7 +59,7 @@ class Settings(QObject):
     def config_folder_location(self, value: str) -> None:
         if self._config_folder_location != value:
             self._config_folder_location = value
-            self.settings_changed.emit()
+            self.changed.emit()
 
     @property
     def steam_mods_folder_location(self) -> str:
@@ -69,7 +69,7 @@ class Settings(QObject):
     def steam_mods_folder_location(self, value: str) -> None:
         if self._steam_mods_folder_location != value:
             self._steam_mods_folder_location = value
-            self.settings_changed.emit()
+            self.changed.emit()
 
     @property
     def local_mods_folder_location(self) -> str:
@@ -79,7 +79,7 @@ class Settings(QObject):
     def local_mods_folder_location(self, value: str) -> None:
         if self._local_mods_folder_location != value:
             self._local_mods_folder_location = value
-            self.settings_changed.emit()
+            self.changed.emit()
 
     @property
     def sorting_algorithm(self) -> "Settings.SortingAlgorithm":
@@ -89,7 +89,7 @@ class Settings(QObject):
     def sorting_algorithm(self, value: "Settings.SortingAlgorithm") -> None:
         if self._sorting_algorithm != value:
             self._sorting_algorithm = value
-            self.settings_changed.emit()
+            self.changed.emit()
 
     @property
     def debug_logging(self) -> bool:
@@ -99,7 +99,7 @@ class Settings(QObject):
     def debug_logging(self, value: bool) -> None:
         if self._debug_logging != value:
             self._debug_logging = value
-            self.settings_changed.emit()
+            self.changed.emit()
 
     def save(self) -> None:
         with open(str(self.settings_file_path), "w") as file:
@@ -124,12 +124,12 @@ class Settings(QObject):
         }
 
     def from_dict(self, data: Dict[str, str]) -> None:
-        self.game_location = data.get("game_location", "")
-        self.config_folder_location = data.get("config_folder_location", "")
-        self.steam_mods_folder_location = data.get("steam_mods_folder_location", "")
-        self.local_mods_folder_location = data.get("local_mods_folder_location", "")
+        self._game_location = data.get("game_location", "")
+        self._config_folder_location = data.get("config_folder_location", "")
+        self._steam_mods_folder_location = data.get("steam_mods_folder_location", "")
+        self._local_mods_folder_location = data.get("local_mods_folder_location", "")
 
         sorting_algorithm_str = data.get("sorting_algorithm", "ALPHABETICAL")
-        self.sorting_algorithm = Settings.SortingAlgorithm[sorting_algorithm_str]
+        self._sorting_algorithm = Settings.SortingAlgorithm[sorting_algorithm_str]
 
-        self.debug_logging = bool(data.get("debug_logging", False))
+        self._debug_logging = bool(data.get("debug_logging", False))
