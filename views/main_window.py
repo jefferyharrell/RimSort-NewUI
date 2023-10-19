@@ -1,4 +1,3 @@
-from PySide6.QtCore import QStringListModel
 from PySide6.QtGui import QAction, QKeySequence, Qt
 from PySide6.QtWidgets import (
     QMainWindow,
