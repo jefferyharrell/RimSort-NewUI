@@ -2,19 +2,19 @@ import json
 from unittest import TestCase
 from unittest.mock import mock_open, patch
 
-from models.settings import Settings
+from models.settings_model import SettingsModel
 
 
 class TestSettings(TestCase):
     def setUp(self) -> None:
-        self.prefs = Settings()
+        self.prefs = SettingsModel()
 
     def test_apply_default_settings(self) -> None:
         self.prefs.game_location = "non_default_value"
         self.prefs.config_folder_location = "non_default_value"
         self.prefs.steam_mods_folder_location = "non_default_value"
         self.prefs.local_mods_folder_location = "non_default_value"
-        self.prefs.sorting_algorithm = Settings.SortingAlgorithm.TOPOLOGICAL
+        self.prefs.sorting_algorithm = SettingsModel.SortingAlgorithm.TOPOLOGICAL
         self.prefs.debug_logging = True
         self.prefs.apply_default_settings()
         self.assertEqual(self.prefs.game_location, "")
@@ -22,7 +22,7 @@ class TestSettings(TestCase):
         self.assertEqual(self.prefs.steam_mods_folder_location, "")
         self.assertEqual(self.prefs.local_mods_folder_location, "")
         self.assertEqual(
-            self.prefs.sorting_algorithm, Settings.SortingAlgorithm.ALPHABETICAL
+            self.prefs.sorting_algorithm, SettingsModel.SortingAlgorithm.ALPHABETICAL
         )
         self.assertEqual(self.prefs.debug_logging, False)
 
@@ -43,9 +43,9 @@ class TestSettings(TestCase):
         self.assertEqual(self.prefs.local_mods_folder_location, "test_path")
 
     def test_sorting_algorithm(self) -> None:
-        self.prefs.sorting_algorithm = Settings.SortingAlgorithm.TOPOLOGICAL
+        self.prefs.sorting_algorithm = SettingsModel.SortingAlgorithm.TOPOLOGICAL
         self.assertEqual(
-            self.prefs.sorting_algorithm, Settings.SortingAlgorithm.TOPOLOGICAL
+            self.prefs.sorting_algorithm, SettingsModel.SortingAlgorithm.TOPOLOGICAL
         )
 
     def test_debug_logging(self) -> None:
@@ -82,6 +82,6 @@ class TestSettings(TestCase):
             self.prefs.local_mods_folder_location, "mock_local_mods_folder_location"
         )
         self.assertEqual(
-            self.prefs.sorting_algorithm, Settings.SortingAlgorithm.ALPHABETICAL
+            self.prefs.sorting_algorithm, SettingsModel.SortingAlgorithm.ALPHABETICAL
         )
         self.assertEqual(self.prefs.debug_logging, False)

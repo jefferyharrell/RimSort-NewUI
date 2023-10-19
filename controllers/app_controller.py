@@ -4,7 +4,7 @@ from PySide6.QtCore import Slot, QObject
 from PySide6.QtWidgets import QApplication
 
 from controllers.settings_dialog_controller import SettingsDialogController
-from models.settings import Settings
+from models.settings_model import SettingsModel
 from utilities.system_info import SystemInfo
 from views.main_window import MainWindow
 from views.settings_dialog import SettingsDialog
@@ -28,7 +28,7 @@ class AppController(QObject):
 
         self.main_window = MainWindow(app_controller=self)
 
-        self.settings = Settings()
+        self.settings = SettingsModel()
         self.settings_dialog = SettingsDialog(parent=self.main_window)
         self.settings_dialog_controller = SettingsDialogController(
             model=self.settings, view=self.settings_dialog

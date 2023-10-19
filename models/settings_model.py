@@ -7,7 +7,7 @@ from PySide6.QtCore import QObject, Signal
 from platformdirs import user_data_dir
 
 
-class Settings(QObject):
+class SettingsModel(QObject):
     @unique
     class SortingAlgorithm(Enum):
         ALPHABETICAL = auto()
@@ -31,8 +31,8 @@ class Settings(QObject):
         self._steam_mods_folder_location: str = ""
         self._local_mods_folder_location: str = ""
 
-        self._sorting_algorithm: "Settings.SortingAlgorithm" = (
-            Settings.SortingAlgorithm.ALPHABETICAL
+        self._sorting_algorithm: "SettingsModel.SortingAlgorithm" = (
+            SettingsModel.SortingAlgorithm.ALPHABETICAL
         )
 
         self._debug_logging: bool = False
@@ -82,11 +82,11 @@ class Settings(QObject):
             self.changed.emit()
 
     @property
-    def sorting_algorithm(self) -> "Settings.SortingAlgorithm":
+    def sorting_algorithm(self) -> "SettingsModel.SortingAlgorithm":
         return self._sorting_algorithm
 
     @sorting_algorithm.setter
-    def sorting_algorithm(self, value: "Settings.SortingAlgorithm") -> None:
+    def sorting_algorithm(self, value: "SettingsModel.SortingAlgorithm") -> None:
         if self._sorting_algorithm != value:
             self._sorting_algorithm = value
             self.changed.emit()
@@ -130,6 +130,6 @@ class Settings(QObject):
         self._local_mods_folder_location = data.get("local_mods_folder_location", "")
 
         sorting_algorithm_str = data.get("sorting_algorithm", "ALPHABETICAL")
-        self._sorting_algorithm = Settings.SortingAlgorithm[sorting_algorithm_str]
+        self._sorting_algorithm = SettingsModel.SortingAlgorithm[sorting_algorithm_str]
 
         self._debug_logging = bool(data.get("debug_logging", False))
