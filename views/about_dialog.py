@@ -36,8 +36,6 @@ class AboutDialog(QWidget):
 
         self.setLayout(layout)
 
-        print(f"self.size(): {self.size()}")
-
     def showEvent(self, event):
         screen_geometry = self.screen().geometry()
         screen_center_x = screen_geometry.width() / 2
