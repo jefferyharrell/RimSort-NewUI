@@ -16,7 +16,6 @@ class AboutDialog(QWidget):
         # Create a QLabel for the copyright notice
         more_info_label = QLabel(
             "Version so-n-so whatever.0.0.0\n"
-            "\n"
             "© 2023 blah blah blah\n"
             "All rights reserved."
         )
@@ -24,22 +23,22 @@ class AboutDialog(QWidget):
 
         # Set the font to a smaller size
         small_font = more_info_label.font()
-        small_font.setPointSize(
-            small_font.pointSize() - 2
-        )  # reduce the font size by 2 points
+        small_font.setPointSize(small_font.pointSize() - 1)
         more_info_label.setFont(small_font)
 
         layout = QVBoxLayout(self)
+        layout.addStretch(1)
         layout.addWidget(label)
+        layout.addStretch(1)
         layout.addWidget(more_info_label)
+
+        self.setFixedSize(300, 200)
 
         self.setLayout(layout)
 
         print(f"self.size(): {self.size()}")
 
     def showEvent(self, event):
-        self.setFixedSize(self.size())
-
         screen_geometry = self.screen().geometry()
         screen_center_x = screen_geometry.width() / 2
         screen_center_y = screen_geometry.height() / 2
