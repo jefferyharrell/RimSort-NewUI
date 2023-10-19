@@ -39,16 +39,14 @@ class SettingsModel(QObject):
         self._apply_default_settings()
 
     def _apply_default_settings(self) -> None:
-        self._game_location: str = ""
-        self._config_folder_location: str = ""
-        self._steam_mods_folder_location: str = ""
-        self._local_mods_folder_location: str = ""
+        self._game_location = ""
+        self._config_folder_location = ""
+        self._steam_mods_folder_location = ""
+        self._local_mods_folder_location = ""
 
-        self._sorting_algorithm: "SettingsModel.SortingAlgorithm" = (
-            SettingsModel.SortingAlgorithm.ALPHABETICAL
-        )
+        self._sorting_algorithm = SettingsModel.SortingAlgorithm.ALPHABETICAL
 
-        self._debug_logging: bool = False
+        self._debug_logging = False
 
     def apply_default_settings(self) -> None:
         self._apply_default_settings()
