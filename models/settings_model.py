@@ -11,6 +11,7 @@ from platformdirs import user_data_dir
 class SettingsModel(QObject):
     @unique
     class SortingAlgorithm(Enum):
+        NONE = auto()
         ALPHABETICAL = auto()
         TOPOLOGICAL = auto()
         RADIOLOGICAL = auto()
@@ -23,6 +24,17 @@ class SettingsModel(QObject):
         user_data_folder_location: Path = Path(user_data_dir("NewUI"))
         user_data_folder_location.mkdir(parents=True, exist_ok=True)
         self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
+
+        self._game_location: str = str()
+        self._config_folder_location: str = str()
+        self._steam_mods_folder_location: str = str()
+        self._local_mods_folder_location: str = str()
+
+        self._sorting_algorithm: "SettingsModel.SortingAlgorithm" = (
+            SettingsModel.SortingAlgorithm.NONE
+        )
+
+        self._debug_logging: bool = False
 
         self._apply_default_settings()
 
