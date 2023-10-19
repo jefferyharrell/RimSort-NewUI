@@ -26,6 +26,11 @@ class MainWindowController(QObject):
         )
         self.main_window.exit_action.triggered.connect(self._on_exit_action_triggered)
 
+        # Connect the models to their views
+        self.main_window.inactive_mods_list_view.setModel(
+            self.main_window_model.inactive_mods_list_model
+        )
+
     # region SLots
 
     @Slot()

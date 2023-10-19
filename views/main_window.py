@@ -91,11 +91,6 @@ class MainWindow(QMainWindow):
 
         central_layout.addLayout(button_layout)
 
-        data = [f"Item {i}" for i in range(1, 101)]
-        model = QStringListModel(data)
-        self.inactive_mods_list_view.setModel(model)
-        self.active_mods_list_view.setModel(model)
-
     def _do_main_menu_macos(self) -> None:
         app_menu = self.menuBar().addMenu("AppName")  # This title is ignored on macOS
 
