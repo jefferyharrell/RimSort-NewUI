@@ -1,10 +1,9 @@
-import xml.etree.ElementTree as ET
-
 from pathlib import Path
 
 from PySide6.QtCore import QObject, Slot
 from PySide6.QtWidgets import QApplication
 from logger_tt import logger
+from lxml import etree
 
 from models.main_window_model import MainWindowModel
 from models.settings_model import SettingsModel
@@ -55,12 +54,15 @@ class MainWindowController(QObject):
 
                 if about_xml_path.exists():
                     try:
-                        tree = ET.parse(about_xml_path)
+                        # Parse the XML file using lxml
+                        tree = etree.parse(str(about_xml_path))
                         root = tree.getroot()
                         extracted_data = root.find("./name")
                         if extracted_data is not None:
                             result_list.append(extracted_data.text)
-                    except ET.ParseError:
+                    except (
+                        etree.XMLSyntaxError
+                    ):  # Catching XML parsing errors specific to lxml
                         logger.warning(f"Could not parse About.xml at {about_xml_path}")
 
         logger.info("Finished XML parsing; starting sorting")
