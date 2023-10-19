@@ -1,5 +1,3 @@
-from typing import Optional
-
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QFont, QFontMetrics
 from PySide6.QtWidgets import (
@@ -19,8 +17,10 @@ from PySide6.QtWidgets import (
 
 
 class SettingsDialog(QDialog):
-    def __init__(self, parent: Optional[QWidget] = None) -> None:
-        super().__init__(parent)
+    def __init__(
+        self,
+    ) -> None:
+        super().__init__()
         self._setup_ui()
 
     def _setup_ui(self) -> None:

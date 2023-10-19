@@ -1,9 +1,11 @@
 import sys
 
-from PySide6.QtCore import Slot, QObject
+from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QApplication
 
+from controllers.main_window_controller import MainWindowController
 from controllers.settings_dialog_controller import SettingsDialogController
+from models.main_window_model import MainWindowModel
 from models.settings_model import SettingsModel
 from utilities.system_info import SystemInfo
 from views.main_window import MainWindow
@@ -26,18 +28,20 @@ class AppController(QObject):
         # Uncomment to debug the UI
         # self.app.setStyleSheet("QWidget { border: 1px solid red; }")
 
-        self.main_window = MainWindow(app_controller=self)
-
         self.settings_model = SettingsModel()
-        self.settings_dialog = SettingsDialog(parent=self.main_window)
+        self.settings_dialog = SettingsDialog()
         self.settings_dialog_controller = SettingsDialogController(
             model=self.settings_model, view=self.settings_dialog
+        )
+
+        self.main_window_model = MainWindowModel()
+        self.main_window = MainWindow()
+        self.main_window_controller = MainWindowController(
+            model=self.main_window_model,
+            view=self.main_window,
+            settings_dialog=self.settings_dialog,
         )
 
     def run(self) -> int:
         self.main_window.show()
         return self.app.exec()
-
-    @Slot()
-    def show_settings_dialog(self) -> None:
-        self.settings_dialog.exec()

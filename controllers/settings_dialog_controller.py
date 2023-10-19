@@ -71,6 +71,9 @@ class SettingsDialogController(QObject):
         self.settings_model.load()
         self._update_view_from_model()
 
+    def on_settings_action_triggered(self) -> None:
+        self.settings_dialog.exec()
+
     def _on_settings_changed(self) -> None:
         self._update_view_from_model()
         self.settings_dialog.global_apply_button.setEnabled(True)

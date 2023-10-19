@@ -1,19 +1,12 @@
-from typing import TYPE_CHECKING
-
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import QMainWindow, QWidget
 
 from utilities.system_info import SystemInfo
 
-if TYPE_CHECKING:
-    from controllers.app_controller import AppController
-
 
 class MainWindow(QMainWindow):
-    def __init__(self, app_controller: "AppController") -> None:
+    def __init__(self) -> None:
         super().__init__()
-
-        self.app_controller: "AppController" = app_controller
 
         self.setWindowTitle("Main Window")
         self.setMinimumSize(1280, 720)
@@ -30,16 +23,30 @@ class MainWindow(QMainWindow):
     def _do_main_menu_macos(self) -> None:
         app_menu = self.menuBar().addMenu("AppName")  # This title is ignored on macOS
 
-        settings_action = QAction("Settings", self)
-        settings_action.triggered.connect(self.app_controller.show_settings_dialog)
-        app_menu.addAction(settings_action)
+        self.about_action = QAction("About", self)
+        app_menu.addAction(self.about_action)
         app_menu.addSeparator()
+
+        self.settings_action = QAction("Settings", self)
+        app_menu.addAction(self.settings_action)
+        app_menu.addSeparator()
+
+        self.exit_action = QAction("Quit", self)
+        app_menu.addAction(self.exit_action)
 
     def _do_main_menu_non_macos(self) -> None:
         file_menu = self.menuBar().addMenu("File")
 
-        settings_action = QAction("Settings", self)
-        settings_action.setShortcut(QKeySequence("Ctrl+,"))
-        settings_action.triggered.connect(self.app_controller.show_settings_dialog)
-        file_menu.addAction(settings_action)
+        self.about_action = QAction("About", self)
+
+        self.settings_action = QAction("Settings", self)
+        self.settings_action.setShortcut(QKeySequence("Ctrl+,"))
+        file_menu.addAction(self.settings_action)
         file_menu.addSeparator()
+
+        self.exit_action = QAction("Exit", self)
+        self.exit_action.setShortcut(QKeySequence("Ctrl+Q"))
+        file_menu.addAction(self.exit_action)
+
+        help_menu = self.menuBar().addMenu("Help")
+        help_menu.addAction(self.about_action)
