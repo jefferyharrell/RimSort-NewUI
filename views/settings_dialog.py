@@ -1,5 +1,4 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QFont, QFontMetrics
 from PySide6.QtWidgets import (
     QDialog,
     QHBoxLayout,
@@ -10,10 +9,11 @@ from PySide6.QtWidgets import (
     QPushButton,
     QSpacerItem,
     QSizePolicy,
-    QApplication,
     QTabWidget,
     QCheckBox,
 )
+
+from utilities.gui_info import GUIInfo
 
 
 class SettingsDialog(QDialog):
@@ -27,11 +27,6 @@ class SettingsDialog(QDialog):
         """Setup main UI components."""
         self.setWindowTitle("Settings")
         self.resize(800, 600)
-
-        self.default_font = QApplication.font()
-        self.emphasis_font = self.default_font
-        self.emphasis_font.setWeight(QFont.Weight.Bold)
-        self.default_font_line_height = QFontMetrics(self.default_font).lineSpacing()
 
         main_layout = QVBoxLayout(self)
         self.setLayout(main_layout)
@@ -102,13 +97,13 @@ class SettingsDialog(QDialog):
 
     def _do_game_location_area(self, tab_layout: QVBoxLayout) -> None:
         section_label = QLabel("Game Location")
-        section_label.setFont(self.emphasis_font)
+        section_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(section_label)
 
         self.game_location_value_label = QLabel()
         self.game_location_value_label.setWordWrap(True)
         self.game_location_value_label.setMinimumHeight(
-            self.default_font_line_height * 2
+            GUIInfo().default_font_line_height * 2
         )
 
         self.game_location_choose_button = QPushButton("Choose…")
@@ -127,13 +122,13 @@ class SettingsDialog(QDialog):
 
     def _do_config_folder_location_area(self, tab_layout: QVBoxLayout) -> None:
         section_label = QLabel("Config Folder Location")
-        section_label.setFont(self.emphasis_font)
+        section_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(section_label)
 
         self.config_folder_location_value_label = QLabel()
         self.config_folder_location_value_label.setWordWrap(True)
         self.config_folder_location_value_label.setMinimumHeight(
-            self.default_font_line_height * 2
+            GUIInfo().default_font_line_height * 2
         )
 
         self.config_folder_location_choose_button = QPushButton("Choose…")
@@ -152,13 +147,13 @@ class SettingsDialog(QDialog):
 
     def _do_steam_mods_folder_location_area(self, tab_layout: QVBoxLayout) -> None:
         section_label = QLabel("Steam Mods Folder Location")
-        section_label.setFont(self.emphasis_font)
+        section_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(section_label)
 
         self.steam_mods_folder_location_value_label = QLabel()
         self.steam_mods_folder_location_value_label.setWordWrap(True)
         self.steam_mods_folder_location_value_label.setMinimumHeight(
-            self.default_font_line_height * 2
+            GUIInfo().default_font_line_height * 2
         )
 
         self.steam_mods_folder_location_choose_button = QPushButton("Choose…")
@@ -177,13 +172,13 @@ class SettingsDialog(QDialog):
 
     def _do_local_mods_folder_location_area(self, tab_layout: QVBoxLayout) -> None:
         section_label = QLabel("Local Mods Folder Location")
-        section_label.setFont(self.emphasis_font)
+        section_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(section_label)
 
         self.local_mods_folder_location_value_label = QLabel()
         self.local_mods_folder_location_value_label.setWordWrap(True)
         self.local_mods_folder_location_value_label.setMinimumHeight(
-            self.default_font_line_height * 2
+            GUIInfo().default_font_line_height * 2
         )
 
         self.local_mods_folder_location_choose_button = QPushButton("Choose…")
@@ -206,7 +201,7 @@ class SettingsDialog(QDialog):
         tab_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         sorting_label = QLabel("Sort Mods")
-        sorting_label.setFont(self.emphasis_font)
+        sorting_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(sorting_label)
 
         self.alphabetical_button = QRadioButton("Alphabetically")
