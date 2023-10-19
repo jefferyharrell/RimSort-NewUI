@@ -1,9 +1,12 @@
+from typing import Optional
+
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QShowEvent
 from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QApplication
 
 
 class AboutDialog(QWidget):
-    def __init__(self, parent: QWidget = None) -> None:
+    def __init__(self, parent: Optional[QWidget] = None) -> None:
         super(AboutDialog, self).__init__(parent)
 
         label = QLabel("NewUI")
@@ -36,7 +39,7 @@ class AboutDialog(QWidget):
 
         self.setLayout(layout)
 
-    def showEvent(self, event):
+    def showEvent(self, event: QShowEvent) -> None:
         screen_geometry = self.screen().geometry()
         screen_center_x = screen_geometry.width() / 2
         screen_center_y = screen_geometry.height() / 2
