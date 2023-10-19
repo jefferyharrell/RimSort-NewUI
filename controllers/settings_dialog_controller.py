@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PySide6.QtCore import QObject
+from PySide6.QtCore import QObject, Slot
 from PySide6.QtWidgets import QFileDialog, QMessageBox
 
 from models.settings_model import SettingsModel
@@ -68,15 +68,139 @@ class SettingsDialogController(QObject):
         )
 
         self.settings_model.changed.connect(self._on_settings_changed)
+
         self.settings_model.load()
         self._update_view_from_model()
 
-    def on_settings_action_triggered(self) -> None:
-        self.settings_dialog.exec()
+    # region Slots
 
+    @Slot()
     def _on_settings_changed(self) -> None:
         self._update_view_from_model()
         self.settings_dialog.global_apply_button.setEnabled(True)
+
+    @Slot()
+    def _on_global_reset_to_defaults_button_clicked(self) -> None:
+        message_box = QMessageBox(self.settings_dialog)
+        message_box.setWindowTitle("Reset to defaults")
+        message_box.setText(
+            "Are you sure you want to reset all settings to their default values?"
+        )
+        message_box.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        message_box.setDefaultButton(QMessageBox.StandardButton.No)
+        pressed_button = message_box.exec()
+        if pressed_button == QMessageBox.StandardButton.No:
+            return
+
+        self.settings_model.apply_default_settings()
+
+    @Slot()
+    def _on_global_cancel_button_clicked(self) -> None:
+        self.settings_dialog.close()
+        self.settings_dialog.global_apply_button.setEnabled(False)
+
+    @Slot()
+    def _on_global_apply_button_clicked(self) -> None:
+        self.settings_model.save()
+        self.settings_dialog.global_apply_button.setEnabled(False)
+
+    @Slot()
+    def _on_global_ok_button_clicked(self) -> None:
+        self.settings_model.save()
+        self.settings_dialog.close()
+        self.settings_dialog.global_apply_button.setEnabled(False)
+
+    @Slot()
+    def _on_choose_game_location(self) -> None:
+        game_location, _ = QFileDialog.getOpenFileName(
+            parent=self.settings_dialog,
+            dir=str(self.user_home_path),
+        )
+        if game_location != "":
+            self.settings_model.game_location = game_location
+
+    @Slot()
+    def _on_choose_config_folder_location(self) -> None:
+        config_folder_location = QFileDialog.getExistingDirectory(
+            parent=self.settings_dialog,
+            dir=str(self.user_home_path),
+        )
+        if config_folder_location != "":
+            self.settings_model.config_folder_location = config_folder_location
+
+    @Slot()
+    def _on_choose_steam_mods_folder_location(self) -> None:
+        steam_mods_folder_location = QFileDialog.getExistingDirectory(
+            parent=self.settings_dialog,
+            dir=str(self.user_home_path),
+        )
+        if steam_mods_folder_location != "":
+            self.settings_model.steam_mods_folder_location = steam_mods_folder_location
+
+    @Slot()
+    def _on_choose_local_mods_folder_location(self) -> None:
+        local_mods_folder_location = QFileDialog.getExistingDirectory(
+            parent=self.settings_dialog,
+            dir=str(self.user_home_path),
+        )
+        if local_mods_folder_location != "":
+            self.settings_model.local_mods_folder_location = local_mods_folder_location
+
+    @Slot()
+    def _on_locations_autodetect_button_clicked(self) -> None:
+        if SystemInfo().operating_system == SystemInfo.OperatingSystem.WINDOWS:
+            self._autodetect_locations_windows()
+        elif SystemInfo().operating_system == SystemInfo.OperatingSystem.LINUX:
+            self._autodetect_locations_linux()
+        elif SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
+            self._autodetect_locations_macos()
+
+    @Slot()
+    def _on_locations_clear_button_clicked(self) -> None:
+        message_box = QMessageBox(self.settings_dialog)
+        message_box.setWindowTitle("Clear all locations")
+        message_box.setText("Are you sure you want to clear all locations?")
+        message_box.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        message_box.setDefaultButton(QMessageBox.StandardButton.No)
+        pressed_button = message_box.exec()
+        if pressed_button == QMessageBox.StandardButton.No:
+            return
+
+        self.settings_model.game_location = ""
+        self.settings_model.config_folder_location = ""
+        self.settings_model.steam_mods_folder_location = ""
+        self.settings_model.local_mods_folder_location = ""
+
+    @Slot()
+    def _on_sorting_algorithm_button_toggled(self, checked: bool) -> None:
+        if checked:
+            if self.sender() == self.settings_dialog.alphabetical_button:
+                self.settings_model.sorting_algorithm = (
+                    SettingsModel.SortingAlgorithm.ALPHABETICAL
+                )
+            elif self.sender() == self.settings_dialog.topological_button:
+                self.settings_model.sorting_algorithm = (
+                    SettingsModel.SortingAlgorithm.TOPOLOGICAL
+                )
+            elif self.sender() == self.settings_dialog.radiological_button:
+                self.settings_model.sorting_algorithm = (
+                    SettingsModel.SortingAlgorithm.RADIOLOGICAL
+                )
+
+    @Slot()
+    def _on_debug_logging_button_toggled(self, checked: bool) -> None:
+        if checked:
+            self.settings_model.debug_logging = True
+        else:
+            self.settings_model.debug_logging = False
+
+    # endregion
+
+    # region Private methods
 
     def _update_view_from_model(self) -> None:
         # Locations tab
@@ -115,75 +239,6 @@ class SettingsDialogController(QObject):
             self.settings_dialog.debug_logging_checkbox.setChecked(True)
         else:
             self.settings_dialog.debug_logging_checkbox.setChecked(False)
-
-    def _on_global_reset_to_defaults_button_clicked(self) -> None:
-        message_box = QMessageBox(self.settings_dialog)
-        message_box.setWindowTitle("Reset to defaults")
-        message_box.setText(
-            "Are you sure you want to reset all settings to their default values?"
-        )
-        message_box.setStandardButtons(
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
-        message_box.setDefaultButton(QMessageBox.StandardButton.No)
-        pressed_button = message_box.exec()
-        if pressed_button == QMessageBox.StandardButton.No:
-            return
-
-        self.settings_model.apply_default_settings()
-
-    def _on_global_cancel_button_clicked(self) -> None:
-        self.settings_dialog.close()
-        self.settings_dialog.global_apply_button.setEnabled(False)
-
-    def _on_global_apply_button_clicked(self) -> None:
-        self.settings_model.save()
-        self.settings_dialog.global_apply_button.setEnabled(False)
-
-    def _on_global_ok_button_clicked(self) -> None:
-        self.settings_model.save()
-        self.settings_dialog.close()
-        self.settings_dialog.global_apply_button.setEnabled(False)
-
-    def _on_choose_game_location(self) -> None:
-        game_location, _ = QFileDialog.getOpenFileName(
-            parent=self.settings_dialog,
-            dir=str(self.user_home_path),
-        )
-        if game_location != "":
-            self.settings_model.game_location = game_location
-
-    def _on_choose_config_folder_location(self) -> None:
-        config_folder_location = QFileDialog.getExistingDirectory(
-            parent=self.settings_dialog,
-            dir=str(self.user_home_path),
-        )
-        if config_folder_location != "":
-            self.settings_model.config_folder_location = config_folder_location
-
-    def _on_choose_steam_mods_folder_location(self) -> None:
-        steam_mods_folder_location = QFileDialog.getExistingDirectory(
-            parent=self.settings_dialog,
-            dir=str(self.user_home_path),
-        )
-        if steam_mods_folder_location != "":
-            self.settings_model.steam_mods_folder_location = steam_mods_folder_location
-
-    def _on_choose_local_mods_folder_location(self) -> None:
-        local_mods_folder_location = QFileDialog.getExistingDirectory(
-            parent=self.settings_dialog,
-            dir=str(self.user_home_path),
-        )
-        if local_mods_folder_location != "":
-            self.settings_model.local_mods_folder_location = local_mods_folder_location
-
-    def _on_locations_autodetect_button_clicked(self) -> None:
-        if SystemInfo().operating_system == SystemInfo.OperatingSystem.WINDOWS:
-            self._autodetect_locations_windows()
-        elif SystemInfo().operating_system == SystemInfo.OperatingSystem.LINUX:
-            self._autodetect_locations_linux()
-        elif SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
-            self._autodetect_locations_macos()
 
     def _autodetect_locations_windows(self) -> None:
         self.settings_model.game_location = ""
@@ -237,40 +292,4 @@ class SettingsDialogController(QObject):
                 local_mods_folder_location_candidate
             )
 
-    def _on_locations_clear_button_clicked(self) -> None:
-        message_box = QMessageBox(self.settings_dialog)
-        message_box.setWindowTitle("Clear all locations")
-        message_box.setText("Are you sure you want to clear all locations?")
-        message_box.setStandardButtons(
-            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
-        )
-        message_box.setDefaultButton(QMessageBox.StandardButton.No)
-        pressed_button = message_box.exec()
-        if pressed_button == QMessageBox.StandardButton.No:
-            return
-
-        self.settings_model.game_location = ""
-        self.settings_model.config_folder_location = ""
-        self.settings_model.steam_mods_folder_location = ""
-        self.settings_model.local_mods_folder_location = ""
-
-    def _on_sorting_algorithm_button_toggled(self, checked: bool) -> None:
-        if checked:
-            if self.sender() == self.settings_dialog.alphabetical_button:
-                self.settings_model.sorting_algorithm = (
-                    SettingsModel.SortingAlgorithm.ALPHABETICAL
-                )
-            elif self.sender() == self.settings_dialog.topological_button:
-                self.settings_model.sorting_algorithm = (
-                    SettingsModel.SortingAlgorithm.TOPOLOGICAL
-                )
-            elif self.sender() == self.settings_dialog.radiological_button:
-                self.settings_model.sorting_algorithm = (
-                    SettingsModel.SortingAlgorithm.RADIOLOGICAL
-                )
-
-    def _on_debug_logging_button_toggled(self, checked: bool) -> None:
-        if checked:
-            self.settings_model.debug_logging = True
-        else:
-            self.settings_model.debug_logging = False
+    # endregion
