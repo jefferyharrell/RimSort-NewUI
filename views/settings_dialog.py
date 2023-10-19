@@ -41,7 +41,7 @@ class SettingsDialog(QDialog):
         main_layout.addWidget(self._tab_widget)
 
         # Initialize the tabs
-        self._do_general_tab()
+        self._do_locations_tab()
         self._do_sorting_tab()
         self._do_advanced_tab()
 
@@ -70,7 +70,7 @@ class SettingsDialog(QDialog):
         # Add button layout to the main layout
         main_layout.addLayout(button_layout)
 
-    def _do_general_tab(self) -> None:
+    def _do_locations_tab(self) -> None:
         tab = QWidget(self)
         tab_layout = QVBoxLayout(tab)
         tab_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -88,17 +88,17 @@ class SettingsDialog(QDialog):
         buttons_layout.addStretch(1)
 
         # Create the "Clear" button and connect its signal
-        self.general_clear_button = QPushButton("Clear", tab)
-        buttons_layout.addWidget(self.general_clear_button)
+        self.locations_clear_button = QPushButton("Clear", tab)
+        buttons_layout.addWidget(self.locations_clear_button)
 
         # Create the "Autodetect" button and connect its signal
-        self.general_autodetect_button = QPushButton("Autodetect", tab)
-        buttons_layout.addWidget(self.general_autodetect_button)
+        self.locations_autodetect_button = QPushButton("Autodetect", tab)
+        buttons_layout.addWidget(self.locations_autodetect_button)
 
         # Add the buttons layout to the main QVBoxLayout
         tab_layout.addLayout(buttons_layout)
 
-        self._tab_widget.addTab(tab, "General")
+        self._tab_widget.addTab(tab, "Locations")
 
     def _do_game_location_area(self, tab_layout: QVBoxLayout) -> None:
         section_label = QLabel("Game Location")

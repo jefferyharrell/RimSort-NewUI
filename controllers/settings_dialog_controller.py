@@ -31,7 +31,7 @@ class SettingsDialogController(QObject):
             self._on_global_ok_button_clicked
         )
 
-        # General tab
+        # Locations tab
         self.settings_dialog.game_location_choose_button.clicked.connect(
             self._on_choose_game_location
         )
@@ -44,11 +44,11 @@ class SettingsDialogController(QObject):
         self.settings_dialog.local_mods_folder_location_choose_button.clicked.connect(
             self._on_choose_local_mods_folder_location
         )
-        self.settings_dialog.general_clear_button.clicked.connect(
-            self._on_general_clear_button_clicked
+        self.settings_dialog.locations_clear_button.clicked.connect(
+            self._on_locations_clear_button_clicked
         )
-        self.settings_dialog.general_autodetect_button.clicked.connect(
-            self._on_general_autodetect_button_clicked
+        self.settings_dialog.locations_autodetect_button.clicked.connect(
+            self._on_locations_autodetect_button_clicked
         )
 
         # Sorting tab
@@ -76,7 +76,7 @@ class SettingsDialogController(QObject):
         self.settings_dialog.global_apply_button.setEnabled(True)
 
     def _update_view_from_model(self) -> None:
-        # General tab
+        # Locations tab
         self.settings_dialog.game_location_value_label.setText(
             self.settings.game_location
         )
@@ -165,7 +165,7 @@ class SettingsDialogController(QObject):
         if local_mods_folder_location != "":
             self.settings.local_mods_folder_location = local_mods_folder_location
 
-    def _on_general_autodetect_button_clicked(self) -> None:
+    def _on_locations_autodetect_button_clicked(self) -> None:
         if SystemInfo.operating_system() == SystemInfo.OperatingSystem.WINDOWS:
             self._autodetect_locations_windows()
         elif SystemInfo.operating_system() == SystemInfo.OperatingSystem.LINUX:
@@ -223,7 +223,7 @@ class SettingsDialogController(QObject):
                 local_mods_folder_location_candidate
             )
 
-    def _on_general_clear_button_clicked(self) -> None:
+    def _on_locations_clear_button_clicked(self) -> None:
         message_box = QMessageBox(self.settings_dialog)
         message_box.setWindowTitle("Clear all locations")
         message_box.setText("Are you sure you want to clear all locations?")
