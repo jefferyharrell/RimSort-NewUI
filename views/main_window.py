@@ -1,6 +1,18 @@
-from PySide6.QtGui import QAction, QKeySequence
-from PySide6.QtWidgets import QMainWindow, QWidget
+from PySide6.QtCore import QStringListModel
+from PySide6.QtGui import QAction, QKeySequence, Qt
+from PySide6.QtWidgets import (
+    QMainWindow,
+    QWidget,
+    QVBoxLayout,
+    QHBoxLayout,
+    QPushButton,
+    QFrame,
+    QLineEdit,
+    QLabel,
+    QListView,
+)
 
+from utilities.gui_info import GUIInfo
 from utilities.system_info import SystemInfo
 
 
@@ -17,8 +29,72 @@ class MainWindow(QMainWindow):
             self._do_main_menu_non_macos()
 
         central_widget = QWidget(self)
-
         self.setCentralWidget(central_widget)
+
+        central_layout = QVBoxLayout(central_widget)
+
+        frames_layout = QHBoxLayout()
+
+        selected_mod_info_frame = QFrame()
+        selected_mod_info_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        frames_layout.addWidget(selected_mod_info_frame, stretch=2)
+
+        inactive_mods_frame = QFrame()
+        inactive_mods_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        frames_layout.addWidget(inactive_mods_frame, stretch=1)
+
+        inactive_mods_layout = QVBoxLayout(inactive_mods_frame)
+
+        inactive_mods_label = QLabel("Inactive Mods")
+        inactive_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        inactive_mods_layout.addWidget(inactive_mods_label)
+
+        self.inactive_search_field = QLineEdit()
+        self.inactive_search_field.setPlaceholderText("Search...")
+        inactive_mods_layout.addWidget(self.inactive_search_field)
+
+        self.inactive_mods_list_view = QListView()
+        self.inactive_mods_list_view.setFont(GUIInfo().default_font)
+        inactive_mods_layout.addWidget(self.inactive_mods_list_view)
+
+        active_mods_frame = QFrame()
+        active_mods_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        frames_layout.addWidget(active_mods_frame, stretch=1)
+
+        active_mods_layout = QVBoxLayout(active_mods_frame)
+
+        active_mods_label = QLabel("Active Mods")
+        active_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        active_mods_layout.addWidget(active_mods_label)
+
+        self.active_search_field = QLineEdit()
+        self.active_search_field.setPlaceholderText("Search...")
+        active_mods_layout.addWidget(self.active_search_field)
+
+        self.active_mods_list_view = QListView()
+        active_mods_layout.addWidget(self.active_mods_list_view)
+
+        central_layout.addLayout(frames_layout)
+
+        button_layout = QHBoxLayout()
+
+        button_layout.addStretch()
+
+        self.refresh_button = QPushButton("Refresh")
+        button_layout.addWidget(self.refresh_button)
+
+        self.save_button = QPushButton("Save")
+        button_layout.addWidget(self.save_button)
+
+        self.run_button = QPushButton("Run Game")
+        button_layout.addWidget(self.run_button)
+
+        central_layout.addLayout(button_layout)
+
+        data = [f"Item {i}" for i in range(1, 101)]
+        model = QStringListModel(data)
+        self.inactive_mods_list_view.setModel(model)
+        self.active_mods_list_view.setModel(model)
 
     def _do_main_menu_macos(self) -> None:
         app_menu = self.menuBar().addMenu("AppName")  # This title is ignored on macOS
