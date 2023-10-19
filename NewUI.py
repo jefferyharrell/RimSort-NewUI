@@ -22,5 +22,7 @@ if __name__ == "__main__":
         config_path=str(config_path),
     )
 
+    logger.info("Starting application")
+
     app_controller = AppController()
     sys.exit(app_controller.run())
