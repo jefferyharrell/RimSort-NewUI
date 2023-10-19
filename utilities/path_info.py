@@ -24,7 +24,7 @@ class PathInfo:
             raise ValueError("PathInfo must be initialized with __file__.")
 
         self._application_folder = Path(file_path).resolve().parent
-        self._log_folder = Path(user_log_dir())
+        self._user_log_folder = Path(user_log_dir())
 
         self._is_initialized: bool = True
 
@@ -33,5 +33,5 @@ class PathInfo:
         return self._application_folder
 
     @property
-    def log_folder(self) -> Path:
-        return self._log_folder
+    def user_log_folder(self) -> Path:
+        return self._user_log_folder

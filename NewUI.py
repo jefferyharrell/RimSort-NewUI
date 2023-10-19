@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     setup_logging(
         full_context=1,
-        log_path=str(PathInfo().log_folder / "NewUI.log"),
+        log_path=str(PathInfo().user_log_folder / "NewUI.log"),
         capture_print=True,
         config_path=str(PathInfo().application_folder / "log_config.json"),
     )
