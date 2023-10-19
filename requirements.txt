@@ -1,6 +1,7 @@
 black==23.10.0
 imageio==2.31.5
 logger-tt==1.7.3
+lxml==4.9.3
 mypy==1.6.1
 mypy-extensions==1.0.0
 Nuitka==1.8.4
