@@ -1,5 +1,6 @@
 import json
 from enum import Enum, unique, auto
+from json import JSONDecodeError
 from pathlib import Path
 from typing import Dict, Any
 
@@ -110,7 +111,7 @@ class SettingsModel(QObject):
             with open(str(self.settings_file_path), "r") as file:
                 data = json.load(file)
                 self.from_dict(data)
-        except FileNotFoundError:
+        except (FileNotFoundError, JSONDecodeError):
             self.save()
 
     def to_dict(self) -> Dict[str, Any]:
