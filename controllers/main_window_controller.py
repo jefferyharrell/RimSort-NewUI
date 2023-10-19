@@ -2,6 +2,7 @@ from PySide6.QtCore import QObject, Slot
 from PySide6.QtWidgets import QApplication
 
 from models.main_window_model import MainWindowModel
+from models.settings_model import SettingsModel
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
 from views.settings_dialog import SettingsDialog
@@ -9,12 +10,17 @@ from views.settings_dialog import SettingsDialog
 
 class MainWindowController(QObject):
     def __init__(
-        self, model: MainWindowModel, view: MainWindow, settings_dialog: SettingsDialog
+        self,
+        model: MainWindowModel,
+        view: MainWindow,
+        settings_model: SettingsModel,
+        settings_dialog: SettingsDialog,
     ) -> None:
         super().__init__()
 
         self.main_window_model = model
         self.main_window = view
+        self.settings_model = settings_model
         self.settings_dialog = settings_dialog
 
         self.about_dialog = AboutDialog()
