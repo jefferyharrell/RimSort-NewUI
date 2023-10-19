@@ -1,5 +1,10 @@
+import xml.etree.ElementTree as ET
+
+from pathlib import Path
+
 from PySide6.QtCore import QObject, Slot
 from PySide6.QtWidgets import QApplication
+from logger_tt import logger
 
 from models.main_window_model import MainWindowModel
 from models.settings_model import SettingsModel
@@ -36,6 +41,33 @@ class MainWindowController(QObject):
         self.main_window.inactive_mods_list_view.setModel(
             self.main_window_model.inactive_mods_list_model
         )
+
+        steam_mods_folder_location_path = Path(
+            self.settings_model.steam_mods_folder_location
+        )
+
+        result_list = []
+
+        logger.info(f"Starting XML parsing of {steam_mods_folder_location_path}")
+        for subfolder in steam_mods_folder_location_path.iterdir():
+            if subfolder.is_dir():
+                about_xml_path = subfolder / "About" / "About.xml"
+
+                if about_xml_path.exists():
+                    try:
+                        tree = ET.parse(about_xml_path)
+                        root = tree.getroot()
+                        extracted_data = root.find("./name")
+                        if extracted_data is not None:
+                            result_list.append(extracted_data.text)
+                    except ET.ParseError:
+                        logger.warning(f"Could not parse About.xml at {about_xml_path}")
+
+        logger.info("Finished XML parsing; starting sorting")
+        result_list.sort()
+        logger.info("Finished sorting")
+
+        self.main_window_model.inactive_mods_list_model.setStringList(result_list)
 
     # region SLots
 
