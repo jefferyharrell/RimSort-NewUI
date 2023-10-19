@@ -20,8 +20,8 @@ class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setWindowTitle("Main Window")
-        self.setMinimumSize(1280, 720)
+        self.setWindowTitle("NewUI")
+        self.setMinimumSize(1000, 600)
 
         if SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
             self._do_main_menu_macos()
@@ -38,6 +38,14 @@ class MainWindow(QMainWindow):
         selected_mod_info_frame = QFrame()
         selected_mod_info_frame.setFrameShape(QFrame.Shape.StyledPanel)
         frames_layout.addWidget(selected_mod_info_frame, stretch=2)
+
+        selected_mod_layout = QVBoxLayout(selected_mod_info_frame)
+
+        selected_mod_label = QLabel("Selected Mod")
+        selected_mod_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        selected_mod_layout.addWidget(selected_mod_label)
+
+        selected_mod_layout.addStretch()
 
         inactive_mods_frame = QFrame()
         inactive_mods_frame.setFrameShape(QFrame.Shape.StyledPanel)
