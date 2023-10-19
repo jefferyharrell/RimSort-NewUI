@@ -1,0 +1,1 @@
+python -m nuitka --standalone --enable-plugin=pyside6 --macos-create-app-bundle --macos-app-icon=AppIcon_a.png --output-dir=./build --include-data-file=./log_config.json=log_config.json --disable-console NewUI.py
