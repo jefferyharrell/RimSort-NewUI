@@ -16,11 +16,11 @@ class AppController(QObject):
 
         self.app = QApplication(sys.argv)
 
-        if SystemInfo.operating_system() == SystemInfo.OperatingSystem.WINDOWS:
+        if SystemInfo().operating_system == SystemInfo.OperatingSystem.WINDOWS:
             self.app.setStyle("Fusion")
-        elif SystemInfo.operating_system() == SystemInfo.OperatingSystem.LINUX:
+        elif SystemInfo().operating_system == SystemInfo.OperatingSystem.LINUX:
             self.app.setStyle("Fusion")
-        elif SystemInfo.operating_system() == SystemInfo.OperatingSystem.MACOS:
+        elif SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
             self.app.setStyle("macOS")
 
         # Uncomment to debug the UI

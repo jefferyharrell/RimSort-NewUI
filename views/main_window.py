@@ -18,7 +18,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("Main Window")
         self.setMinimumSize(1280, 720)
 
-        if SystemInfo.operating_system() == SystemInfo.OperatingSystem.MACOS:
+        if SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
             self._do_main_menu_macos()
         else:
             self._do_main_menu_non_macos()

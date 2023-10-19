@@ -166,11 +166,11 @@ class SettingsDialogController(QObject):
             self.settings.local_mods_folder_location = local_mods_folder_location
 
     def _on_locations_autodetect_button_clicked(self) -> None:
-        if SystemInfo.operating_system() == SystemInfo.OperatingSystem.WINDOWS:
+        if SystemInfo().operating_system == SystemInfo.OperatingSystem.WINDOWS:
             self._autodetect_locations_windows()
-        elif SystemInfo.operating_system() == SystemInfo.OperatingSystem.LINUX:
+        elif SystemInfo().operating_system == SystemInfo.OperatingSystem.LINUX:
             self._autodetect_locations_linux()
-        elif SystemInfo.operating_system() == SystemInfo.OperatingSystem.MACOS:
+        elif SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
             self._autodetect_locations_macos()
 
     def _autodetect_locations_windows(self) -> None:

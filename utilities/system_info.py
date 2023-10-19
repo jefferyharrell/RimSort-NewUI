@@ -5,9 +5,10 @@ from typing import Optional
 
 class SystemInfo:
     """
-    A class that provides information about the system, such as the operating system and architecture.
+    A singleton class that provides information about the system.
     """
 
+    _instance: Optional["SystemInfo"] = None
     _operating_system: Optional["SystemInfo.OperatingSystem"] = None
     _architecture: Optional["SystemInfo.Architecture"] = None
 
@@ -27,47 +28,41 @@ class SystemInfo:
         X64 = auto()
         ARM64 = auto()
 
+    def __new__(cls) -> "SystemInfo":
+        if not cls._instance:
+            cls._instance = super(SystemInfo, cls).__new__(cls)
+        return cls._instance
+
     def __init__(self) -> None:
-        """Prevents instantiation of the static SystemInfo class"""
-        raise TypeError("SystemInfo class cannot be instantiated")
+        # Initialize _operating_system
+        if platform.system() in ["Windows"]:
+            self._operating_system = SystemInfo.OperatingSystem.WINDOWS
+        elif platform.system() in ["Linux"]:
+            self._operating_system = SystemInfo.OperatingSystem.LINUX
+        elif platform.system() in ["Darwin"]:
+            self._operating_system = SystemInfo.OperatingSystem.MACOS
+        else:
+            raise UnsupportedOperatingSystemError(
+                f"Unsupported operating system detected: {platform.system()}."
+            )
 
-    @classmethod
-    def operating_system(cls) -> Optional["SystemInfo.OperatingSystem"]:
-        """
-        Returns the current operating system.
+        # Initialize _architecture
+        if platform.machine() in ["x86_64", "AMD64"]:
+            self._architecture = SystemInfo.Architecture.X64
+        elif platform.machine() in ["arm64", "aarch64"]:
+            self._architecture = SystemInfo.Architecture.ARM64
+        else:
+            raise UnsupportedArchitectureError(
+                f"Unsupported architecture detected: {platform.machine()}."
+            )
 
-        :raises UnsupportedOperatingSystemError: If the detected OS is not supported.
-        """
-        if cls._operating_system is None:
-            if platform.system() in ["Windows"]:
-                cls._operating_system = SystemInfo.OperatingSystem.WINDOWS
-            elif platform.system() in ["Linux"]:
-                cls._operating_system = SystemInfo.OperatingSystem.LINUX
-            elif platform.system() in ["Darwin"]:
-                cls._operating_system = SystemInfo.OperatingSystem.MACOS
-            else:
-                raise UnsupportedOperatingSystemError(
-                    f"Unsupported operating system detected: {platform.system()}."
-                )
-        return cls._operating_system
+    @property
+    def operating_system(self) -> Optional["SystemInfo.OperatingSystem"]:
+        return self._operating_system
 
-    @classmethod
-    def architecture(cls) -> Optional["SystemInfo.Architecture"]:
-        """
-        Returns the architecture of the system.
-
-        :raises UnsupportedArchitectureError: If the detected architecture is not supported.
-        """
-        if cls._architecture is None:
-            if platform.machine() in ["x86_64", "AMD64"]:
-                cls._architecture = SystemInfo.Architecture.X64
-            elif platform.machine() in ["arm64", "aarch64"]:
-                cls._architecture = SystemInfo.Architecture.ARM64
-            else:
-                raise UnsupportedArchitectureError(
-                    f"Unsupported architecture detected: {platform.machine()}."
-                )
-        return cls._architecture
+    @property
+    def architecture(self) -> Optional["SystemInfo.Architecture"]:
+        return self._architecture
 
 
 class UnsupportedOperatingSystemError(Exception):
