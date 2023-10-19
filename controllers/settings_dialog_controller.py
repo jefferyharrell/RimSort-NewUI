@@ -12,7 +12,7 @@ class SettingsDialogController(QObject):
     def __init__(self, model: SettingsModel, view: SettingsDialog) -> None:
         super().__init__()
 
-        self.settings = model
+        self.settings_model = model
         self.settings_dialog = view
 
         self.user_home_path: Path = Path.home()
@@ -67,8 +67,8 @@ class SettingsDialogController(QObject):
             self._on_debug_logging_button_toggled
         )
 
-        self.settings.changed.connect(self._on_settings_changed)
-        self.settings.load()
+        self.settings_model.changed.connect(self._on_settings_changed)
+        self.settings_model.load()
         self._update_view_from_model()
 
     def _on_settings_changed(self) -> None:
@@ -78,37 +78,37 @@ class SettingsDialogController(QObject):
     def _update_view_from_model(self) -> None:
         # Locations tab
         self.settings_dialog.game_location_value_label.setText(
-            self.settings.game_location
+            self.settings_model.game_location
         )
         self.settings_dialog.config_folder_location_value_label.setText(
-            self.settings.config_folder_location
+            self.settings_model.config_folder_location
         )
         self.settings_dialog.steam_mods_folder_location_value_label.setText(
-            self.settings.steam_mods_folder_location
+            self.settings_model.steam_mods_folder_location
         )
         self.settings_dialog.local_mods_folder_location_value_label.setText(
-            self.settings.local_mods_folder_location
+            self.settings_model.local_mods_folder_location
         )
 
         # Sorting tab
         if (
-            self.settings.sorting_algorithm
+            self.settings_model.sorting_algorithm
             == SettingsModel.SortingAlgorithm.ALPHABETICAL
         ):
             self.settings_dialog.alphabetical_button.setChecked(True)
         elif (
-            self.settings.sorting_algorithm
+            self.settings_model.sorting_algorithm
             == SettingsModel.SortingAlgorithm.TOPOLOGICAL
         ):
             self.settings_dialog.topological_button.setChecked(True)
         elif (
-            self.settings.sorting_algorithm
+            self.settings_model.sorting_algorithm
             == SettingsModel.SortingAlgorithm.RADIOLOGICAL
         ):
             self.settings_dialog.radiological_button.setChecked(True)
 
         # Advanced tab
-        if self.settings.debug_logging:
+        if self.settings_model.debug_logging:
             self.settings_dialog.debug_logging_checkbox.setChecked(True)
         else:
             self.settings_dialog.debug_logging_checkbox.setChecked(False)
@@ -127,18 +127,18 @@ class SettingsDialogController(QObject):
         if pressed_button == QMessageBox.StandardButton.No:
             return
 
-        self.settings.apply_default_settings()
+        self.settings_model.apply_default_settings()
 
     def _on_global_cancel_button_clicked(self) -> None:
         self.settings_dialog.close()
         self.settings_dialog.global_apply_button.setEnabled(False)
 
     def _on_global_apply_button_clicked(self) -> None:
-        self.settings.save()
+        self.settings_model.save()
         self.settings_dialog.global_apply_button.setEnabled(False)
 
     def _on_global_ok_button_clicked(self) -> None:
-        self.settings.save()
+        self.settings_model.save()
         self.settings_dialog.close()
         self.settings_dialog.global_apply_button.setEnabled(False)
 
@@ -148,7 +148,7 @@ class SettingsDialogController(QObject):
             dir=str(self.user_home_path),
         )
         if game_location != "":
-            self.settings.game_location = game_location
+            self.settings_model.game_location = game_location
 
     def _on_choose_config_folder_location(self) -> None:
         config_folder_location = QFileDialog.getExistingDirectory(
@@ -156,7 +156,7 @@ class SettingsDialogController(QObject):
             dir=str(self.user_home_path),
         )
         if config_folder_location != "":
-            self.settings.config_folder_location = config_folder_location
+            self.settings_model.config_folder_location = config_folder_location
 
     def _on_choose_steam_mods_folder_location(self) -> None:
         steam_mods_folder_location = QFileDialog.getExistingDirectory(
@@ -164,7 +164,7 @@ class SettingsDialogController(QObject):
             dir=str(self.user_home_path),
         )
         if steam_mods_folder_location != "":
-            self.settings.steam_mods_folder_location = steam_mods_folder_location
+            self.settings_model.steam_mods_folder_location = steam_mods_folder_location
 
     def _on_choose_local_mods_folder_location(self) -> None:
         local_mods_folder_location = QFileDialog.getExistingDirectory(
@@ -172,7 +172,7 @@ class SettingsDialogController(QObject):
             dir=str(self.user_home_path),
         )
         if local_mods_folder_location != "":
-            self.settings.local_mods_folder_location = local_mods_folder_location
+            self.settings_model.local_mods_folder_location = local_mods_folder_location
 
     def _on_locations_autodetect_button_clicked(self) -> None:
         if SystemInfo().operating_system == SystemInfo.OperatingSystem.WINDOWS:
@@ -183,22 +183,22 @@ class SettingsDialogController(QObject):
             self._autodetect_locations_macos()
 
     def _autodetect_locations_windows(self) -> None:
-        self.settings.game_location = ""
-        self.settings.config_folder_location = ""
-        self.settings.steam_mods_folder_location = ""
-        self.settings.local_mods_folder_location = ""
+        self.settings_model.game_location = ""
+        self.settings_model.config_folder_location = ""
+        self.settings_model.steam_mods_folder_location = ""
+        self.settings_model.local_mods_folder_location = ""
 
     def _autodetect_locations_linux(self) -> None:
-        self.settings.game_location = ""
-        self.settings.config_folder_location = ""
-        self.settings.steam_mods_folder_location = ""
-        self.settings.local_mods_folder_location = ""
+        self.settings_model.game_location = ""
+        self.settings_model.config_folder_location = ""
+        self.settings_model.steam_mods_folder_location = ""
+        self.settings_model.local_mods_folder_location = ""
 
     def _autodetect_locations_macos(self) -> None:
-        self.settings.game_location = ""
-        self.settings.config_folder_location = ""
-        self.settings.steam_mods_folder_location = ""
-        self.settings.local_mods_folder_location = ""
+        self.settings_model.game_location = ""
+        self.settings_model.config_folder_location = ""
+        self.settings_model.steam_mods_folder_location = ""
+        self.settings_model.local_mods_folder_location = ""
 
         home_folder_path: Path = Path.home()
         steam_folder_candidate_path: Path = (
@@ -210,25 +210,27 @@ class SettingsDialogController(QObject):
             steam_folder_candidate_path / "steamapps/common/RimWorld/RimWorldMac.app"
         )
         if game_location_candidate.exists():
-            self.settings.game_location = str(game_location_candidate)
+            self.settings_model.game_location = str(game_location_candidate)
 
         config_folder_location_candidate: Path = (
             app_support_candidate_path / "RimWorld/Config"
         )
         if config_folder_location_candidate.exists():
-            self.settings.config_folder_location = str(config_folder_location_candidate)
+            self.settings_model.config_folder_location = str(
+                config_folder_location_candidate
+            )
 
         steam_mods_folder_location_candidate: Path = (
             steam_folder_candidate_path / "steamapps/workshop/content/294100"
         )
         if steam_mods_folder_location_candidate.exists():
-            self.settings.steam_mods_folder_location = str(
+            self.settings_model.steam_mods_folder_location = str(
                 steam_mods_folder_location_candidate
             )
 
         local_mods_folder_location_candidate: Path = game_location_candidate / "Mods"
         if local_mods_folder_location_candidate.exists():
-            self.settings.local_mods_folder_location = str(
+            self.settings_model.local_mods_folder_location = str(
                 local_mods_folder_location_candidate
             )
 
@@ -244,28 +246,28 @@ class SettingsDialogController(QObject):
         if pressed_button == QMessageBox.StandardButton.No:
             return
 
-        self.settings.game_location = ""
-        self.settings.config_folder_location = ""
-        self.settings.steam_mods_folder_location = ""
-        self.settings.local_mods_folder_location = ""
+        self.settings_model.game_location = ""
+        self.settings_model.config_folder_location = ""
+        self.settings_model.steam_mods_folder_location = ""
+        self.settings_model.local_mods_folder_location = ""
 
     def _on_sorting_algorithm_button_toggled(self, checked: bool) -> None:
         if checked:
             if self.sender() == self.settings_dialog.alphabetical_button:
-                self.settings.sorting_algorithm = (
+                self.settings_model.sorting_algorithm = (
                     SettingsModel.SortingAlgorithm.ALPHABETICAL
                 )
             elif self.sender() == self.settings_dialog.topological_button:
-                self.settings.sorting_algorithm = (
+                self.settings_model.sorting_algorithm = (
                     SettingsModel.SortingAlgorithm.TOPOLOGICAL
                 )
             elif self.sender() == self.settings_dialog.radiological_button:
-                self.settings.sorting_algorithm = (
+                self.settings_model.sorting_algorithm = (
                     SettingsModel.SortingAlgorithm.RADIOLOGICAL
                 )
 
     def _on_debug_logging_button_toggled(self, checked: bool) -> None:
         if checked:
-            self.settings.debug_logging = True
+            self.settings_model.debug_logging = True
         else:
-            self.settings.debug_logging = False
+            self.settings_model.debug_logging = False

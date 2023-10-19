@@ -28,10 +28,10 @@ class AppController(QObject):
 
         self.main_window = MainWindow(app_controller=self)
 
-        self.settings = SettingsModel()
+        self.settings_model = SettingsModel()
         self.settings_dialog = SettingsDialog(parent=self.main_window)
         self.settings_dialog_controller = SettingsDialogController(
-            model=self.settings, view=self.settings_dialog
+            model=self.settings_model, view=self.settings_dialog
         )
 
     def run(self) -> int:
