@@ -47,7 +47,6 @@ class MainWindowController(QObject):
 
         result_list = []
 
-        logger.info(f"Starting XML parsing of {steam_mods_folder_location_path}")
         for subfolder in steam_mods_folder_location_path.iterdir():
             if subfolder.is_dir():
                 about_xml_path = subfolder / "About" / "About.xml"
@@ -65,9 +64,7 @@ class MainWindowController(QObject):
                     ):  # Catching XML parsing errors specific to lxml
                         logger.warning(f"Could not parse About.xml at {about_xml_path}")
 
-        logger.info("Finished XML parsing; starting sorting")
         result_list.sort()
-        logger.info("Finished sorting")
 
         self.main_window_model.inactive_mods_list_model.setStringList(result_list)
 
