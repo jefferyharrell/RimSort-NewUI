@@ -63,7 +63,7 @@ class MainWindowController(QObject):
 
         result_list = self._scan_folder_for_mods(steam_mods_folder_location_path)
         result_list += self._scan_folder_for_mods(local_mods_folder_location_path)
-        result_list.sort(key=lambda mod: mod.name)
+        result_list.sort(key=lambda m: m.name)
 
         for mod in result_list:
             self.main_window_model.mods_dictionary[mod.id] = mod
@@ -144,8 +144,8 @@ class MainWindowController(QObject):
 
         self._move_mod_to_list_view(index, source_list_view, target_list_view)
 
+    @staticmethod
     def _move_mod_to_list_view(
-        self,
         index: QModelIndex,
         source_list_view: QListView,
         target_list_view: QListView,
@@ -189,7 +189,8 @@ class MainWindowController(QObject):
             target_model = cast(QStandardItemModel, target_model.sourceModel())
         target_model.appendRow(item_clone)
 
-    def _scan_folder_for_mods(self, folder_location_path: Path) -> List[Mod]:
+    @staticmethod
+    def _scan_folder_for_mods(folder_location_path: Path) -> List[Mod]:
         result_list: List[Mod] = []
         for subfolder in folder_location_path.iterdir():
             if subfolder.is_dir():
