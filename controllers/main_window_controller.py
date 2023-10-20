@@ -1,6 +1,7 @@
 from pathlib import Path
+from typing import List
 
-from PySide6.QtCore import QObject, Slot
+from PySide6.QtCore import QObject, Slot, Qt
 from PySide6.QtWidgets import QApplication
 from logger_tt import logger
 from lxml import etree
@@ -36,18 +37,63 @@ class MainWindowController(QObject):
         )
         self.main_window.exit_action.triggered.connect(self._on_exit_action_triggered)
 
-        # Connect the models to their views
-        self.main_window.inactive_mods_list_view.setModel(
-            self.main_window_model.inactive_mods_list_model
-        )
-
+        # Populate the models
         steam_mods_folder_location_path = Path(
             self.settings_model.steam_mods_folder_location
         )
+        local_mods_folder_location_path = Path(
+            self.settings_model.local_mods_folder_location
+        )
 
+        result_list = self._scan_folder_for_mods(steam_mods_folder_location_path)
+        result_list += self._scan_folder_for_mods(local_mods_folder_location_path)
+        result_list.sort()
+
+        self.main_window_model.inactive_mods_list_model.setStringList(result_list)
+        self.main_window_model.active_mods_list_model.setStringList(result_list)
+
+        # Set up the proxy models
+        self.main_window_model.inactive_mods_proxy_model.setSourceModel(
+            self.main_window_model.inactive_mods_list_model
+        )
+        self.main_window_model.inactive_mods_proxy_model.setFilterCaseSensitivity(
+            Qt.CaseSensitivity.CaseInsensitive
+        )
+        self.main_window.inactive_mods_filter_field.textChanged.connect(
+            self.update_inactive_mods_filter
+        )
+
+        self.main_window_model.active_mods_proxy_model.setSourceModel(
+            self.main_window_model.active_mods_list_model
+        )
+        self.main_window_model.active_mods_proxy_model.setFilterCaseSensitivity(
+            Qt.CaseSensitivity.CaseInsensitive
+        )
+        self.main_window.active_mods_filter_field.textChanged.connect(
+            self.update_active_mods_filter
+        )
+
+        # Connect the models to their views
+        self.main_window.inactive_mods_list_view.setModel(
+            self.main_window_model.inactive_mods_proxy_model
+        )
+        self.main_window.active_mods_list_view.setModel(
+            self.main_window_model.active_mods_proxy_model
+        )
+
+    @Slot(str)
+    def update_inactive_mods_filter(self, text: str) -> None:
+        """Update the filter based on the text in the QLineEdit."""
+        self.main_window_model.inactive_mods_proxy_model.setFilterFixedString(text)
+
+    @Slot(str)
+    def update_active_mods_filter(self, text: str) -> None:
+        """Update the filter based on the text in the QLineEdit."""
+        self.main_window_model.active_mods_proxy_model.setFilterFixedString(text)
+
+    def _scan_folder_for_mods(self, folder_location_path: Path) -> List[str]:
         result_list = []
-
-        for subfolder in steam_mods_folder_location_path.iterdir():
+        for subfolder in folder_location_path.iterdir():
             if subfolder.is_dir():
                 about_xml_path = subfolder / "About" / "About.xml"
 
@@ -63,10 +109,7 @@ class MainWindowController(QObject):
                         etree.XMLSyntaxError
                     ):  # Catching XML parsing errors specific to lxml
                         logger.warning(f"Could not parse About.xml at {about_xml_path}")
-
-        result_list.sort()
-
-        self.main_window_model.inactive_mods_list_model.setStringList(result_list)
+        return result_list
 
     # region SLots
 

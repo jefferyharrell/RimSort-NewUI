@@ -9,6 +9,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QLabel,
     QListView,
+    QAbstractItemView,
 )
 
 from utilities.gui_info import GUIInfo
@@ -56,12 +57,15 @@ class MainWindow(QMainWindow):
         inactive_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         inactive_mods_layout.addWidget(inactive_mods_label)
 
-        self.inactive_search_field = QLineEdit()
-        self.inactive_search_field.setPlaceholderText("Search...")
-        inactive_mods_layout.addWidget(self.inactive_search_field)
+        self.inactive_mods_filter_field = QLineEdit()
+        self.inactive_mods_filter_field.setPlaceholderText("Search...")
+        inactive_mods_layout.addWidget(self.inactive_mods_filter_field)
 
         self.inactive_mods_list_view = QListView()
         self.inactive_mods_list_view.setFont(GUIInfo().default_font)
+        self.inactive_mods_list_view.setSelectionMode(
+            QAbstractItemView.SelectionMode.ExtendedSelection
+        )
         inactive_mods_layout.addWidget(self.inactive_mods_list_view)
 
         active_mods_frame = QFrame()
@@ -74,11 +78,15 @@ class MainWindow(QMainWindow):
         active_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         active_mods_layout.addWidget(active_mods_label)
 
-        self.active_search_field = QLineEdit()
-        self.active_search_field.setPlaceholderText("Search...")
-        active_mods_layout.addWidget(self.active_search_field)
+        self.active_mods_filter_field = QLineEdit()
+        self.active_mods_filter_field.setPlaceholderText("Search...")
+        active_mods_layout.addWidget(self.active_mods_filter_field)
 
         self.active_mods_list_view = QListView()
+        self.active_mods_list_view.setFont(GUIInfo().default_font)
+        self.active_mods_list_view.setSelectionMode(
+            QAbstractItemView.SelectionMode.ExtendedSelection
+        )
         active_mods_layout.addWidget(self.active_mods_list_view)
 
         central_layout.addLayout(frames_layout)
