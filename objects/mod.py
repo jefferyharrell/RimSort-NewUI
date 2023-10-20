@@ -1,6 +1,6 @@
 from typing import List
 
-from PySide6.QtGui import QStandardItem
+from PySide6.QtGui import QStandardItem, Qt
 
 
 class Mod(QStandardItem):
@@ -11,6 +11,8 @@ class Mod(QStandardItem):
         self._name = name
         self._package_id = package_id
         self._supported_versions = supported_versions
+
+        self.setData(self, Qt.ItemDataRole.UserRole)
 
     @property
     def name(self) -> str:

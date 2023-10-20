@@ -47,6 +47,30 @@ class MainWindow(QMainWindow):
 
         selected_mod_layout.addStretch()
 
+        selected_mod_name_hbox_layout = QHBoxLayout()
+        selected_mod_name_hbox_layout.addWidget(QLabel("Name: "))
+        self.selected_mod_name_label = QLabel()
+        selected_mod_name_hbox_layout.addWidget(self.selected_mod_name_label)
+        selected_mod_layout.addLayout(selected_mod_name_hbox_layout)
+
+        selected_mod_package_id_hbox_layout = QHBoxLayout()
+        selected_mod_package_id_hbox_layout.addWidget(QLabel("Package ID: "))
+        self.selected_mod_package_id_label = QLabel()
+        selected_mod_package_id_hbox_layout.addWidget(
+            self.selected_mod_package_id_label
+        )
+        selected_mod_layout.addLayout(selected_mod_package_id_hbox_layout)
+
+        selected_mod_supported_versions_hbox_layout = QHBoxLayout()
+        selected_mod_supported_versions_hbox_layout.addWidget(
+            QLabel("Supported Versions: ")
+        )
+        self.selected_mod_supported_versions_label = QLabel()
+        selected_mod_supported_versions_hbox_layout.addWidget(
+            self.selected_mod_supported_versions_label
+        )
+        selected_mod_layout.addLayout(selected_mod_supported_versions_hbox_layout)
+
         inactive_mods_frame = QFrame()
         inactive_mods_frame.setFrameShape(QFrame.Shape.StyledPanel)
         frames_layout.addWidget(inactive_mods_frame, stretch=1)

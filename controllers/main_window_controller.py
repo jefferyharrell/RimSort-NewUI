@@ -1,7 +1,7 @@
 from pathlib import Path
 from typing import List
 
-from PySide6.QtCore import QObject, Slot, Qt
+from PySide6.QtCore import QObject, Slot, Qt, QModelIndex
 from PySide6.QtWidgets import QApplication
 from logger_tt import logger
 from lxml import etree
@@ -37,6 +37,10 @@ class MainWindowController(QObject):
             self._on_settings_action_triggered
         )
         self.main_window.exit_action.triggered.connect(self._on_exit_action_triggered)
+
+        self.main_window.inactive_mods_list_view.clicked.connect(
+            self._on_inactive_mods_list_view_clicked
+        )
 
         # Populate the models
         steam_mods_folder_location_path = Path(
@@ -91,6 +95,15 @@ class MainWindowController(QObject):
     def update_active_mods_filter(self, text: str) -> None:
         """Update the filter based on the text in the QLineEdit."""
         self.main_window_model.active_mods_proxy_model.setFilterFixedString(text)
+
+    @Slot(QModelIndex)
+    def _on_inactive_mods_list_view_clicked(self, index: QModelIndex) -> None:
+        mod = index.data(Qt.ItemDataRole.UserRole)
+        self.main_window.selected_mod_name_label.setText(mod.name)
+        self.main_window.selected_mod_package_id_label.setText(mod.package_id)
+        self.main_window.selected_mod_supported_versions_label.setText(
+            ", ".join(mod.supported_versions)
+        )
 
     def _scan_folder_for_mods(self, folder_location_path: Path) -> List[Mod]:
         result_list = []
