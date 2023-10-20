@@ -56,6 +56,8 @@ class MainWindowController(QObject):
 
         result_list = self._scan_folder_for_mods(steam_mods_folder_location_path)
         result_list += self._scan_folder_for_mods(local_mods_folder_location_path)
+        result_list.sort(key=lambda mod: mod.name)
+
         for mod in result_list:
             self.main_window_model.mods_dictionary[mod.id] = mod
 
