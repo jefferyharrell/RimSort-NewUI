@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import List
 
 from PySide6.QtCore import QObject, Slot, Qt, QModelIndex
+from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import QApplication
 from logger_tt import logger
 from lxml import etree
@@ -104,12 +105,22 @@ class MainWindowController(QObject):
         self.main_window.selected_mod_supported_versions_label.setText(
             ", ".join(mod.supported_versions)
         )
+        if mod.preview_image_path.exists():
+            desired_width = self.main_window.selected_mod_preview_image.width()
+            pixmap = QPixmap(str(mod.preview_image_path)).scaledToWidth(
+                desired_width, Qt.TransformationMode.SmoothTransformation
+            )
+            self.main_window.selected_mod_preview_image.setPixmap(pixmap)
 
     def _scan_folder_for_mods(self, folder_location_path: Path) -> List[Mod]:
-        result_list = []
+        result_list: List[Mod] = []
         for subfolder in folder_location_path.iterdir():
             if subfolder.is_dir():
                 about_xml_path = subfolder / "About" / "About.xml"
+
+                name = None
+                package_id = None
+                supported_versions = None
 
                 if about_xml_path.exists():
                     try:
@@ -122,19 +133,20 @@ class MainWindowController(QObject):
                         node = root.find("./packageId")
                         package_id = node.text if node is not None else ""
                         supported_versions = root.xpath("./supportedVersions/li/text()")
-
-                        if (
-                            name is not None
-                            and package_id is not None
-                            and supported_versions is not None
-                        ):
-                            result_list.append(
-                                Mod(name, package_id, supported_versions)
-                            )
                     except (
                         etree.XMLSyntaxError
                     ):  # Catching XML parsing errors specific to lxml
                         logger.warning(f"Could not parse About.xml at {about_xml_path}")
+
+                    preview_image_path = subfolder / "About" / "Preview.png"
+
+                    if name is not None:
+                        result_list.append(
+                            Mod(
+                                name, package_id, supported_versions, preview_image_path
+                            )
+                        )
+
         return result_list
 
     # region Slots

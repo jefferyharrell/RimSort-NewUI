@@ -5,11 +5,11 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QHBoxLayout,
     QPushButton,
-    QFrame,
     QLineEdit,
     QLabel,
     QListView,
     QAbstractItemView,
+    QGroupBox,
 )
 
 from utilities.gui_info import GUIInfo
@@ -35,8 +35,7 @@ class MainWindow(QMainWindow):
 
         frames_layout = QHBoxLayout()
 
-        selected_mod_info_frame = QFrame()
-        selected_mod_info_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        selected_mod_info_frame = QGroupBox()
         frames_layout.addWidget(selected_mod_info_frame, stretch=2)
 
         selected_mod_layout = QVBoxLayout(selected_mod_info_frame)
@@ -44,6 +43,9 @@ class MainWindow(QMainWindow):
         selected_mod_label = QLabel("Selected Mod")
         selected_mod_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         selected_mod_layout.addWidget(selected_mod_label)
+
+        self.selected_mod_preview_image = QLabel()
+        selected_mod_layout.addWidget(self.selected_mod_preview_image)
 
         selected_mod_layout.addStretch()
 
@@ -71,8 +73,7 @@ class MainWindow(QMainWindow):
         )
         selected_mod_layout.addLayout(selected_mod_supported_versions_hbox_layout)
 
-        inactive_mods_frame = QFrame()
-        inactive_mods_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        inactive_mods_frame = QGroupBox()
         frames_layout.addWidget(inactive_mods_frame, stretch=1)
 
         inactive_mods_layout = QVBoxLayout(inactive_mods_frame)
@@ -92,8 +93,7 @@ class MainWindow(QMainWindow):
         )
         inactive_mods_layout.addWidget(self.inactive_mods_list_view)
 
-        active_mods_frame = QFrame()
-        active_mods_frame.setFrameShape(QFrame.Shape.StyledPanel)
+        active_mods_frame = QGroupBox()
         frames_layout.addWidget(active_mods_frame, stretch=1)
 
         active_mods_layout = QVBoxLayout(active_mods_frame)
