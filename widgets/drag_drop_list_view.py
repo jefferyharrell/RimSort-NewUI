@@ -19,8 +19,8 @@ class DragDropListView(QListView):
         # Disable editing
         self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
 
-    def dragMoveEvent(self, event: QDragMoveEvent) -> None:
-        super().dragMoveEvent(event)
+        # Look and feel
+        self.setAlternatingRowColors(True)
 
         # If the drop indicator is "OnItem", ignore the drop action
         if (
