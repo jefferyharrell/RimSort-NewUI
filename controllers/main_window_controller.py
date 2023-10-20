@@ -1,11 +1,16 @@
 from pathlib import Path
 from typing import List, cast
 
-from PySide6.QtCore import QObject, Slot, Qt, QModelIndex, QSortFilterProxyModel
+from PySide6.QtCore import (
+    QObject,
+    Slot,
+    Qt,
+    QModelIndex,
+    QSortFilterProxyModel,
+    QThreadPool,
+)
 from PySide6.QtGui import QPixmap, QStandardItemModel
 from PySide6.QtWidgets import QApplication, QListView
-from logger_tt import logger
-from lxml import etree
 
 from models.main_window_model import MainWindowModel
 from models.settings_model import SettingsModel
@@ -13,6 +18,7 @@ from objects.mod import Mod
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
 from views.settings_dialog import SettingsDialog
+from runners.load_mods_from_folder_runner import LoadModsFromFolderRunner
 
 
 class MainWindowController(QObject):
@@ -32,7 +38,7 @@ class MainWindowController(QObject):
 
         self.about_dialog = AboutDialog()
 
-        # Connect the signals
+        # Connect the main window's signals
         self.main_window.about_action.triggered.connect(self._on_about_action_triggered)
         self.main_window.settings_action.triggered.connect(
             self._on_settings_action_triggered
@@ -53,24 +59,6 @@ class MainWindowController(QObject):
             self._on_mod_list_view_double_clicked
         )
 
-        # Populate the models
-        steam_mods_folder_location_path = Path(
-            self.settings_model.steam_mods_folder_location
-        )
-        local_mods_folder_location_path = Path(
-            self.settings_model.local_mods_folder_location
-        )
-
-        result_list = self._scan_folder_for_mods(steam_mods_folder_location_path)
-        result_list += self._scan_folder_for_mods(local_mods_folder_location_path)
-        result_list.sort(key=lambda m: m.name)
-
-        for mod in result_list:
-            self.main_window_model.mods_dictionary[mod.id] = mod
-
-        for mod in result_list:
-            self.main_window_model.inactive_mods_list_model.appendRow(mod)
-
         # Set up the proxy models
         self.main_window_model.inactive_mods_proxy_model.setSourceModel(
             self.main_window_model.inactive_mods_list_model
@@ -79,7 +67,7 @@ class MainWindowController(QObject):
             Qt.CaseSensitivity.CaseInsensitive
         )
         self.main_window.inactive_mods_filter_field.textChanged.connect(
-            self.update_inactive_mods_filter
+            self._update_inactive_mods_filter
         )
 
         self.main_window_model.active_mods_proxy_model.setSourceModel(
@@ -89,7 +77,7 @@ class MainWindowController(QObject):
             Qt.CaseSensitivity.CaseInsensitive
         )
         self.main_window.active_mods_filter_field.textChanged.connect(
-            self.update_active_mods_filter
+            self._update_active_mods_filter
         )
 
         # Connect the models to their views
@@ -100,13 +88,29 @@ class MainWindowController(QObject):
             self.main_window_model.active_mods_proxy_model
         )
 
+        # Populate the models
+        steam_mods_folder_location_path = Path(
+            self.settings_model.steam_mods_folder_location
+        )
+        self.runner = LoadModsFromFolderRunner(steam_mods_folder_location_path)
+        self.runner.signals.data_ready.connect(self._on_runner_data_ready)
+        pool = QThreadPool.globalInstance()
+        pool.start(self.runner)
+
+    @Slot(object)
+    def _on_runner_data_ready(self, data: object) -> None:
+        for mod in cast(List[Mod], data):
+            self.main_window_model.mods_dictionary[mod.id] = mod
+            self.main_window_model.inactive_mods_list_model.appendRow(mod)
+            self.main_window_model.inactive_mods_proxy_model.sort(0)
+
     @Slot(str)
-    def update_inactive_mods_filter(self, text: str) -> None:
+    def _update_inactive_mods_filter(self, text: str) -> None:
         """Update the filter based on the text in the QLineEdit."""
         self.main_window_model.inactive_mods_proxy_model.setFilterFixedString(text)
 
     @Slot(str)
-    def update_active_mods_filter(self, text: str) -> None:
+    def _update_active_mods_filter(self, text: str) -> None:
         """Update the filter based on the text in the QLineEdit."""
         self.main_window_model.active_mods_proxy_model.setFilterFixedString(text)
 
@@ -189,43 +193,43 @@ class MainWindowController(QObject):
             target_model = cast(QStandardItemModel, target_model.sourceModel())
         target_model.appendRow(item_clone)
 
-    @staticmethod
-    def _scan_folder_for_mods(folder_location_path: Path) -> List[Mod]:
-        result_list: List[Mod] = []
-        for subfolder in folder_location_path.iterdir():
-            if subfolder.is_dir():
-                about_xml_path = subfolder / "About" / "About.xml"
-
-                name = ""
-                package_id = ""
-                supported_versions = []
-
-                if about_xml_path.exists():
-                    try:
-                        # Parse the XML file using lxml
-                        tree = etree.parse(str(about_xml_path))
-                        root = tree.getroot()
-
-                        node = root.find("./name")
-                        name = node.text if node is not None else ""
-                        node = root.find("./packageId")
-                        package_id = node.text if node is not None else ""
-                        supported_versions = root.xpath("./supportedVersions/li/text()")
-                    except (
-                        etree.XMLSyntaxError
-                    ):  # Catching XML parsing errors specific to lxml
-                        logger.warning(f"Could not parse About.xml at {about_xml_path}")
-
-                    preview_image_path = subfolder / "About" / "Preview.png"
-
-                    if name is not None:
-                        result_list.append(
-                            Mod(
-                                name, package_id, supported_versions, preview_image_path
-                            )
-                        )
-
-        return result_list
+    # @staticmethod
+    # def _scan_folder_for_mods(folder_location_path: Path) -> List[Mod]:
+    #     result_list: List[Mod] = []
+    #     for subfolder in folder_location_path.iterdir():
+    #         if subfolder.is_dir():
+    #             about_xml_path = subfolder / "About" / "About.xml"
+    #
+    #             name = ""
+    #             package_id = ""
+    #             supported_versions = []
+    #
+    #             if about_xml_path.exists():
+    #                 try:
+    #                     # Parse the XML file using lxml
+    #                     tree = etree.parse(str(about_xml_path))
+    #                     root = tree.getroot()
+    #
+    #                     node = root.find("./name")
+    #                     name = node.text if node is not None else ""
+    #                     node = root.find("./packageId")
+    #                     package_id = node.text if node is not None else ""
+    #                     supported_versions = root.xpath("./supportedVersions/li/text()")
+    #                 except (
+    #                     etree.XMLSyntaxError
+    #                 ):  # Catching XML parsing errors specific to lxml
+    #                     logger.warning(f"Could not parse About.xml at {about_xml_path}")
+    #
+    #                 preview_image_path = subfolder / "About" / "Preview.png"
+    #
+    #                 if name is not None:
+    #                     result_list.append(
+    #                         Mod(
+    #                             name, package_id, supported_versions, preview_image_path
+    #                         )
+    #                     )
+    #
+    #     return result_list
 
     # region Slots
 
