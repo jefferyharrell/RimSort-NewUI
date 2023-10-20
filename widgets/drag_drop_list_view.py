@@ -22,6 +22,9 @@ class DragDropListView(QListView):
         # Look and feel
         self.setAlternatingRowColors(True)
 
+    def dragMoveEvent(self, event: QDragMoveEvent) -> None:
+        super().dragMoveEvent(event)
+
         # If the drop indicator is "OnItem", ignore the drop action
         if (
             self.dropIndicatorPosition()
