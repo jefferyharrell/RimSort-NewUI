@@ -1,9 +1,9 @@
 from pathlib import Path
-from typing import List
+from typing import List, cast
 
-from PySide6.QtCore import QObject, Slot, Qt, QModelIndex
-from PySide6.QtGui import QPixmap
-from PySide6.QtWidgets import QApplication
+from PySide6.QtCore import QObject, Slot, Qt, QModelIndex, QSortFilterProxyModel
+from PySide6.QtGui import QPixmap, QStandardItemModel
+from PySide6.QtWidgets import QApplication, QListView
 from logger_tt import logger
 from lxml import etree
 
@@ -44,6 +44,13 @@ class MainWindowController(QObject):
         )
         self.main_window.active_mods_list_view.clicked.connect(
             self._on_mod_list_view_clicked
+        )
+
+        self.main_window.inactive_mods_list_view.doubleClicked.connect(
+            self._on_mod_list_view_double_clicked
+        )
+        self.main_window.active_mods_list_view.doubleClicked.connect(
+            self._on_mod_list_view_double_clicked
         )
 
         # Populate the models
@@ -119,6 +126,68 @@ class MainWindowController(QObject):
                 desired_width, Qt.TransformationMode.SmoothTransformation
             )
             self.main_window.selected_mod_preview_image.setPixmap(pixmap)
+
+    @Slot(QModelIndex)
+    def _on_mod_list_view_double_clicked(self, index: QModelIndex) -> None:
+        sender_obj = self.sender()
+        if not isinstance(sender_obj, QListView):
+            raise TypeError(
+                f"Expected sender of type QListView, but got {type(sender_obj)}"
+            )
+
+        source_list_view = sender_obj
+        target_list_view = (
+            self.main_window.active_mods_list_view
+            if source_list_view == self.main_window.inactive_mods_list_view
+            else self.main_window.inactive_mods_list_view
+        )
+
+        self._move_mod_to_list_view(index, source_list_view, target_list_view)
+
+    def _move_mod_to_list_view(
+        self,
+        index: QModelIndex,
+        source_list_view: QListView,
+        target_list_view: QListView,
+    ) -> None:
+        # Ensure the source_list_view and target_list_view are of type QListView
+        if not isinstance(source_list_view, QListView):
+            raise TypeError(
+                f"Expected source_list_view of type QListView, but got {type(source_list_view)}"
+            )
+        if not isinstance(target_list_view, QListView):
+            raise TypeError(
+                f"Expected target_list_view of type QListView, but got {type(target_list_view)}"
+            )
+
+        # Retrieve the item from the source model
+        source_model = cast(QStandardItemModel, source_list_view.model())
+
+        # If the model is a QSortFilterProxyModel, get its source model
+        if isinstance(source_model, QSortFilterProxyModel):
+            index = source_model.mapToSource(index)
+            source_model = cast(QStandardItemModel, source_model.sourceModel())
+
+        # Ensure the source model is a QStandardItemModel
+        if not isinstance(source_model, QStandardItemModel):
+            raise TypeError(
+                f"Expected source_model of type QStandardItemModel, but got {type(source_model)}"
+            )
+
+        # Retrieve the item from the source model
+        item = source_model.itemFromIndex(index)
+
+        # Clone the item
+        item_clone = item.clone()
+
+        # Remove the item from the source model
+        source_model.removeRow(index.row())
+
+        # Add the item to the bottom of the target model
+        target_model = cast(QStandardItemModel, target_list_view.model())
+        if isinstance(target_model, QSortFilterProxyModel):
+            target_model = cast(QStandardItemModel, target_model.sourceModel())
+        target_model.appendRow(item_clone)
 
     def _scan_folder_for_mods(self, folder_location_path: Path) -> List[Mod]:
         result_list: List[Mod] = []
