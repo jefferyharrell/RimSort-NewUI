@@ -40,7 +40,10 @@ class MainWindowController(QObject):
         self.main_window.exit_action.triggered.connect(self._on_exit_action_triggered)
 
         self.main_window.inactive_mods_list_view.clicked.connect(
-            self._on_inactive_mods_list_view_clicked
+            self._on_mod_list_view_clicked
+        )
+        self.main_window.active_mods_list_view.clicked.connect(
+            self._on_mod_list_view_clicked
         )
 
         # Populate the models
@@ -53,7 +56,8 @@ class MainWindowController(QObject):
 
         result_list = self._scan_folder_for_mods(steam_mods_folder_location_path)
         result_list += self._scan_folder_for_mods(local_mods_folder_location_path)
-        result_list.sort(key=lambda x: x.name)
+        for mod in result_list:
+            self.main_window_model.mods_dictionary[mod.id] = mod
 
         for mod in result_list:
             self.main_window_model.inactive_mods_list_model.appendRow(mod)
@@ -98,10 +102,12 @@ class MainWindowController(QObject):
         self.main_window_model.active_mods_proxy_model.setFilterFixedString(text)
 
     @Slot(QModelIndex)
-    def _on_inactive_mods_list_view_clicked(self, index: QModelIndex) -> None:
-        mod = index.data(Qt.ItemDataRole.UserRole)
+    def _on_mod_list_view_clicked(self, index: QModelIndex) -> None:
+        mod_uuid = index.data(Qt.ItemDataRole.UserRole)
+        mod = self.main_window_model.mods_dictionary[mod_uuid]
+
         self.main_window.selected_mod_name_label.setText(mod.name)
-        self.main_window.selected_mod_package_id_label.setText(mod.package_id)
+        self.main_window.selected_mod_package_id_label.setText(str(mod.package_id))
         self.main_window.selected_mod_supported_versions_label.setText(
             ", ".join(mod.supported_versions)
         )
@@ -118,9 +124,9 @@ class MainWindowController(QObject):
             if subfolder.is_dir():
                 about_xml_path = subfolder / "About" / "About.xml"
 
-                name = None
-                package_id = None
-                supported_versions = None
+                name = ""
+                package_id = ""
+                supported_versions = []
 
                 if about_xml_path.exists():
                     try:

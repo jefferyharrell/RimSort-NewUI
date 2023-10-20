@@ -7,13 +7,13 @@ from PySide6.QtWidgets import (
     QPushButton,
     QLineEdit,
     QLabel,
-    QListView,
     QAbstractItemView,
     QGroupBox,
 )
 
 from utilities.gui_info import GUIInfo
 from utilities.system_info import SystemInfo
+from widgets.drag_drop_list_view import DragDropListView
 
 
 class MainWindow(QMainWindow):
@@ -86,7 +86,7 @@ class MainWindow(QMainWindow):
         self.inactive_mods_filter_field.setPlaceholderText("Search...")
         inactive_mods_layout.addWidget(self.inactive_mods_filter_field)
 
-        self.inactive_mods_list_view = QListView()
+        self.inactive_mods_list_view = DragDropListView()
         self.inactive_mods_list_view.setFont(GUIInfo().default_font)
         self.inactive_mods_list_view.setSelectionMode(
             QAbstractItemView.SelectionMode.ExtendedSelection
@@ -106,7 +106,7 @@ class MainWindow(QMainWindow):
         self.active_mods_filter_field.setPlaceholderText("Search...")
         active_mods_layout.addWidget(self.active_mods_filter_field)
 
-        self.active_mods_list_view = QListView()
+        self.active_mods_list_view = DragDropListView()
         self.active_mods_list_view.setFont(GUIInfo().default_font)
         self.active_mods_list_view.setSelectionMode(
             QAbstractItemView.SelectionMode.ExtendedSelection

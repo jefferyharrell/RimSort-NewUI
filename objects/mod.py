@@ -1,5 +1,6 @@
+import uuid
 from pathlib import Path
-from typing import List, Optional
+from typing import Iterable
 
 from PySide6.QtGui import QStandardItem, Qt
 
@@ -8,28 +9,35 @@ class Mod(QStandardItem):
     def __init__(
         self,
         name: str,
-        package_id: Optional[str],
-        supported_versions: Optional[List[str]],
+        package_id: str,
+        supported_versions: Iterable[str],
         preview_image_path: Path,
     ) -> None:
         super().__init__(name)
+
+        self._id = uuid.uuid4()
+
         self._name = name
         self._package_id = package_id
         self._supported_versions = supported_versions
         self._preview_image_path = preview_image_path
 
-        self.setData(self, Qt.ItemDataRole.UserRole)
+        self.setData(self.id, Qt.ItemDataRole.UserRole)
+
+    @property
+    def id(self) -> uuid.UUID:
+        return self._id
 
     @property
     def name(self) -> str:
         return self._name
 
     @property
-    def package_id(self) -> Optional[str]:
+    def package_id(self) -> str:
         return self._package_id
 
     @property
-    def supported_versions(self) -> Optional[List[str]]:
+    def supported_versions(self) -> Iterable[str]:
         return self._supported_versions
 
     @property
@@ -38,3 +46,6 @@ class Mod(QStandardItem):
 
     def __str__(self) -> str:
         return self.name
+
+    def __repr__(self) -> str:
+        return f"Mod({self.name}, {self.package_id}, {self.supported_versions}, {self.preview_image_path})"
