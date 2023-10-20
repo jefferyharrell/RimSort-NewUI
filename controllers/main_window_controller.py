@@ -8,6 +8,7 @@ from lxml import etree
 
 from models.main_window_model import MainWindowModel
 from models.settings_model import SettingsModel
+from objects.mod import Mod
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
 from views.settings_dialog import SettingsDialog
@@ -47,10 +48,10 @@ class MainWindowController(QObject):
 
         result_list = self._scan_folder_for_mods(steam_mods_folder_location_path)
         result_list += self._scan_folder_for_mods(local_mods_folder_location_path)
-        result_list.sort()
+        result_list.sort(key=lambda x: x.name)
 
-        self.main_window_model.inactive_mods_list_model.setStringList(result_list)
-        self.main_window_model.active_mods_list_model.setStringList(result_list)
+        for mod in result_list:
+            self.main_window_model.inactive_mods_list_model.appendRow(mod)
 
         # Set up the proxy models
         self.main_window_model.inactive_mods_proxy_model.setSourceModel(
@@ -91,7 +92,7 @@ class MainWindowController(QObject):
         """Update the filter based on the text in the QLineEdit."""
         self.main_window_model.active_mods_proxy_model.setFilterFixedString(text)
 
-    def _scan_folder_for_mods(self, folder_location_path: Path) -> List[str]:
+    def _scan_folder_for_mods(self, folder_location_path: Path) -> List[Mod]:
         result_list = []
         for subfolder in folder_location_path.iterdir():
             if subfolder.is_dir():
@@ -102,9 +103,21 @@ class MainWindowController(QObject):
                         # Parse the XML file using lxml
                         tree = etree.parse(str(about_xml_path))
                         root = tree.getroot()
-                        extracted_data = root.find("./name")
-                        if extracted_data is not None:
-                            result_list.append(extracted_data.text)
+
+                        node = root.find("./name")
+                        name = node.text if node is not None else ""
+                        node = root.find("./packageId")
+                        package_id = node.text if node is not None else ""
+                        supported_versions = root.xpath("./supportedVersions/li/text()")
+
+                        if (
+                            name is not None
+                            and package_id is not None
+                            and supported_versions is not None
+                        ):
+                            result_list.append(
+                                Mod(name, package_id, supported_versions)
+                            )
                     except (
                         etree.XMLSyntaxError
                     ):  # Catching XML parsing errors specific to lxml
