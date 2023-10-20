@@ -88,13 +88,17 @@ class MainWindow(QMainWindow):
         button_layout.addStretch()
 
         self.refresh_button = QPushButton("Refresh")
+        self.refresh_button.setMinimumWidth(100)
         button_layout.addWidget(self.refresh_button)
 
-        self.save_button = QPushButton("Save")
-        button_layout.addWidget(self.save_button)
+        self.sort_button = QPushButton("Sort")
+        self.sort_button.setMinimumWidth(100)
+        self.sort_button.setDefault(True)
+        button_layout.addWidget(self.sort_button)
 
-        self.run_button = QPushButton("Run Game")
-        button_layout.addWidget(self.run_button)
+        self.save_button = QPushButton("Save")
+        self.save_button.setMinimumWidth(100)
+        button_layout.addWidget(self.save_button)
 
         central_layout.addLayout(button_layout)
 
