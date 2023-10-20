@@ -124,7 +124,7 @@ class MainWindowController(QObject):
                         logger.warning(f"Could not parse About.xml at {about_xml_path}")
         return result_list
 
-    # region SLots
+    # region Slots
 
     @Slot()
     def _on_about_action_triggered(self) -> None:
