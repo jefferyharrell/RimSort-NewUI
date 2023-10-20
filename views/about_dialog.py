@@ -2,7 +2,7 @@ from typing import Optional
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QShowEvent
-from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout, QApplication
+from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout
 
 
 class AboutDialog(QWidget):
