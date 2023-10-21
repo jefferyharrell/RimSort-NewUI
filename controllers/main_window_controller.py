@@ -102,7 +102,12 @@ class MainWindowController(QObject):
 
     @Slot(object)
     def _on_runner_data_ready(self, data: object) -> None:
-        for mod in cast(List[Mod], data):
+        if not isinstance(data, list) or not all(
+            isinstance(item, Mod) for item in data
+        ):
+            raise TypeError("Expected a list of Mod objects")
+
+        for mod in data:
             self.main_window_model.mods_dictionary[mod.id] = mod
             self.main_window_model.inactive_mods_list_model.appendRow(mod)
             self.main_window_model.inactive_mods_proxy_model.sort(0)
