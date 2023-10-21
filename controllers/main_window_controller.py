@@ -107,6 +107,9 @@ class MainWindowController(QObject):
         ):
             raise TypeError("Expected a list of Mod objects")
 
+        self.main_window_model.mods_dictionary = {}
+        self.main_window_model.inactive_mods_list_model.clear()
+
         for mod in data:
             self.main_window_model.mods_dictionary[mod.id] = mod
             self.main_window_model.inactive_mods_list_model.appendRow(mod)
