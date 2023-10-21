@@ -36,10 +36,10 @@ class MainWindow(QMainWindow):
 
         central_layout = QVBoxLayout(central_widget)
 
-        frames_layout = QHBoxLayout()
+        horizontal_layout = QHBoxLayout()
 
         selected_mod_info_frame = QGroupBox()
-        frames_layout.addWidget(selected_mod_info_frame, stretch=2)
+        horizontal_layout.addWidget(selected_mod_info_frame, stretch=2)
 
         selected_mod_layout = QVBoxLayout(selected_mod_info_frame)
 
@@ -96,7 +96,7 @@ class MainWindow(QMainWindow):
         selected_mod_layout.addWidget(self.selected_mod_table)
 
         inactive_mods_frame = QGroupBox()
-        frames_layout.addWidget(inactive_mods_frame, stretch=1)
+        horizontal_layout.addWidget(inactive_mods_frame, stretch=1)
 
         inactive_mods_layout = QVBoxLayout(inactive_mods_frame)
 
@@ -117,7 +117,7 @@ class MainWindow(QMainWindow):
         inactive_mods_layout.addWidget(self.inactive_mods_list_view)
 
         active_mods_frame = QGroupBox()
-        frames_layout.addWidget(active_mods_frame, stretch=1)
+        horizontal_layout.addWidget(active_mods_frame, stretch=1)
 
         active_mods_layout = QVBoxLayout(active_mods_frame)
 
@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
         )
         active_mods_layout.addWidget(self.active_mods_list_view)
 
-        central_layout.addLayout(frames_layout)
+        central_layout.addLayout(horizontal_layout)
 
         button_layout = QHBoxLayout()
 
