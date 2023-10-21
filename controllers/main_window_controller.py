@@ -137,7 +137,7 @@ class MainWindowController(QObject):
             self.main_window.selected_mod_description.hide()
         self.main_window.selected_mod_description.setText(mod.description)
         height = self.main_window.selected_mod_description.document().size().height()
-        self.main_window.selected_mod_description.setFixedHeight(height)
+        self.main_window.selected_mod_description.setFixedHeight(int(height))
 
     @Slot(QModelIndex)
     def _on_mod_list_view_double_clicked(self, index: QModelIndex) -> None:
