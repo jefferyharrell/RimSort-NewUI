@@ -92,10 +92,12 @@ class MainWindowController(QObject):
         self._refresh_inactive_mods_list()
 
     def _refresh_inactive_mods_list(self) -> None:
-        steam_mods_folder_location_path = Path(
-            self.settings_model.steam_mods_folder_location
+        self.runner = LoadModsFromFolderRunner(
+            [
+                self.settings_model.steam_mods_folder_location_path,
+                self.settings_model.local_mods_folder_location_path,
+            ]
         )
-        self.runner = LoadModsFromFolderRunner([steam_mods_folder_location_path])
         self.runner.signals.data_ready.connect(self._on_runner_data_ready)
         pool = QThreadPool.globalInstance()
         pool.start(self.runner)
