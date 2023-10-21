@@ -11,6 +11,8 @@ class AboutDialog(QWidget):
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super(AboutDialog, self).__init__(parent)
 
+        self.setWindowTitle("About NewUI")
+
         image_label = QLabel()
         pixmap = QPixmap("resources/AppIcon_a.png").scaled(
             QSize(64, 64),
