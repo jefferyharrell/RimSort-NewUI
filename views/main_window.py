@@ -187,7 +187,8 @@ class MainWindow(QMainWindow):
         inactive_mods_layout.addWidget(inactive_mods_label)
 
         self.inactive_mods_filter_field = QLineEdit()
-        self.inactive_mods_filter_field.setPlaceholderText("Search…")
+        self.inactive_mods_filter_field.setPlaceholderText("Filter…")
+        self.inactive_mods_filter_field.setClearButtonEnabled(True)
         inactive_mods_layout.addWidget(self.inactive_mods_filter_field)
 
         self.inactive_mods_list_view = DragDropListView()
@@ -209,7 +210,8 @@ class MainWindow(QMainWindow):
         active_mods_layout.addWidget(active_mods_label)
 
         self.active_mods_filter_field = QLineEdit()
-        self.active_mods_filter_field.setPlaceholderText("Search…")
+        self.active_mods_filter_field.setPlaceholderText("Filter…")
+        self.active_mods_filter_field.setClearButtonEnabled(True)
         active_mods_layout.addWidget(self.active_mods_filter_field)
 
         self.active_mods_list_view = DragDropListView()
