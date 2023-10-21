@@ -1,5 +1,4 @@
-from pathlib import Path
-from typing import List, cast
+from typing import cast
 
 from PySide6.QtCore import (
     QObject,
@@ -19,7 +18,7 @@ from models.settings_model import SettingsModel
 from objects.mod import Mod
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
-from runners.load_mods_from_folder_runner import LoadModsFromFolderRunner
+from runners.load_mods_from_folders_runner import LoadModsFromFoldersRunner
 
 
 class MainWindowController(QObject):
@@ -92,7 +91,7 @@ class MainWindowController(QObject):
         self._refresh_inactive_mods_list()
 
     def _refresh_inactive_mods_list(self) -> None:
-        self.runner = LoadModsFromFolderRunner(
+        self.runner = LoadModsFromFoldersRunner(
             [
                 self.settings_model.steam_mods_folder_location_path,
                 self.settings_model.local_mods_folder_location_path,

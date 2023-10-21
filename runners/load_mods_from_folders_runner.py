@@ -9,7 +9,7 @@ from objects.mod import Mod
 from runners.runner_signals import RunnerSignals
 
 
-class LoadModsFromFolderRunner(QRunnable):
+class LoadModsFromFoldersRunner(QRunnable):
     def __init__(self, folder_paths: List[Path]) -> None:
         super().__init__()
         self.signals = RunnerSignals()
