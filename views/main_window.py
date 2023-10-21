@@ -22,8 +22,6 @@ from widgets.drag_drop_list_view import DragDropListView
 
 
 class MainWindow(QMainWindow):
-    close_window_hotkey = Signal()
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -61,14 +59,6 @@ class MainWindow(QMainWindow):
         button_layout.addWidget(self.save_button)
 
         central_layout.addLayout(button_layout)
-
-    def keyPressEvent(self, event: QKeyEvent) -> None:
-        if (
-            event.key() == Qt.Key.Key_W
-            and event.modifiers() == Qt.KeyboardModifier.ControlModifier
-        ):
-            self.close_window_hotkey.emit()
-        super().keyPressEvent(event)
 
     def _do_selected_mod_widget(self) -> None:
         selected_mod_info_frame = QGroupBox()

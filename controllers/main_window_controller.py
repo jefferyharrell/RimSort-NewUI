@@ -38,8 +38,6 @@ class MainWindowController(QObject):
         self.about_dialog = AboutDialog()
 
         # Connect the main window's signals
-        self.main_window.close_window_hotkey.connect(self._on_close_window_hotkey)
-
         self.main_window.inactive_mods_list_view.clicked.connect(
             self._on_mod_list_view_clicked
         )
@@ -105,10 +103,6 @@ class MainWindowController(QObject):
             self.main_window_model.mods_dictionary[mod.id] = mod
             self.main_window_model.inactive_mods_list_model.appendRow(mod)
             self.main_window_model.inactive_mods_proxy_model.sort(0)
-
-    @Slot()
-    def _on_close_window_hotkey(self) -> None:
-        QApplication.quit()
 
     @Slot(str)
     def _update_inactive_mods_filter(self, text: str) -> None:

@@ -24,6 +24,9 @@ class MainMenuController(QObject):
             self._on_settings_action_triggered
         )
         self.main_menu.exit_action.triggered.connect(self._on_exit_action_triggered)
+        self.main_menu.close_window_action.triggered.connect(
+            self._on_close_window_action_triggered
+        )
 
     @Slot()
     def _on_about_action_triggered(self) -> None:
@@ -35,4 +38,8 @@ class MainMenuController(QObject):
 
     @Slot()
     def _on_exit_action_triggered(self) -> None:
+        QApplication.quit()
+
+    @Slot()
+    def _on_close_window_action_triggered(self) -> None:
         QApplication.quit()

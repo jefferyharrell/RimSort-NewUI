@@ -30,6 +30,12 @@ class MainMenu(QObject):
         self.exit_action = QAction("Quit", self)
         app_menu.addAction(self.exit_action)
 
+        file_menu = self.menu_bar.addMenu("File")
+
+        self.close_window_action = QAction("Close Window", self)
+        self.close_window_action.setShortcut(QKeySequence("Ctrl+W"))
+        file_menu.addAction(self.close_window_action)
+
     def _do_main_menu_non_macos(self) -> None:
         file_menu = self.menu_bar.addMenu("File")
 
