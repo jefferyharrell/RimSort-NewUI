@@ -8,6 +8,8 @@ from PySide6.QtCore import (
     QModelIndex,
     QSortFilterProxyModel,
     QThreadPool,
+    QItemSelection,
+    QItemSelectionModel,
 )
 from PySide6.QtGui import QPixmap, QStandardItemModel
 from PySide6.QtWidgets import QApplication, QListView
@@ -88,6 +90,13 @@ class MainWindowController(QObject):
             self.main_window_model.active_mods_proxy_model
         )
 
+        self.main_window.inactive_mods_list_view.selectionModel().selectionChanged.connect(
+            self._on_mods_list_view_selection_changed
+        )
+        self.main_window.active_mods_list_view.selectionModel().selectionChanged.connect(
+            self._on_mods_list_view_selection_changed
+        )
+
         # Populate the models
         steam_mods_folder_location_path = Path(
             self.settings_model.steam_mods_folder_location
@@ -96,6 +105,18 @@ class MainWindowController(QObject):
         self.runner.signals.data_ready.connect(self._on_runner_data_ready)
         pool = QThreadPool.globalInstance()
         pool.start(self.runner)
+
+    @Slot()
+    def _on_about_action_triggered(self) -> None:
+        self.about_dialog.show()
+
+    @Slot()
+    def _on_settings_action_triggered(self) -> None:
+        self.settings_dialog.exec()
+
+    @Slot()
+    def _on_exit_action_triggered(self) -> None:
+        QApplication.quit()
 
     @Slot(object)
     def _on_runner_data_ready(self, data: object) -> None:
@@ -116,28 +137,15 @@ class MainWindowController(QObject):
 
     @Slot(QModelIndex)
     def _on_mod_list_view_clicked(self, index: QModelIndex) -> None:
-        mod_uuid = index.data(Qt.ItemDataRole.UserRole)
-        mod = self.main_window_model.mods_dictionary[mod_uuid]
-
-        if mod.preview_image_path.exists():
-            desired_width = self.main_window.selected_mod_preview_image.width()
-            pixmap = QPixmap(str(mod.preview_image_path)).scaledToWidth(
-                desired_width, Qt.TransformationMode.SmoothTransformation
+        sender_object = self.sender()
+        if not isinstance(sender_object, QListView):
+            raise TypeError(
+                f"Expected sender of type QListView, but got {type(sender_object)}"
             )
-            self.main_window.selected_mod_preview_image.setPixmap(pixmap)
 
-        self.main_window.selected_mod_name_label.setText(mod.name)
-        self.main_window.selected_mod_package_id_label.setText(str(mod.package_id))
-        self.main_window.selected_mod_supported_versions_label.setText(
-            ", ".join(mod.supported_versions)
-        )
-        if mod.description != "":
-            self.main_window.selected_mod_description.show()
-        else:
-            self.main_window.selected_mod_description.hide()
-        self.main_window.selected_mod_description.setText(mod.description)
-        height = self.main_window.selected_mod_description.document().size().height()
-        self.main_window.selected_mod_description.setFixedHeight(int(height))
+        if not sender_object.selectionModel().isSelected(index):
+            return
+        self._show_selected_mod_info_by_index(index)
 
     @Slot(QModelIndex)
     def _on_mod_list_view_double_clicked(self, index: QModelIndex) -> None:
@@ -155,6 +163,53 @@ class MainWindowController(QObject):
         )
 
         self._move_mod_to_list_view(index, source_list_view, target_list_view)
+
+    @Slot(QItemSelection, QItemSelection)
+    def _on_mods_list_view_selection_changed(
+        self, selected: QItemSelection, deselected: QItemSelection
+    ) -> None:
+        sender_object = self.sender()
+        if not isinstance(sender_object, QItemSelectionModel):
+            raise TypeError(
+                f"Expected sender of type QListView, but got {type(sender_object)}"
+            )
+
+        if deselected.count() != 0:
+            selected_indexes = sender_object.selectedIndexes()
+            if selected_indexes:
+                self._show_selected_mod_info_by_index(selected_indexes[-1])
+            else:
+                self._clear_selected_mod_info()
+
+    def _show_selected_mod_info_by_index(self, index: QModelIndex) -> None:
+        mod_uuid = index.data(Qt.ItemDataRole.UserRole)
+        mod = self.main_window_model.mods_dictionary[mod_uuid]
+        if mod.preview_image_path.exists():
+            desired_width = self.main_window.selected_mod_preview_image.width()
+            pixmap = QPixmap(str(mod.preview_image_path)).scaledToWidth(
+                desired_width, Qt.TransformationMode.SmoothTransformation
+            )
+            self.main_window.selected_mod_preview_image.setPixmap(pixmap)
+        self.main_window.selected_mod_name_label.setText(mod.name)
+        self.main_window.selected_mod_package_id_label.setText(str(mod.package_id))
+        self.main_window.selected_mod_supported_versions_label.setText(
+            ", ".join(mod.supported_versions)
+        )
+        if mod.description != "":
+            self.main_window.selected_mod_description.show()
+        else:
+            self.main_window.selected_mod_description.hide()
+        self.main_window.selected_mod_description.setText(mod.description)
+        height = self.main_window.selected_mod_description.document().size().height()
+        self.main_window.selected_mod_description.setFixedHeight(int(height))
+
+    def _clear_selected_mod_info(self) -> None:
+        self.main_window.selected_mod_preview_image.setPixmap(QPixmap())
+        self.main_window.selected_mod_name_label.setText("")
+        self.main_window.selected_mod_package_id_label.setText("")
+        self.main_window.selected_mod_supported_versions_label.setText("")
+        self.main_window.selected_mod_description.setText("")
+        self.main_window.selected_mod_description.hide()
 
     @staticmethod
     def _move_mod_to_list_view(
@@ -200,57 +255,3 @@ class MainWindowController(QObject):
         if isinstance(target_model, QSortFilterProxyModel):
             target_model = cast(QStandardItemModel, target_model.sourceModel())
         target_model.appendRow(item_clone)
-
-    # @staticmethod
-    # def _scan_folder_for_mods(folder_location_path: Path) -> List[Mod]:
-    #     result_list: List[Mod] = []
-    #     for subfolder in folder_location_path.iterdir():
-    #         if subfolder.is_dir():
-    #             about_xml_path = subfolder / "About" / "About.xml"
-    #
-    #             name = ""
-    #             package_id = ""
-    #             supported_versions = []
-    #
-    #             if about_xml_path.exists():
-    #                 try:
-    #                     # Parse the XML file using lxml
-    #                     tree = etree.parse(str(about_xml_path))
-    #                     root = tree.getroot()
-    #
-    #                     node = root.find("./name")
-    #                     name = node.text if node is not None else ""
-    #                     node = root.find("./packageId")
-    #                     package_id = node.text if node is not None else ""
-    #                     supported_versions = root.xpath("./supportedVersions/li/text()")
-    #                 except (
-    #                     etree.XMLSyntaxError
-    #                 ):  # Catching XML parsing errors specific to lxml
-    #                     logger.warning(f"Could not parse About.xml at {about_xml_path}")
-    #
-    #                 preview_image_path = subfolder / "About" / "Preview.png"
-    #
-    #                 if name is not None:
-    #                     result_list.append(
-    #                         Mod(
-    #                             name, package_id, supported_versions, preview_image_path
-    #                         )
-    #                     )
-    #
-    #     return result_list
-
-    # region Slots
-
-    @Slot()
-    def _on_about_action_triggered(self) -> None:
-        self.about_dialog.show()
-
-    @Slot()
-    def _on_settings_action_triggered(self) -> None:
-        self.settings_dialog.exec()
-
-    @Slot()
-    def _on_exit_action_triggered(self) -> None:
-        QApplication.quit()
-
-    # endregion
