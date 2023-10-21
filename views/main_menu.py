@@ -23,7 +23,9 @@ class MainMenu(QObject):
         app_menu.addAction(self.about_action)
         app_menu.addSeparator()
 
-        self.settings_action = QAction("Settings", self)
+        self.settings_action = QAction("Settings…", self)
+        self.settings_action.setShortcut(QKeySequence("Ctrl+,"))
+        self.settings_action.setMenuRole(QAction.MenuRole.ApplicationSpecificRole)
         app_menu.addAction(self.settings_action)
         app_menu.addSeparator()
 
