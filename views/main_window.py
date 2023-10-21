@@ -44,6 +44,7 @@ class MainWindow(QMainWindow):
         selected_mod_layout = QVBoxLayout(selected_mod_info_frame)
 
         selected_mod_label = QLabel("Selected Mod")
+        selected_mod_label.setFont(GUIInfo().emphasis_font)
         selected_mod_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         selected_mod_layout.addWidget(selected_mod_label)
 
@@ -100,6 +101,7 @@ class MainWindow(QMainWindow):
         inactive_mods_layout = QVBoxLayout(inactive_mods_frame)
 
         inactive_mods_label = QLabel("Inactive Mods")
+        inactive_mods_label.setFont(GUIInfo().emphasis_font)
         inactive_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         inactive_mods_layout.addWidget(inactive_mods_label)
 
@@ -120,6 +122,7 @@ class MainWindow(QMainWindow):
         active_mods_layout = QVBoxLayout(active_mods_frame)
 
         active_mods_label = QLabel("Active Mods")
+        active_mods_label.setFont(GUIInfo().emphasis_font)
         active_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         active_mods_layout.addWidget(active_mods_label)
 
