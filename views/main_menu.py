@@ -78,6 +78,23 @@ class MainMenu(QObject):
 
         file_menu.addSeparator()
 
+        export_submenu = QMenu("Export")
+        file_menu.addMenu(export_submenu)
+
+        self.export_to_clipboard_action = QAction("To Clipboard…", self)
+        self.export_to_clipboard_action.setEnabled(False)
+        export_submenu.addAction(self.export_to_clipboard_action)
+
+        self.export_to_file_action = QAction("To Text File…", self)
+        self.export_to_file_action.setEnabled(False)
+        export_submenu.addAction(self.export_to_file_action)
+
+        self.export_to_rentry_action = QAction("To Rentry.co…", self)
+        self.export_to_rentry_action.setEnabled(False)
+        export_submenu.addAction(self.export_to_rentry_action)
+
+        file_menu.addSeparator()
+
         self.settings_action = QAction("Settings", self)
         self.settings_action.setShortcut(QKeySequence("Ctrl+,"))
         file_menu.addAction(self.settings_action)
