@@ -9,6 +9,9 @@ from PySide6.QtWidgets import (
     QLabel,
     QAbstractItemView,
     QGroupBox,
+    QTableWidgetItem,
+    QTableWidget,
+    QHeaderView,
 )
 
 from utilities.gui_info import GUIInfo
@@ -49,29 +52,47 @@ class MainWindow(QMainWindow):
 
         selected_mod_layout.addStretch()
 
-        selected_mod_name_hbox_layout = QHBoxLayout()
-        selected_mod_name_hbox_layout.addWidget(QLabel("Name: "))
-        self.selected_mod_name_label = QLabel()
-        selected_mod_name_hbox_layout.addWidget(self.selected_mod_name_label)
-        selected_mod_layout.addLayout(selected_mod_name_hbox_layout)
+        self.selected_mod_table = QTableWidget(3, 2)
+        self.selected_mod_table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeMode.ResizeToContents
+        )
+        self.selected_mod_table.horizontalHeader().setSectionResizeMode(
+            1, QHeaderView.ResizeMode.Stretch
+        )
+        self.selected_mod_table.horizontalHeader().setVisible(False)
+        self.selected_mod_table.verticalHeader().setVisible(False)
+        self.selected_mod_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.selected_mod_table.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
+        self.selected_mod_table.setShowGrid(False)
+        self.selected_mod_table.setStyleSheet("background: transparent;")
 
-        selected_mod_package_id_hbox_layout = QHBoxLayout()
-        selected_mod_package_id_hbox_layout.addWidget(QLabel("Package ID: "))
-        self.selected_mod_package_id_label = QLabel()
-        selected_mod_package_id_hbox_layout.addWidget(
-            self.selected_mod_package_id_label
-        )
-        selected_mod_layout.addLayout(selected_mod_package_id_hbox_layout)
+        row = 0
+        self.selected_mod_table.setRowHeight(row, GUIInfo().default_font_line_height)
+        row_header_label = QTableWidgetItem("Name")
+        row_header_label.setFont(GUIInfo().emphasis_font)
+        self.selected_mod_table.setItem(row, 0, row_header_label)
+        self.selected_mod_name_label = QTableWidgetItem()
+        self.selected_mod_table.setItem(row, 1, self.selected_mod_name_label)
 
-        selected_mod_supported_versions_hbox_layout = QHBoxLayout()
-        selected_mod_supported_versions_hbox_layout.addWidget(
-            QLabel("Supported Versions: ")
+        row = 1
+        self.selected_mod_table.setRowHeight(row, GUIInfo().default_font_line_height)
+        row_header_label = QTableWidgetItem("Package ID")
+        row_header_label.setFont(GUIInfo().emphasis_font)
+        self.selected_mod_table.setItem(row, 0, row_header_label)
+        self.selected_mod_package_id_label = QTableWidgetItem()
+        self.selected_mod_table.setItem(row, 1, self.selected_mod_package_id_label)
+
+        row = 2
+        self.selected_mod_table.setRowHeight(row, GUIInfo().default_font_line_height)
+        row_header_label = QTableWidgetItem("Supported Versions")
+        row_header_label.setFont(GUIInfo().emphasis_font)
+        self.selected_mod_table.setItem(row, 0, row_header_label)
+        self.selected_mod_supported_versions_label = QTableWidgetItem()
+        self.selected_mod_table.setItem(
+            row, 1, self.selected_mod_supported_versions_label
         )
-        self.selected_mod_supported_versions_label = QLabel()
-        selected_mod_supported_versions_hbox_layout.addWidget(
-            self.selected_mod_supported_versions_label
-        )
-        selected_mod_layout.addLayout(selected_mod_supported_versions_hbox_layout)
+
+        selected_mod_layout.addWidget(self.selected_mod_table)
 
         inactive_mods_frame = QGroupBox()
         frames_layout.addWidget(inactive_mods_frame, stretch=1)
