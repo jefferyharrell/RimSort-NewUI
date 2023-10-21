@@ -12,6 +12,8 @@ from PySide6.QtWidgets import (
     QTableWidgetItem,
     QTableWidget,
     QHeaderView,
+    QScrollArea,
+    QTextEdit,
 )
 
 from utilities.gui_info import GUIInfo
@@ -48,10 +50,16 @@ class MainWindow(QMainWindow):
         selected_mod_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         selected_mod_layout.addWidget(selected_mod_label)
 
-        self.selected_mod_preview_image = QLabel()
-        selected_mod_layout.addWidget(self.selected_mod_preview_image)
+        scroll_widget = QWidget()
+        scroll_layout = QVBoxLayout(scroll_widget)
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setWidget(scroll_widget)
 
-        selected_mod_layout.addStretch()
+        self.selected_mod_preview_image = QLabel()
+        scroll_layout.addWidget(self.selected_mod_preview_image)
+
+        scroll_layout.addStretch()
 
         self.selected_mod_table = QTableWidget(3, 2)
         self.selected_mod_table.horizontalHeader().setSectionResizeMode(
@@ -93,7 +101,25 @@ class MainWindow(QMainWindow):
             row, 1, self.selected_mod_supported_versions_label
         )
 
-        selected_mod_layout.addWidget(self.selected_mod_table)
+        total_height = sum(
+            [
+                self.selected_mod_table.rowHeight(i)
+                for i in range(self.selected_mod_table.rowCount())
+            ]
+        )
+        self.selected_mod_table.setFixedHeight(total_height + 2)
+
+        self.selected_mod_description = QTextEdit(self)
+        self.selected_mod_description.setReadOnly(True)
+        self.selected_mod_description.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+        self.selected_mod_description.setStyleSheet("background: transparent;")
+        self.selected_mod_description.hide()
+
+        scroll_layout.addWidget(self.selected_mod_table)
+        scroll_layout.addWidget(self.selected_mod_description)
+        selected_mod_layout.addWidget(scroll_area)
 
         inactive_mods_frame = QGroupBox()
         horizontal_layout.addWidget(inactive_mods_frame, stretch=1)

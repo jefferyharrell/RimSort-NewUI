@@ -119,17 +119,25 @@ class MainWindowController(QObject):
         mod_uuid = index.data(Qt.ItemDataRole.UserRole)
         mod = self.main_window_model.mods_dictionary[mod_uuid]
 
-        self.main_window.selected_mod_name_label.setText(mod.name)
-        self.main_window.selected_mod_package_id_label.setText(str(mod.package_id))
-        self.main_window.selected_mod_supported_versions_label.setText(
-            ", ".join(mod.supported_versions)
-        )
         if mod.preview_image_path.exists():
             desired_width = self.main_window.selected_mod_preview_image.width()
             pixmap = QPixmap(str(mod.preview_image_path)).scaledToWidth(
                 desired_width, Qt.TransformationMode.SmoothTransformation
             )
             self.main_window.selected_mod_preview_image.setPixmap(pixmap)
+
+        self.main_window.selected_mod_name_label.setText(mod.name)
+        self.main_window.selected_mod_package_id_label.setText(str(mod.package_id))
+        self.main_window.selected_mod_supported_versions_label.setText(
+            ", ".join(mod.supported_versions)
+        )
+        if mod.description != "":
+            self.main_window.selected_mod_description.show()
+        else:
+            self.main_window.selected_mod_description.hide()
+        self.main_window.selected_mod_description.setText(mod.description)
+        height = self.main_window.selected_mod_description.document().size().height()
+        self.main_window.selected_mod_description.setFixedHeight(height)
 
     @Slot(QModelIndex)
     def _on_mod_list_view_double_clicked(self, index: QModelIndex) -> None:

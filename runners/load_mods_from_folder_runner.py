@@ -24,6 +24,7 @@ class LoadModsFromFolderRunner(QRunnable):
                 name = ""
                 package_id = ""
                 supported_versions = []
+                description = ""
 
                 if about_xml_path.exists():
                     try:
@@ -35,6 +36,8 @@ class LoadModsFromFolderRunner(QRunnable):
                         node = root.find("./packageId")
                         package_id = node.text if node is not None else ""
                         supported_versions = root.xpath("./supportedVersions/li/text()")
+                        node = root.find("./description")
+                        description = node.text if node is not None else ""
                     except etree.XMLSyntaxError:
                         logger.warning(f"Could not parse About.xml at {about_xml_path}")
 
@@ -43,7 +46,11 @@ class LoadModsFromFolderRunner(QRunnable):
                     if name is not None:
                         data.append(
                             Mod(
-                                name, package_id, supported_versions, preview_image_path
+                                name,
+                                package_id,
+                                supported_versions,
+                                description,
+                                preview_image_path,
                             )
                         )
 

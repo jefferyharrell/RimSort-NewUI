@@ -11,6 +11,7 @@ class Mod(QStandardItem):
         name: str,
         package_id: str,
         supported_versions: Iterable[str],
+        description: str,
         preview_image_path: Path,
     ) -> None:
         super().__init__(name)
@@ -20,6 +21,7 @@ class Mod(QStandardItem):
         self._name = name
         self._package_id = package_id
         self._supported_versions = supported_versions
+        self._description = description
         self._preview_image_path = preview_image_path
 
         self.setData(self.id, Qt.ItemDataRole.UserRole)
@@ -39,6 +41,10 @@ class Mod(QStandardItem):
     @property
     def supported_versions(self) -> Iterable[str]:
         return self._supported_versions
+
+    @property
+    def description(self) -> str:
+        return self._description
 
     @property
     def preview_image_path(self) -> Path:
