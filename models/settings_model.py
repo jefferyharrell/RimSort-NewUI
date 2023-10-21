@@ -63,6 +63,10 @@ class SettingsModel(QObject):
             self.changed.emit()
 
     @property
+    def game_location_path(self) -> Path:
+        return Path(self._game_location)
+
+    @property
     def config_folder_location(self) -> str:
         return self._config_folder_location
 
@@ -71,6 +75,10 @@ class SettingsModel(QObject):
         if self._config_folder_location != value:
             self._config_folder_location = value
             self.changed.emit()
+
+    @property
+    def config_folder_location_path(self) -> Path:
+        return Path(self._config_folder_location)
 
     @property
     def steam_mods_folder_location(self) -> str:
@@ -83,6 +91,10 @@ class SettingsModel(QObject):
             self.changed.emit()
 
     @property
+    def steam_mods_folder_location_path(self) -> Path:
+        return Path(self._steam_mods_folder_location)
+
+    @property
     def local_mods_folder_location(self) -> str:
         return self._local_mods_folder_location
 
@@ -91,6 +103,10 @@ class SettingsModel(QObject):
         if self._local_mods_folder_location != value:
             self._local_mods_folder_location = value
             self.changed.emit()
+
+    @property
+    def local_mods_folder_location_path(self) -> Path:
+        return Path(self._local_mods_folder_location)
 
     @property
     def sorting_algorithm(self) -> "SettingsModel.SortingAlgorithm":
