@@ -38,91 +38,12 @@ class MainWindow(QMainWindow):
 
         central_layout = QVBoxLayout(central_widget)
 
-        horizontal_layout = QHBoxLayout()
+        self.horizontal_layout = QHBoxLayout()
 
-        selected_mod_info_frame = QGroupBox()
-        horizontal_layout.addWidget(selected_mod_info_frame, stretch=2)
-
-        selected_mod_layout = QVBoxLayout(selected_mod_info_frame)
-
-        selected_mod_label = QLabel("Selected Mod")
-        selected_mod_label.setFont(GUIInfo().emphasis_font)
-        selected_mod_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        selected_mod_layout.addWidget(selected_mod_label)
-
-        scroll_widget = QWidget()
-        scroll_layout = QVBoxLayout(scroll_widget)
-        scroll_area = QScrollArea()
-        scroll_area.setWidgetResizable(True)
-        scroll_area.setWidget(scroll_widget)
-
-        self.selected_mod_preview_image = QLabel()
-        scroll_layout.addWidget(self.selected_mod_preview_image)
-
-        scroll_layout.addStretch()
-
-        self.selected_mod_table = QTableWidget(3, 2)
-        self.selected_mod_table.horizontalHeader().setSectionResizeMode(
-            0, QHeaderView.ResizeMode.ResizeToContents
-        )
-        self.selected_mod_table.horizontalHeader().setSectionResizeMode(
-            1, QHeaderView.ResizeMode.Stretch
-        )
-        self.selected_mod_table.horizontalHeader().setVisible(False)
-        self.selected_mod_table.verticalHeader().setVisible(False)
-        self.selected_mod_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-        self.selected_mod_table.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
-        self.selected_mod_table.setShowGrid(False)
-        self.selected_mod_table.setStyleSheet("background: transparent;")
-
-        row = 0
-        self.selected_mod_table.setRowHeight(row, GUIInfo().default_font_line_height)
-        row_header_label = QTableWidgetItem("Name")
-        row_header_label.setFont(GUIInfo().emphasis_font)
-        self.selected_mod_table.setItem(row, 0, row_header_label)
-        self.selected_mod_name_label = QTableWidgetItem()
-        self.selected_mod_table.setItem(row, 1, self.selected_mod_name_label)
-
-        row = 1
-        self.selected_mod_table.setRowHeight(row, GUIInfo().default_font_line_height)
-        row_header_label = QTableWidgetItem("Package ID")
-        row_header_label.setFont(GUIInfo().emphasis_font)
-        self.selected_mod_table.setItem(row, 0, row_header_label)
-        self.selected_mod_package_id_label = QTableWidgetItem()
-        self.selected_mod_table.setItem(row, 1, self.selected_mod_package_id_label)
-
-        row = 2
-        self.selected_mod_table.setRowHeight(row, GUIInfo().default_font_line_height)
-        row_header_label = QTableWidgetItem("Supported Versions")
-        row_header_label.setFont(GUIInfo().emphasis_font)
-        self.selected_mod_table.setItem(row, 0, row_header_label)
-        self.selected_mod_supported_versions_label = QTableWidgetItem()
-        self.selected_mod_table.setItem(
-            row, 1, self.selected_mod_supported_versions_label
-        )
-
-        total_height = sum(
-            [
-                self.selected_mod_table.rowHeight(i)
-                for i in range(self.selected_mod_table.rowCount())
-            ]
-        )
-        self.selected_mod_table.setFixedHeight(total_height + 2)
-
-        self.selected_mod_description = QTextEdit(self)
-        self.selected_mod_description.setReadOnly(True)
-        self.selected_mod_description.setVerticalScrollBarPolicy(
-            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
-        )
-        self.selected_mod_description.setStyleSheet("background: transparent;")
-        self.selected_mod_description.hide()
-
-        scroll_layout.addWidget(self.selected_mod_table)
-        scroll_layout.addWidget(self.selected_mod_description)
-        selected_mod_layout.addWidget(scroll_area)
+        self._do_selected_mod_widget()
 
         inactive_mods_frame = QGroupBox()
-        horizontal_layout.addWidget(inactive_mods_frame, stretch=1)
+        self.horizontal_layout.addWidget(inactive_mods_frame, stretch=1)
 
         inactive_mods_layout = QVBoxLayout(inactive_mods_frame)
 
@@ -143,7 +64,7 @@ class MainWindow(QMainWindow):
         inactive_mods_layout.addWidget(self.inactive_mods_list_view)
 
         active_mods_frame = QGroupBox()
-        horizontal_layout.addWidget(active_mods_frame, stretch=1)
+        self.horizontal_layout.addWidget(active_mods_frame, stretch=1)
 
         active_mods_layout = QVBoxLayout(active_mods_frame)
 
@@ -163,7 +84,7 @@ class MainWindow(QMainWindow):
         )
         active_mods_layout.addWidget(self.active_mods_list_view)
 
-        central_layout.addLayout(horizontal_layout)
+        central_layout.addLayout(self.horizontal_layout)
 
         button_layout = QHBoxLayout()
 
@@ -214,3 +135,83 @@ class MainWindow(QMainWindow):
 
         self.about_action = QAction("About NewUI", self)
         help_menu.addAction(self.about_action)
+
+    def _do_selected_mod_widget(self) -> None:
+        selected_mod_info_frame = QGroupBox()
+        self.horizontal_layout.addWidget(selected_mod_info_frame, stretch=2)
+
+        selected_mod_layout = QVBoxLayout(selected_mod_info_frame)
+
+        selected_mod_label = QLabel("Selected Mod")
+        selected_mod_label.setFont(GUIInfo().emphasis_font)
+        selected_mod_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        scroll_widget = QWidget()
+        scroll_layout = QVBoxLayout(scroll_widget)
+        scroll_area = QScrollArea()
+        scroll_area.setWidgetResizable(True)
+        scroll_area.setWidget(scroll_widget)
+
+        self.selected_mod_preview_image = QLabel()
+
+        selected_mod_table = QTableWidget(3, 2)
+        selected_mod_table.horizontalHeader().setSectionResizeMode(
+            0, QHeaderView.ResizeMode.ResizeToContents
+        )
+        selected_mod_table.horizontalHeader().setSectionResizeMode(
+            1, QHeaderView.ResizeMode.Stretch
+        )
+        selected_mod_table.horizontalHeader().setVisible(False)
+        selected_mod_table.verticalHeader().setVisible(False)
+        selected_mod_table.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        selected_mod_table.setSelectionMode(QTableWidget.SelectionMode.NoSelection)
+        selected_mod_table.setShowGrid(False)
+        selected_mod_table.setStyleSheet("background: transparent;")
+
+        row = 0
+        selected_mod_table.setRowHeight(row, GUIInfo().default_font_line_height)
+        row_header_label = QTableWidgetItem("Name")
+        row_header_label.setFont(GUIInfo().emphasis_font)
+        selected_mod_table.setItem(row, 0, row_header_label)
+        self.selected_mod_name_label = QTableWidgetItem()
+        selected_mod_table.setItem(row, 1, self.selected_mod_name_label)
+
+        row = 1
+        selected_mod_table.setRowHeight(row, GUIInfo().default_font_line_height)
+        row_header_label = QTableWidgetItem("Package ID")
+        row_header_label.setFont(GUIInfo().emphasis_font)
+        selected_mod_table.setItem(row, 0, row_header_label)
+        self.selected_mod_package_id_label = QTableWidgetItem()
+        selected_mod_table.setItem(row, 1, self.selected_mod_package_id_label)
+
+        row = 2
+        selected_mod_table.setRowHeight(row, GUIInfo().default_font_line_height)
+        row_header_label = QTableWidgetItem("Supported Versions")
+        row_header_label.setFont(GUIInfo().emphasis_font)
+        selected_mod_table.setItem(row, 0, row_header_label)
+        self.selected_mod_supported_versions_label = QTableWidgetItem()
+        selected_mod_table.setItem(row, 1, self.selected_mod_supported_versions_label)
+
+        total_height = sum(
+            [
+                selected_mod_table.rowHeight(i)
+                for i in range(selected_mod_table.rowCount())
+            ]
+        )
+        selected_mod_table.setFixedHeight(total_height + 2)
+
+        self.selected_mod_description = QTextEdit(self)
+        self.selected_mod_description.setReadOnly(True)
+        self.selected_mod_description.setVerticalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
+        self.selected_mod_description.setStyleSheet("background: transparent;")
+        self.selected_mod_description.hide()
+
+        scroll_layout.addWidget(self.selected_mod_preview_image)
+        scroll_layout.addStretch()
+        scroll_layout.addWidget(selected_mod_table)
+        scroll_layout.addWidget(self.selected_mod_description)
+
+        selected_mod_layout.addWidget(selected_mod_label)
+        selected_mod_layout.addWidget(scroll_area)
