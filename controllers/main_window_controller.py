@@ -95,7 +95,7 @@ class MainWindowController(QObject):
         steam_mods_folder_location_path = Path(
             self.settings_model.steam_mods_folder_location
         )
-        self.runner = LoadModsFromFolderRunner(steam_mods_folder_location_path)
+        self.runner = LoadModsFromFolderRunner([steam_mods_folder_location_path])
         self.runner.signals.data_ready.connect(self._on_runner_data_ready)
         pool = QThreadPool.globalInstance()
         pool.start(self.runner)
