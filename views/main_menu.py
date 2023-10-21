@@ -1,6 +1,6 @@
 from PySide6.QtCore import QObject
 from PySide6.QtGui import QAction, QKeySequence
-from PySide6.QtWidgets import QMenuBar
+from PySide6.QtWidgets import QMenuBar, QMenu
 
 from utilities.system_info import SystemInfo
 
@@ -47,6 +47,21 @@ class MainMenu(QObject):
         file_menu.addAction(self.save_mod_list_action)
 
         file_menu.addSeparator()
+
+        export_submenu = QMenu("Export")
+        file_menu.addMenu(export_submenu)
+
+        self.export_to_clipboard_action = QAction("To Clipboard…", self)
+        self.export_to_clipboard_action.setEnabled(False)
+        export_submenu.addAction(self.export_to_clipboard_action)
+
+        self.export_to_file_action = QAction("To Text File…", self)
+        self.export_to_file_action.setEnabled(False)
+        export_submenu.addAction(self.export_to_file_action)
+
+        self.export_to_rentry_action = QAction("To Rentry.co…", self)
+        self.export_to_rentry_action.setEnabled(False)
+        export_submenu.addAction(self.export_to_rentry_action)
 
     def _do_main_menu_non_macos(self) -> None:
         file_menu = self.menu_bar.addMenu("File")
