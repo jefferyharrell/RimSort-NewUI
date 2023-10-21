@@ -48,14 +48,3 @@ class AboutDialog(QWidget):
         self.setFixedSize(300, 200)
 
         self.setLayout(layout)
-
-    def showEvent(self, event: QShowEvent) -> None:
-        screen_geometry = self.screen().geometry()
-        screen_center_x = screen_geometry.width() / 2
-        screen_center_y = screen_geometry.height() / 2
-
-        move_x = screen_center_x - self.width() / 2
-        move_y = (screen_center_y - self.height()) / 1.6
-        self.move(int(move_x), int(move_y))
-
-        super().showEvent(event)
