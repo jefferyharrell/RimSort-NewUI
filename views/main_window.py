@@ -48,6 +48,10 @@ class MainWindow(QMainWindow):
         self.refresh_button.setMinimumWidth(100)
         button_layout.addWidget(self.refresh_button)
 
+        self.clear_button = QPushButton("Clear")
+        self.clear_button.setMinimumWidth(100)
+        button_layout.addWidget(self.clear_button)
+
         self.sort_button = QPushButton("Sort")
         self.sort_button.setMinimumWidth(100)
         self.sort_button.setDefault(True)
