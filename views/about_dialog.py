@@ -1,11 +1,13 @@
 from typing import Optional
 
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QShowEvent, QPixmap
+from PySide6.QtCore import Qt, QSize, Signal
+from PySide6.QtGui import QPixmap, QKeyEvent
 from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout
 
 
 class AboutDialog(QWidget):
+    close_window_hotkey = Signal()
+
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super(AboutDialog, self).__init__(parent)
 
@@ -48,3 +50,11 @@ class AboutDialog(QWidget):
         self.setFixedSize(300, 200)
 
         self.setLayout(layout)
+
+    def keyPressEvent(self, event: QKeyEvent) -> None:
+        if (
+            event.key() == Qt.Key.Key_W
+            and event.modifiers() == Qt.KeyboardModifier.ControlModifier
+        ):
+            self.close_window_hotkey.emit()
+        super().keyPressEvent(event)

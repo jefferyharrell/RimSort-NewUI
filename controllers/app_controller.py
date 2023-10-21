@@ -3,6 +3,7 @@ import sys
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QApplication
 
+from controllers.about_dialog_controller import AboutDialogController
 from controllers.main_menu_controller import MainMenuController
 from controllers.main_window_controller import MainWindowController
 from controllers.settings_dialog_controller import SettingsDialogController
@@ -46,12 +47,13 @@ class AppController(QObject):
         )
 
         self.about_dialog = AboutDialog()
+        self.about_dialog_controller = AboutDialogController(view=self.about_dialog)
 
         self.main_menu = MainMenu(menu_bar=self.main_window.menuBar())
         self.main_menu_controller = MainMenuController(
             view=self.main_menu,
             settings_dialog_controller=self.settings_dialog_controller,
-            about_dialog=self.about_dialog,
+            about_dialog_controller=self.about_dialog_controller,
         )
 
     def run(self) -> int:
