@@ -89,6 +89,9 @@ class MainWindowController(QObject):
         )
 
         # Populate the models
+        self._refresh_inactive_mods_list()
+
+    def _refresh_inactive_mods_list(self) -> None:
         steam_mods_folder_location_path = Path(
             self.settings_model.steam_mods_folder_location
         )
