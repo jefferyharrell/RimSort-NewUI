@@ -41,29 +41,8 @@ class MainWindow(QMainWindow):
         self.horizontal_layout = QHBoxLayout()
 
         self._do_selected_mod_widget()
-
         self._do_inactive_mods_widget()
-
-        active_mods_frame = QGroupBox()
-        self.horizontal_layout.addWidget(active_mods_frame, stretch=1)
-
-        active_mods_layout = QVBoxLayout(active_mods_frame)
-
-        active_mods_label = QLabel("Active Mods")
-        active_mods_label.setFont(GUIInfo().emphasis_font)
-        active_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        active_mods_layout.addWidget(active_mods_label)
-
-        self.active_mods_filter_field = QLineEdit()
-        self.active_mods_filter_field.setPlaceholderText("Search...")
-        active_mods_layout.addWidget(self.active_mods_filter_field)
-
-        self.active_mods_list_view = DragDropListView()
-        self.active_mods_list_view.setFont(GUIInfo().default_font)
-        self.active_mods_list_view.setSelectionMode(
-            QAbstractItemView.SelectionMode.ExtendedSelection
-        )
-        active_mods_layout.addWidget(self.active_mods_list_view)
+        self._do_active_mods_widget()
 
         central_layout.addLayout(self.horizontal_layout)
 
@@ -217,3 +196,25 @@ class MainWindow(QMainWindow):
             QAbstractItemView.SelectionMode.ExtendedSelection
         )
         inactive_mods_layout.addWidget(self.inactive_mods_list_view)
+
+    def _do_active_mods_widget(self) -> None:
+        active_mods_frame = QGroupBox()
+        self.horizontal_layout.addWidget(active_mods_frame, stretch=1)
+
+        active_mods_layout = QVBoxLayout(active_mods_frame)
+
+        active_mods_label = QLabel("Active Mods")
+        active_mods_label.setFont(GUIInfo().emphasis_font)
+        active_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        active_mods_layout.addWidget(active_mods_label)
+
+        self.active_mods_filter_field = QLineEdit()
+        self.active_mods_filter_field.setPlaceholderText("Search...")
+        active_mods_layout.addWidget(self.active_mods_filter_field)
+
+        self.active_mods_list_view = DragDropListView()
+        self.active_mods_list_view.setFont(GUIInfo().default_font)
+        self.active_mods_list_view.setSelectionMode(
+            QAbstractItemView.SelectionMode.ExtendedSelection
+        )
+        active_mods_layout.addWidget(self.active_mods_list_view)
