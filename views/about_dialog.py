@@ -4,6 +4,8 @@ from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QPixmap, QKeyEvent
 from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout
 
+from utilities.system_info import SystemInfo
+
 
 class AboutDialog(QWidget):
     close_window_hotkey = Signal()
@@ -11,7 +13,8 @@ class AboutDialog(QWidget):
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super(AboutDialog, self).__init__(parent)
 
-        self.setWindowTitle("About NewUI")
+        if SystemInfo().operating_system != SystemInfo.OperatingSystem.MACOS:
+            self.setWindowTitle("About NewUI")
 
         image_label = QLabel()
         pixmap = QPixmap("resources/AppIcon_a.png").scaled(
