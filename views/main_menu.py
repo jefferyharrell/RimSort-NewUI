@@ -48,11 +48,6 @@ class MainMenu(QObject):
 
         file_menu.addSeparator()
 
-        self.close_window_action = QAction("Close Window", self)
-        self.close_window_action.setShortcut(QKeySequence("Ctrl+W"))
-        file_menu.addAction(self.close_window_action)
-        file_menu.addSeparator()
-
     def _do_main_menu_non_macos(self) -> None:
         file_menu = self.menu_bar.addMenu("File")
 
@@ -65,12 +60,6 @@ class MainMenu(QObject):
         self.save_mod_list_action.setShortcut(QKeySequence("Ctrl+S"))
         self.save_mod_list_action.setEnabled(False)
         file_menu.addAction(self.save_mod_list_action)
-
-        file_menu.addSeparator()
-
-        self.close_window_action = QAction("Close Window", self)
-        self.close_window_action.setShortcut(QKeySequence("Ctrl+W"))
-        file_menu.addAction(self.close_window_action)
 
         file_menu.addSeparator()
 

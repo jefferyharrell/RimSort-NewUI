@@ -12,7 +12,7 @@ from PySide6.QtCore import (
     QItemSelectionModel,
 )
 from PySide6.QtGui import QPixmap, QStandardItemModel
-from PySide6.QtWidgets import QListView, QApplication
+from PySide6.QtWidgets import QListView
 
 from models.main_window_model import MainWindowModel
 from models.settings_model import SettingsModel

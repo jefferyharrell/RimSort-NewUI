@@ -1,5 +1,4 @@
-from PySide6.QtCore import Signal
-from PySide6.QtGui import Qt, QKeyEvent
+from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
     QMainWindow,
     QWidget,
