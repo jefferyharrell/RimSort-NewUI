@@ -42,26 +42,7 @@ class MainWindow(QMainWindow):
 
         self._do_selected_mod_widget()
 
-        inactive_mods_frame = QGroupBox()
-        self.horizontal_layout.addWidget(inactive_mods_frame, stretch=1)
-
-        inactive_mods_layout = QVBoxLayout(inactive_mods_frame)
-
-        inactive_mods_label = QLabel("Inactive Mods")
-        inactive_mods_label.setFont(GUIInfo().emphasis_font)
-        inactive_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        inactive_mods_layout.addWidget(inactive_mods_label)
-
-        self.inactive_mods_filter_field = QLineEdit()
-        self.inactive_mods_filter_field.setPlaceholderText("Search...")
-        inactive_mods_layout.addWidget(self.inactive_mods_filter_field)
-
-        self.inactive_mods_list_view = DragDropListView()
-        self.inactive_mods_list_view.setFont(GUIInfo().default_font)
-        self.inactive_mods_list_view.setSelectionMode(
-            QAbstractItemView.SelectionMode.ExtendedSelection
-        )
-        inactive_mods_layout.addWidget(self.inactive_mods_list_view)
+        self._do_inactive_mods_widget()
 
         active_mods_frame = QGroupBox()
         self.horizontal_layout.addWidget(active_mods_frame, stretch=1)
@@ -215,3 +196,24 @@ class MainWindow(QMainWindow):
 
         selected_mod_layout.addWidget(selected_mod_label)
         selected_mod_layout.addWidget(scroll_area)
+
+    def _do_inactive_mods_widget(self) -> None:
+        inactive_mods_frame = QGroupBox()
+        self.horizontal_layout.addWidget(inactive_mods_frame, stretch=1)
+
+        inactive_mods_layout = QVBoxLayout(inactive_mods_frame)
+        inactive_mods_label = QLabel("Inactive Mods")
+        inactive_mods_label.setFont(GUIInfo().emphasis_font)
+        inactive_mods_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        inactive_mods_layout.addWidget(inactive_mods_label)
+
+        self.inactive_mods_filter_field = QLineEdit()
+        self.inactive_mods_filter_field.setPlaceholderText("Search...")
+        inactive_mods_layout.addWidget(self.inactive_mods_filter_field)
+
+        self.inactive_mods_list_view = DragDropListView()
+        self.inactive_mods_list_view.setFont(GUIInfo().default_font)
+        self.inactive_mods_list_view.setSelectionMode(
+            QAbstractItemView.SelectionMode.ExtendedSelection
+        )
+        inactive_mods_layout.addWidget(self.inactive_mods_list_view)
