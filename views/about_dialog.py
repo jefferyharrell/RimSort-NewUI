@@ -1,13 +1,22 @@
 from typing import Optional
 
-from PySide6.QtCore import Qt
-from PySide6.QtGui import QShowEvent
+from PySide6.QtCore import Qt, QSize
+from PySide6.QtGui import QShowEvent, QPixmap
 from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout
 
 
 class AboutDialog(QWidget):
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super(AboutDialog, self).__init__(parent)
+
+        image_label = QLabel()
+        pixmap = QPixmap("resources/AppIcon_a.png").scaled(
+            QSize(64, 64),
+            Qt.AspectRatioMode.KeepAspectRatio,
+            Qt.TransformationMode.SmoothTransformation,
+        )
+        image_label.setPixmap(pixmap)
+        image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         label = QLabel("NewUI")
 
@@ -31,6 +40,7 @@ class AboutDialog(QWidget):
 
         layout = QVBoxLayout(self)
         layout.addStretch(1)
+        layout.addWidget(image_label)
         layout.addWidget(label)
         layout.addStretch(1)
         layout.addWidget(more_info_label)
