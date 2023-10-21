@@ -72,6 +72,9 @@ class SettingsDialogController(QObject):
         self.settings_model.load()
         self._update_view_from_model()
 
+    def show_settings_dialog(self) -> None:
+        self.settings_dialog.show()
+
     # region Slots
 
     @Slot()

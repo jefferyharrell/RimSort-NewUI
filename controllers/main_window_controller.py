@@ -12,14 +12,13 @@ from PySide6.QtCore import (
     QItemSelectionModel,
 )
 from PySide6.QtGui import QPixmap, QStandardItemModel
-from PySide6.QtWidgets import QApplication, QListView
+from PySide6.QtWidgets import QListView
 
 from models.main_window_model import MainWindowModel
 from models.settings_model import SettingsModel
 from objects.mod import Mod
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
-from views.settings_dialog import SettingsDialog
 from runners.load_mods_from_folder_runner import LoadModsFromFolderRunner
 
 
@@ -29,24 +28,16 @@ class MainWindowController(QObject):
         model: MainWindowModel,
         view: MainWindow,
         settings_model: SettingsModel,
-        settings_dialog: SettingsDialog,
     ) -> None:
         super().__init__()
 
         self.main_window_model = model
         self.main_window = view
         self.settings_model = settings_model
-        self.settings_dialog = settings_dialog
 
         self.about_dialog = AboutDialog()
 
         # Connect the main window's signals
-        self.main_window.about_action.triggered.connect(self._on_about_action_triggered)
-        self.main_window.settings_action.triggered.connect(
-            self._on_settings_action_triggered
-        )
-        self.main_window.exit_action.triggered.connect(self._on_exit_action_triggered)
-
         self.main_window.inactive_mods_list_view.clicked.connect(
             self._on_mod_list_view_clicked
         )
@@ -105,18 +96,6 @@ class MainWindowController(QObject):
         self.runner.signals.data_ready.connect(self._on_runner_data_ready)
         pool = QThreadPool.globalInstance()
         pool.start(self.runner)
-
-    @Slot()
-    def _on_about_action_triggered(self) -> None:
-        self.about_dialog.show()
-
-    @Slot()
-    def _on_settings_action_triggered(self) -> None:
-        self.settings_dialog.exec()
-
-    @Slot()
-    def _on_exit_action_triggered(self) -> None:
-        QApplication.quit()
 
     @Slot(object)
     def _on_runner_data_ready(self, data: object) -> None:
