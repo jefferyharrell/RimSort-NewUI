@@ -17,9 +17,9 @@ class LoadModsFromFolderRunner(QRunnable):
 
     def run(self) -> None:
         data: List[Mod] = []
-        for subfolder in self.folder_location_path.iterdir():
-            if subfolder.is_dir():
-                about_xml_path = subfolder / "About" / "About.xml"
+        for sub_folder in self.folder_location_path.iterdir():
+            if sub_folder.is_dir():
+                about_xml_path = sub_folder / "About" / "About.xml"
 
                 name = ""
                 package_id = ""
@@ -41,7 +41,7 @@ class LoadModsFromFolderRunner(QRunnable):
                     except etree.XMLSyntaxError:
                         logger.warning(f"Could not parse About.xml at {about_xml_path}")
 
-                    preview_image_path = subfolder / "About" / "Preview.png"
+                    preview_image_path = sub_folder / "About" / "Preview.png"
 
                     if name is not None:
                         data.append(
