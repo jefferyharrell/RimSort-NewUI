@@ -18,7 +18,7 @@ class SettingsDialogController(QObject):
 
         self.user_home_path: Path = Path.home()
 
-        EventBus.instance().main_menu_settings_action_triggered.connect(
+        EventBus.instance().menu_bar_settings_action_triggered.connect(
             self.settings_dialog.exec
         )
 

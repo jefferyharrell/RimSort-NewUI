@@ -4,7 +4,7 @@ from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QApplication
 
 from controllers.about_dialog_controller import AboutDialogController
-from controllers.main_menu_controller import MainMenuController
+from controllers.menu_bar_controller import MenuBarController
 from controllers.main_window_controller import MainWindowController
 from controllers.settings_dialog_controller import SettingsDialogController
 from models.main_window_model import MainWindowModel
@@ -12,7 +12,7 @@ from models.settings_model import SettingsModel
 from utilities.event_bus import EventBus
 from utilities.system_info import SystemInfo
 from views.about_dialog import AboutDialog
-from views.main_menu import MainMenu
+from views.menu_bar import MenuBar
 from views.main_window import MainWindow
 from views.settings_dialog import SettingsDialog
 
@@ -50,10 +50,10 @@ class AppController(QObject):
         self.about_dialog = AboutDialog()
         self.about_dialog_controller = AboutDialogController(view=self.about_dialog)
 
-        self.main_menu = MainMenu(menu_bar=self.main_window.menuBar())
-        self.main_menu_controller = MainMenuController(view=self.main_menu)
+        self.menu_bar = MenuBar(menu_bar=self.main_window.menuBar())
+        self.menu_bar_controller = MenuBarController(view=self.menu_bar)
 
-        EventBus.instance().main_menu_quit_action_triggered.connect(self.quit)
+        EventBus.instance().menu_bar_quit_action_triggered.connect(self.quit)
 
     def run(self) -> int:
         self.main_window.show()

@@ -37,7 +37,7 @@ class MainWindowController(QObject):
 
         self.about_dialog = AboutDialog()
 
-        EventBus.instance().main_menu_zoom_action_triggered.connect(
+        EventBus.instance().menu_bar_zoom_action_triggered.connect(
             self._on_zoom_action_triggered
         )
 

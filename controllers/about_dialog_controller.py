@@ -10,7 +10,7 @@ class AboutDialogController(QObject):
 
         self.about_dialog = view
 
-        EventBus.instance().main_menu_about_action_triggered.connect(
+        EventBus.instance().menu_bar_about_action_triggered.connect(
             self.about_dialog.show
         )
 
