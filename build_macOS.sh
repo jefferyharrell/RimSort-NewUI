@@ -1,3 +1,5 @@
+rm -f ./resources/.DS_Store
+
 python -m nuitka \
     --standalone \
     --enable-plugin=pyside6 \
