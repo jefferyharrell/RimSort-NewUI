@@ -103,12 +103,24 @@ class MenuBar(QObject):
         self.export_to_rentry_action.setEnabled(False)
         export_submenu.addAction(self.export_to_rentry_action)
 
-        help_menu = self.menu_bar.addMenu("Help")
+        file_menu.addSeparator()
 
-        self.about_action = QAction(f"About {AppInfo().app_name}", self)
-        help_menu.addAction(self.about_action)
+        self.settings_action = QAction("Settings…", self)
+        self.settings_action.setShortcut(QKeySequence("Ctrl+,"))
+        file_menu.addAction(self.settings_action)
+
+        file_menu.addSeparator()
+
+        self.quit_action = QAction("Exit", self)
+        self.quit_action.setShortcut(QKeySequence("Ctrl+Q"))
+        file_menu.addAction(self.quit_action)
 
         window_menu = self.menu_bar.addMenu("Window")
 
         self.zoom_action = QAction("Zoom", self)
         window_menu.addAction(self.zoom_action)
+
+        help_menu = self.menu_bar.addMenu("Help")
+
+        self.about_action = QAction(f"About {AppInfo().app_name}", self)
+        help_menu.addAction(self.about_action)
