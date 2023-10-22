@@ -34,80 +34,43 @@ class MainMenu(QObject):
         self.exit_action = QAction("Quit", self)
         app_menu.addAction(self.exit_action)
 
-        file_menu = self.menu_bar.addMenu("File")
-
-        self.open_mod_list_action = QAction("Open Mod List", self)
-        self.open_mod_list_action.setShortcut(QKeySequence("Ctrl+O"))
-        self.open_mod_list_action.setEnabled(False)
-        file_menu.addAction(self.open_mod_list_action)
-
-        file_menu.addSeparator()
-
-        self.save_mod_list_action = QAction("Save Mod List", self)
-        self.save_mod_list_action.setShortcut(QKeySequence("Ctrl+S"))
-        self.save_mod_list_action.setEnabled(False)
-        file_menu.addAction(self.save_mod_list_action)
-
-        file_menu.addSeparator()
-
-        export_submenu = QMenu("Export")
-        file_menu.addMenu(export_submenu)
-
-        self.export_to_clipboard_action = QAction("To Clipboard…", self)
-        self.export_to_clipboard_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_clipboard_action)
-
-        self.export_to_file_action = QAction("To Text File…", self)
-        self.export_to_file_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_file_action)
-
-        self.export_to_rentry_action = QAction("To Rentry.co…", self)
-        self.export_to_rentry_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_rentry_action)
+        self._do_file_menu()
+        self._do_window_menu()
 
     def _do_main_menu_non_macos(self) -> None:
-        file_menu = self.menu_bar.addMenu("File")
-
-        self.open_mod_list_action = QAction("Open Mod List", self)
-        self.open_mod_list_action.setShortcut(QKeySequence("Ctrl+O"))
-        self.open_mod_list_action.setEnabled(False)
-        file_menu.addAction(self.open_mod_list_action)
-
-        self.save_mod_list_action = QAction("Save Mod List", self)
-        self.save_mod_list_action.setShortcut(QKeySequence("Ctrl+S"))
-        self.save_mod_list_action.setEnabled(False)
-        file_menu.addAction(self.save_mod_list_action)
-
-        file_menu.addSeparator()
-
-        export_submenu = QMenu("Export")
-        file_menu.addMenu(export_submenu)
-
-        self.export_to_clipboard_action = QAction("To Clipboard…", self)
-        self.export_to_clipboard_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_clipboard_action)
-
-        self.export_to_file_action = QAction("To Text File…", self)
-        self.export_to_file_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_file_action)
-
-        self.export_to_rentry_action = QAction("To Rentry.co…", self)
-        self.export_to_rentry_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_rentry_action)
-
-        file_menu.addSeparator()
-
-        self.settings_action = QAction("Settings", self)
-        self.settings_action.setShortcut(QKeySequence("Ctrl+,"))
-        file_menu.addAction(self.settings_action)
-
-        file_menu.addSeparator()
-
-        self.exit_action = QAction("Exit", self)
-        self.exit_action.setShortcut(QKeySequence("Ctrl+Q"))
-        file_menu.addAction(self.exit_action)
+        self._do_file_menu()
 
         help_menu = self.menu_bar.addMenu("Help")
 
         self.about_action = QAction("About NewUI", self)
         help_menu.addAction(self.about_action)
+
+    def _do_file_menu(self):
+        file_menu = self.menu_bar.addMenu("File")
+        self.open_mod_list_action = QAction("Open Mod List", self)
+        self.open_mod_list_action.setShortcut(QKeySequence("Ctrl+O"))
+        self.open_mod_list_action.setEnabled(False)
+        file_menu.addAction(self.open_mod_list_action)
+        file_menu.addSeparator()
+        self.save_mod_list_action = QAction("Save Mod List", self)
+        self.save_mod_list_action.setShortcut(QKeySequence("Ctrl+S"))
+        self.save_mod_list_action.setEnabled(False)
+        file_menu.addAction(self.save_mod_list_action)
+        file_menu.addSeparator()
+        export_submenu = QMenu("Export")
+        file_menu.addMenu(export_submenu)
+        self.export_to_clipboard_action = QAction("To Clipboard…", self)
+        self.export_to_clipboard_action.setEnabled(False)
+        export_submenu.addAction(self.export_to_clipboard_action)
+        self.export_to_file_action = QAction("To Text File…", self)
+        self.export_to_file_action.setEnabled(False)
+        export_submenu.addAction(self.export_to_file_action)
+        self.export_to_rentry_action = QAction("To Rentry.co…", self)
+        self.export_to_rentry_action.setEnabled(False)
+        export_submenu.addAction(self.export_to_rentry_action)
+
+    def _do_window_menu(self):
+        window_menu = self.menu_bar.addMenu("Window")
+
+        self.zoom_action = QAction("Zoom", self)
+        window_menu.addAction(self.zoom_action)

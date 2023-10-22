@@ -16,6 +16,7 @@ from PySide6.QtWidgets import QListView
 from controllers.settings_dialog_controller import SettingsDialogController
 from models.main_window_model import MainWindowModel
 from objects.mod import Mod
+from utilities.event_bus import EventBus
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
 from runners.load_mods_from_folders_runner import LoadModsFromFoldersRunner
@@ -35,6 +36,10 @@ class MainWindowController(QObject):
         self.settings_dialog_controller = settings_dialog_controller
 
         self.about_dialog = AboutDialog()
+
+        EventBus.instance().zoom_action_triggered.connect(
+            self._on_zoom_action_triggered
+        )
 
         # Connect the main window's signals
         self.main_window.inactive_mods_list_view.clicked.connect(
@@ -246,3 +251,10 @@ class MainWindowController(QObject):
         if isinstance(target_model, QSortFilterProxyModel):
             target_model = cast(QStandardItemModel, target_model.sourceModel())
         target_model.appendRow(item_clone)
+
+    @Slot()
+    def _on_zoom_action_triggered(self) -> None:
+        if self.main_window.isMaximized():
+            self.main_window.showNormal()
+        else:
+            self.main_window.showMaximized()

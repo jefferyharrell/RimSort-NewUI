@@ -4,6 +4,7 @@ from PySide6.QtWidgets import QApplication
 from controllers.about_dialog_controller import AboutDialogController
 from controllers.main_window_controller import MainWindowController
 from controllers.settings_dialog_controller import SettingsDialogController
+from utilities.event_bus import EventBus
 from views.main_menu import MainMenu
 
 
@@ -28,9 +29,14 @@ class MainMenuController(QObject):
         )
         self.main_menu.exit_action.triggered.connect(self._on_exit_action_triggered)
 
+        self.main_menu.zoom_action.triggered.connect(
+            EventBus.instance().zoom_action_triggered.emit
+        )
+
     @Slot()
     def _on_about_action_triggered(self) -> None:
-        self.about_dialog_controller.show_about_dialog()
+        # self.about_dialog_controller.show_about_dialog()
+        EventBus.instance().zoom_action_triggered.emit()
 
     @Slot()
     def _on_settings_action_triggered(self) -> None:
