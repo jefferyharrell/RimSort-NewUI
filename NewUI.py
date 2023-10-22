@@ -10,8 +10,8 @@ if __name__ == "__main__":
     PathInfo(__file__)
 
     log_path = PathInfo().user_log_folder / "NewUI.log"
-    with log_path.open("w") as file:
-        pass
+    if not PathInfo().user_log_folder.exists():
+        PathInfo().user_log_folder.mkdir(parents=True, exist_ok=True)
 
     config_path = PathInfo().application_folder / "log_config.json"
 
