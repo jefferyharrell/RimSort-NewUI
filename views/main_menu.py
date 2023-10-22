@@ -41,6 +41,8 @@ class MainMenu(QObject):
         self.open_mod_list_action.setEnabled(False)
         file_menu.addAction(self.open_mod_list_action)
 
+        file_menu.addSeparator()
+
         self.save_mod_list_action = QAction("Save Mod List", self)
         self.save_mod_list_action.setShortcut(QKeySequence("Ctrl+S"))
         self.save_mod_list_action.setEnabled(False)
