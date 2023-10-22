@@ -7,7 +7,7 @@ class EventBus(QObject):
     _instance = None
 
     @classmethod
-    def instance(cls):
+    def instance(cls) -> "EventBus":
         if cls._instance is None:
             cls._instance = EventBus()
         return cls._instance
