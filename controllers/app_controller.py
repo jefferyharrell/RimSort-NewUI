@@ -9,6 +9,7 @@ from controllers.main_window_controller import MainWindowController
 from controllers.settings_dialog_controller import SettingsDialogController
 from models.main_window_model import MainWindowModel
 from models.settings_model import SettingsModel
+from utilities.event_bus import EventBus
 from utilities.system_info import SystemInfo
 from views.about_dialog import AboutDialog
 from views.main_menu import MainMenu
@@ -56,6 +57,8 @@ class AppController(QObject):
             settings_dialog_controller=self.settings_dialog_controller,
             about_dialog_controller=self.about_dialog_controller,
         )
+
+        EventBus.instance().main_menu_quit_action_triggered.connect(self.app.quit)
 
     def run(self) -> int:
         self.main_window.show()

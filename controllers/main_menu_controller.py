@@ -27,10 +27,12 @@ class MainMenuController(QObject):
         self.main_menu.settings_action.triggered.connect(
             self._on_settings_action_triggered
         )
-        self.main_menu.exit_action.triggered.connect(self._on_exit_action_triggered)
+        self.main_menu.quit_action.triggered.connect(
+            EventBus.instance().main_menu_quit_action_triggered.emit
+        )
 
         self.main_menu.zoom_action.triggered.connect(
-            EventBus.instance().zoom_action_triggered.emit
+            EventBus.instance().main_menu_zoom_action_triggered.emit
         )
 
     @Slot()
@@ -40,7 +42,3 @@ class MainMenuController(QObject):
     @Slot()
     def _on_settings_action_triggered(self) -> None:
         self.settings_dialog_controller.show_settings_dialog()
-
-    @Slot()
-    def _on_exit_action_triggered(self) -> None:
-        QApplication.quit()

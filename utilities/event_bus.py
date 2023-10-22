@@ -2,7 +2,8 @@ from PySide6.QtCore import QObject, Signal
 
 
 class EventBus(QObject):
-    zoom_action_triggered = Signal()
+    main_menu_zoom_action_triggered = Signal()
+    main_menu_quit_action_triggered = Signal()
 
     _instance = None
 

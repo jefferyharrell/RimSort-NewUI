@@ -31,8 +31,8 @@ class MainMenu(QObject):
 
         app_menu.addSeparator()
 
-        self.exit_action = QAction("Quit", self)
-        app_menu.addAction(self.exit_action)
+        self.quit_action = QAction("Quit", self)
+        app_menu.addAction(self.quit_action)
 
         self._do_file_menu()
         self._do_window_menu()
