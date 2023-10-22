@@ -1,8 +1,5 @@
-from PySide6.QtCore import QObject, Slot
+from PySide6.QtCore import QObject
 
-from controllers.about_dialog_controller import AboutDialogController
-from controllers.main_window_controller import MainWindowController
-from controllers.settings_dialog_controller import SettingsDialogController
 from utilities.event_bus import EventBus
 from views.main_menu import MainMenu
 
