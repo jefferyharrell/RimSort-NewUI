@@ -2,6 +2,7 @@ from PySide6.QtCore import QObject, Slot
 from PySide6.QtWidgets import QApplication
 
 from controllers.about_dialog_controller import AboutDialogController
+from controllers.main_window_controller import MainWindowController
 from controllers.settings_dialog_controller import SettingsDialogController
 from views.main_menu import MainMenu
 
@@ -10,12 +11,14 @@ class MainMenuController(QObject):
     def __init__(
         self,
         view: MainMenu,
+        main_window_controller: MainWindowController,
         settings_dialog_controller: SettingsDialogController,
         about_dialog_controller: AboutDialogController,
     ) -> None:
         super().__init__()
 
         self.main_menu = view
+        self.main_window_controller = main_window_controller
         self.settings_dialog_controller = settings_dialog_controller
         self.about_dialog_controller = about_dialog_controller
 

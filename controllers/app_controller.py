@@ -52,6 +52,7 @@ class AppController(QObject):
         self.main_menu = MainMenu(menu_bar=self.main_window.menuBar())
         self.main_menu_controller = MainMenuController(
             view=self.main_menu,
+            main_window_controller=self.main_window_controller,
             settings_dialog_controller=self.settings_dialog_controller,
             about_dialog_controller=self.about_dialog_controller,
         )
