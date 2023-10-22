@@ -11,21 +11,19 @@ class MainMenuController(QObject):
     def __init__(
         self,
         view: MainMenu,
-        main_window_controller: MainWindowController,
-        settings_dialog_controller: SettingsDialogController,
-        about_dialog_controller: AboutDialogController,
     ) -> None:
         super().__init__()
 
         self.main_menu = view
-        self.main_window_controller = main_window_controller
-        self.settings_dialog_controller = settings_dialog_controller
-        self.about_dialog_controller = about_dialog_controller
 
-        self.main_menu.about_action.triggered.connect(self._on_about_action_triggered)
-        self.main_menu.settings_action.triggered.connect(
-            self._on_settings_action_triggered
+        self.main_menu.about_action.triggered.connect(
+            EventBus.instance().main_menu_about_action_triggered.emit
         )
+
+        self.main_menu.settings_action.triggered.connect(
+            EventBus.instance().main_menu_settings_action_triggered.emit
+        )
+
         self.main_menu.quit_action.triggered.connect(
             EventBus.instance().main_menu_quit_action_triggered.emit
         )
@@ -33,11 +31,3 @@ class MainMenuController(QObject):
         self.main_menu.zoom_action.triggered.connect(
             EventBus.instance().main_menu_zoom_action_triggered.emit
         )
-
-    @Slot()
-    def _on_about_action_triggered(self) -> None:
-        self.about_dialog_controller.show_about_dialog()
-
-    @Slot()
-    def _on_settings_action_triggered(self) -> None:
-        self.settings_dialog_controller.show_settings_dialog()

@@ -4,6 +4,7 @@ from PySide6.QtCore import QObject, Slot, Qt
 from PySide6.QtWidgets import QFileDialog, QMessageBox
 
 from models.settings_model import SettingsModel
+from utilities.event_bus import EventBus
 from utilities.system_info import SystemInfo
 from views.settings_dialog import SettingsDialog
 
@@ -16,6 +17,10 @@ class SettingsDialogController(QObject):
         self.settings_dialog = view
 
         self.user_home_path: Path = Path.home()
+
+        EventBus.instance().main_menu_settings_action_triggered.connect(
+            self.settings_dialog.exec
+        )
 
         # Global buttons
         self.settings_dialog.global_reset_to_defaults_button.clicked.connect(

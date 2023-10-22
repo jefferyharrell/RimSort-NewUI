@@ -1,5 +1,6 @@
 from PySide6.QtCore import QObject
 
+from utilities.event_bus import EventBus
 from views.about_dialog import AboutDialog
 
 
@@ -9,10 +10,8 @@ class AboutDialogController(QObject):
 
         self.about_dialog = view
 
-        self.about_dialog.close_window_hotkey.connect(self._on_close_window_hotkey)
+        EventBus.instance().main_menu_about_action_triggered.connect(
+            self.about_dialog.show
+        )
 
-    def show_about_dialog(self) -> None:
-        self.about_dialog.show()
-
-    def _on_close_window_hotkey(self) -> None:
-        self.about_dialog.close()
+        self.about_dialog.close_window_hotkey.connect(self.about_dialog.close)

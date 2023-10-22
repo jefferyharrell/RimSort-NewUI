@@ -51,12 +51,7 @@ class AppController(QObject):
         self.about_dialog_controller = AboutDialogController(view=self.about_dialog)
 
         self.main_menu = MainMenu(menu_bar=self.main_window.menuBar())
-        self.main_menu_controller = MainMenuController(
-            view=self.main_menu,
-            main_window_controller=self.main_window_controller,
-            settings_dialog_controller=self.settings_dialog_controller,
-            about_dialog_controller=self.about_dialog_controller,
-        )
+        self.main_menu_controller = MainMenuController(view=self.main_menu)
 
         EventBus.instance().main_menu_quit_action_triggered.connect(self.quit)
 
