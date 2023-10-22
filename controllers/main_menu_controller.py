@@ -1,5 +1,4 @@
 from PySide6.QtCore import QObject, Slot
-from PySide6.QtWidgets import QApplication
 
 from controllers.about_dialog_controller import AboutDialogController
 from controllers.main_window_controller import MainWindowController

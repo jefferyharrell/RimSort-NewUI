@@ -1,14 +1,11 @@
-from pathlib import Path
 from typing import Optional
 
-from PySide6.QtCore import Qt, QSize, Signal
-from PySide6.QtGui import QPixmap, QKeyEvent
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QKeyEvent
 from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout
-from logger_tt import logger
 
 from utilities.app_info import AppInfo
 from utilities.gui_info import GUIInfo
-from utilities.path_info import PathInfo
 from utilities.system_info import SystemInfo
 
 
