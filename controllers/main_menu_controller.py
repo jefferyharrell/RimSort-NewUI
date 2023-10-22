@@ -35,8 +35,7 @@ class MainMenuController(QObject):
 
     @Slot()
     def _on_about_action_triggered(self) -> None:
-        # self.about_dialog_controller.show_about_dialog()
-        EventBus.instance().zoom_action_triggered.emit()
+        self.about_dialog_controller.show_about_dialog()
 
     @Slot()
     def _on_settings_action_triggered(self) -> None:
