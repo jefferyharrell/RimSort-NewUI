@@ -4,7 +4,7 @@ from typing import Dict
 from PySide6.QtCore import QObject, QSortFilterProxyModel
 from PySide6.QtGui import QStandardItemModel
 
-from objects.mod import Mod
+from models.mod import Mod
 
 
 class MainWindowModel(QObject):

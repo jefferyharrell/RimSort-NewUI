@@ -15,7 +15,7 @@ from PySide6.QtWidgets import QListView
 
 from controllers.settings_dialog_controller import SettingsDialogController
 from models.main_window_model import MainWindowModel
-from objects.mod import Mod
+from models.mod import Mod
 from utilities.event_bus import EventBus
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow

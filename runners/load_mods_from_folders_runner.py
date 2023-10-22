@@ -5,7 +5,7 @@ from PySide6.QtCore import QRunnable
 from logger_tt import logger
 from lxml import etree
 
-from objects.mod import Mod
+from models.mod import Mod
 from runners.runner_signals import RunnerSignals
 
 
