@@ -144,6 +144,25 @@ class SettingsDialogController(QObject):
 
     @Slot()
     def _on_locations_autodetect_button_clicked(self) -> None:
+        if (
+            self.settings_dialog.game_location_value_label.text() != ""
+            or self.settings_dialog.config_folder_location_value_label.text() != ""
+            or self.settings_dialog.steam_mods_folder_location_value_label.text() != ""
+            or self.settings_dialog.local_mods_folder_location_value_label.text() != ""
+        ):
+            message_box = QMessageBox(self.settings_dialog)
+            message_box.setWindowTitle("Autodetect locations")
+            message_box.setText("Are you sure you want to autodetect all locations?")
+            message_box.setStandardButtons(
+                QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+            )
+            message_box.setDefaultButton(QMessageBox.StandardButton.No)
+            message_box.setWindowModality(Qt.WindowModality.WindowModal)
+
+            pressed_button = message_box.exec()
+            if pressed_button == QMessageBox.StandardButton.No:
+                return
+
         if SystemInfo().operating_system == SystemInfo.OperatingSystem.WINDOWS:
             self._autodetect_locations_windows()
         elif SystemInfo().operating_system == SystemInfo.OperatingSystem.LINUX:
