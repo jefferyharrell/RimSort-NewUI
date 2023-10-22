@@ -16,7 +16,7 @@ class AboutDialog(QWidget):
         super(AboutDialog, self).__init__(parent)
 
         if SystemInfo().operating_system != SystemInfo.OperatingSystem.MACOS:
-            self.setWindowTitle("About NewUI")
+            self.setWindowTitle(f"About {AppInfo().app_name}")
 
         self.app_icon_label = QLabel()
         self.app_icon_label.setPixmap(AppInfo().app_icon_64x64_pixmap)

@@ -16,6 +16,7 @@ from PySide6.QtWidgets import (
     QTextEdit,
 )
 
+from utilities.app_info import AppInfo
 from utilities.gui_info import GUIInfo
 from widgets.drag_drop_list_view import DragDropListView
 
@@ -24,7 +25,7 @@ class MainWindow(QMainWindow):
     def __init__(self) -> None:
         super().__init__()
 
-        self.setWindowTitle("NewUI")
+        self.setWindowTitle(AppInfo().app_name)
         self.setMinimumSize(1000, 600)
 
         central_widget = QWidget(self)

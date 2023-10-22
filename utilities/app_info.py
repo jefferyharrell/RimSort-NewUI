@@ -25,11 +25,7 @@ class AppInfo:
         self._app_icon_path = Path(
             PathInfo().application_folder, "./resources/AppIcon_a.png"
         )
-        self._app_icon_64x64_pixmap = QPixmap(str(self._app_icon_path)).scaled(
-            QSize(64, 64),
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation,
-        )
+        self._app_icon_64x64_pixmap: Optional[QPixmap] = None
 
         self._is_initialized: bool = True
 
@@ -51,4 +47,10 @@ class AppInfo:
 
     @property
     def app_icon_64x64_pixmap(self) -> QPixmap:
+        if self._app_icon_64x64_pixmap is None:
+            self._app_icon_64x64_pixmap = QPixmap(str(self._app_icon_path)).scaled(
+                QSize(64, 64),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation,
+            )
         return self._app_icon_64x64_pixmap

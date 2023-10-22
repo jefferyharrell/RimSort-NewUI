@@ -2,6 +2,7 @@ from PySide6.QtCore import QObject
 from PySide6.QtGui import QAction, QKeySequence
 from PySide6.QtWidgets import QMenuBar, QMenu
 
+from utilities.app_info import AppInfo
 from utilities.system_info import SystemInfo
 
 
@@ -42,7 +43,7 @@ class MainMenu(QObject):
 
         help_menu = self.menu_bar.addMenu("Help")
 
-        self.about_action = QAction("About NewUI", self)
+        self.about_action = QAction(f"About {AppInfo().app_name}", self)
         help_menu.addAction(self.about_action)
 
     def _do_file_menu(self) -> None:

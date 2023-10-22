@@ -7,6 +7,8 @@ from typing import Dict, Any
 from PySide6.QtCore import QObject, Signal
 from platformdirs import user_data_dir
 
+from utilities.app_info import AppInfo
+
 
 class SettingsModel(QObject):
     @unique
@@ -21,7 +23,7 @@ class SettingsModel(QObject):
     def __init__(self) -> None:
         super().__init__()
 
-        user_data_folder_location: Path = Path(user_data_dir("NewUI"))
+        user_data_folder_location: Path = Path(user_data_dir(AppInfo().app_name))
         user_data_folder_location.mkdir(parents=True, exist_ok=True)
         self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
 
