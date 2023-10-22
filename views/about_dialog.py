@@ -1,10 +1,14 @@
+from pathlib import Path
 from typing import Optional
 
 from PySide6.QtCore import Qt, QSize, Signal
 from PySide6.QtGui import QPixmap, QKeyEvent
 from PySide6.QtWidgets import QWidget, QLabel, QVBoxLayout
+from logger_tt import logger
 
+from utilities.app_info import AppInfo
 from utilities.gui_info import GUIInfo
+from utilities.path_info import PathInfo
 from utilities.system_info import SystemInfo
 
 
@@ -18,37 +22,28 @@ class AboutDialog(QWidget):
             self.setWindowTitle("About NewUI")
 
         self.app_icon_label = QLabel()
-        pixmap = QPixmap("resources/AppIcon_a.png").scaled(
-            QSize(64, 64),
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation,
-        )
-        self.app_icon_label.setPixmap(pixmap)
+        self.app_icon_label.setPixmap(AppInfo().app_icon_64x64_pixmap)
         self.app_icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.app_name_label = QLabel("NewUI")
-
-        self.app_name_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.app_name_label = QLabel(AppInfo().app_name)
         self.app_name_label.setFont(GUIInfo().emphasis_font)
+        self.app_name_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.more_info_label = QLabel(
-            "Version so-n-so whatever.0.0.0\n"
-            "© 2023 blah blah blah\n"
-            "All rights reserved."
-        )
-        self.more_info_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.app_version_label = QLabel(AppInfo().app_version)
+        self.app_version_label.setFont(GUIInfo().smaller_font)
+        self.app_version_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        # Set the font to a smaller size
-        small_font = self.more_info_label.font()
-        small_font.setPointSize(small_font.pointSize() - 1)
-        self.more_info_label.setFont(small_font)
+        self.app_copyright_label = QLabel(AppInfo().app_copyright)
+        self.app_copyright_label.setFont(GUIInfo().smaller_font)
+        self.app_copyright_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         layout = QVBoxLayout(self)
         layout.addStretch(1)
         layout.addWidget(self.app_icon_label)
         layout.addWidget(self.app_name_label)
         layout.addStretch(1)
-        layout.addWidget(self.more_info_label)
+        layout.addWidget(self.app_version_label)
+        layout.addWidget(self.app_copyright_label)
 
         self.setFixedSize(300, 200)
 

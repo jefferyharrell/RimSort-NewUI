@@ -23,6 +23,9 @@ class GUIInfo:
 
         self._default_font_line_height = QFontMetrics(self._default_font).lineSpacing()
 
+        self._smaller_font = QFont(self._default_font)
+        self._smaller_font.setPointSize(self._smaller_font.pointSize() - 1)
+
         self._is_initialized: bool = True
 
     @property
@@ -36,3 +39,7 @@ class GUIInfo:
     @property
     def default_font_line_height(self) -> int:
         return self._default_font_line_height
+
+    @property
+    def smaller_font(self) -> QFont:
+        return self._smaller_font
