@@ -58,8 +58,11 @@ class AppController(QObject):
             about_dialog_controller=self.about_dialog_controller,
         )
 
-        EventBus.instance().main_menu_quit_action_triggered.connect(self.app.quit)
+        EventBus.instance().main_menu_quit_action_triggered.connect(self.quit)
 
     def run(self) -> int:
         self.main_window.show()
         return self.app.exec()
+
+    def quit(self) -> None:
+        self.app.quit()
