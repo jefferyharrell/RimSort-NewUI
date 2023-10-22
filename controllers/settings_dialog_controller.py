@@ -24,9 +24,6 @@ class SettingsDialogController(QObject):
         self.settings_dialog.global_cancel_button.clicked.connect(
             self._on_global_cancel_button_clicked
         )
-        self.settings_dialog.global_apply_button.clicked.connect(
-            self._on_global_apply_button_clicked
-        )
         self.settings_dialog.global_ok_button.clicked.connect(
             self._on_global_ok_button_clicked
         )
@@ -80,7 +77,6 @@ class SettingsDialogController(QObject):
     @Slot()
     def _on_settings_changed(self) -> None:
         self._update_view_from_model()
-        self.settings_dialog.global_apply_button.setEnabled(True)
 
     @Slot()
     def _on_global_reset_to_defaults_button_clicked(self) -> None:
@@ -102,18 +98,11 @@ class SettingsDialogController(QObject):
     @Slot()
     def _on_global_cancel_button_clicked(self) -> None:
         self.settings_dialog.close()
-        self.settings_dialog.global_apply_button.setEnabled(False)
-
-    @Slot()
-    def _on_global_apply_button_clicked(self) -> None:
-        self.settings_model.save()
-        self.settings_dialog.global_apply_button.setEnabled(False)
 
     @Slot()
     def _on_global_ok_button_clicked(self) -> None:
         self.settings_model.save()
         self.settings_dialog.close()
-        self.settings_dialog.global_apply_button.setEnabled(False)
 
     @Slot()
     def _on_choose_game_location(self) -> None:

@@ -52,11 +52,6 @@ class SettingsDialog(QDialog):
         self.global_cancel_button = QPushButton("Cancel", self)
         button_layout.addWidget(self.global_cancel_button)
 
-        # Apply button
-        self.global_apply_button = QPushButton("Apply", self)
-        self.global_apply_button.setEnabled(False)
-        button_layout.addWidget(self.global_apply_button)
-
         # OK button
         self.global_ok_button = QPushButton("OK", self)
         self.global_ok_button.setDefault(True)
