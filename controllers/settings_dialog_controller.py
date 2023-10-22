@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from PySide6.QtCore import QObject, Slot
+from PySide6.QtCore import QObject, Slot, Qt
 from PySide6.QtWidgets import QFileDialog, QMessageBox
 
 from models.settings_model import SettingsModel
@@ -89,6 +89,8 @@ class SettingsDialogController(QObject):
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         message_box.setDefaultButton(QMessageBox.StandardButton.No)
+        message_box.setWindowModality(Qt.WindowModality.WindowModal)
+
         pressed_button = message_box.exec()
         if pressed_button == QMessageBox.StandardButton.No:
             return
@@ -158,6 +160,8 @@ class SettingsDialogController(QObject):
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
         message_box.setDefaultButton(QMessageBox.StandardButton.No)
+        message_box.setWindowModality(Qt.WindowModality.WindowModal)
+
         pressed_button = message_box.exec()
         if pressed_button == QMessageBox.StandardButton.No:
             return
