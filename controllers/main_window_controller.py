@@ -13,8 +13,8 @@ from PySide6.QtCore import (
 from PySide6.QtGui import QPixmap, QStandardItemModel
 from PySide6.QtWidgets import QListView
 
+from controllers.settings_dialog_controller import SettingsDialogController
 from models.main_window_model import MainWindowModel
-from models.settings_model import SettingsModel
 from objects.mod import Mod
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
@@ -26,13 +26,13 @@ class MainWindowController(QObject):
         self,
         model: MainWindowModel,
         view: MainWindow,
-        settings_model: SettingsModel,
+        settings_dialog_controller: SettingsDialogController,
     ) -> None:
         super().__init__()
 
         self.main_window_model = model
         self.main_window = view
-        self.settings_model = settings_model
+        self.settings_dialog_controller = settings_dialog_controller
 
         self.about_dialog = AboutDialog()
 
@@ -93,8 +93,8 @@ class MainWindowController(QObject):
     def _refresh_inactive_mods_list(self) -> None:
         self.runner = LoadModsFromFoldersRunner(
             [
-                self.settings_model.steam_mods_folder_location_path,
-                self.settings_model.local_mods_folder_location_path,
+                self.settings_dialog_controller.settings_model.steam_mods_folder_location_path,
+                self.settings_dialog_controller.settings_model.local_mods_folder_location_path,
             ]
         )
         self.runner.signals.data_ready.connect(self._on_runner_data_ready)
