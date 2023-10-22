@@ -26,6 +26,9 @@ class SystemInfo:
         return cls._instance
 
     def __init__(self) -> None:
+        if hasattr(self, "_is_initialized") and self._is_initialized:
+            return
+
         if platform.system() in ["Windows"]:
             self._operating_system = SystemInfo.OperatingSystem.WINDOWS
         elif platform.system() in ["Linux"]:
@@ -45,6 +48,8 @@ class SystemInfo:
             raise UnsupportedArchitectureError(
                 f"Unsupported architecture detected: {platform.machine()}."
             )
+
+        self._is_initialized: bool = True
 
     @property
     def operating_system(self) -> Optional["SystemInfo.OperatingSystem"]:
