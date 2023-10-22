@@ -77,6 +77,7 @@ class MainWindow(QMainWindow):
         scroll_layout = QVBoxLayout(scroll_widget)
         scroll_area = QScrollArea()
         scroll_area.setWidgetResizable(True)
+        scroll_area.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         scroll_area.setWidget(scroll_widget)
 
         self.selected_mod_preview_image = QLabel()
@@ -163,6 +164,9 @@ class MainWindow(QMainWindow):
         self.inactive_mods_list_view.setSelectionMode(
             QAbstractItemView.SelectionMode.ExtendedSelection
         )
+        self.inactive_mods_list_view.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
+        )
         inactive_mods_layout.addWidget(self.inactive_mods_list_view)
 
     def _do_active_mods_widget(self) -> None:
@@ -185,5 +189,8 @@ class MainWindow(QMainWindow):
         self.active_mods_list_view.setFont(GUIInfo().default_font)
         self.active_mods_list_view.setSelectionMode(
             QAbstractItemView.SelectionMode.ExtendedSelection
+        )
+        self.active_mods_list_view.setHorizontalScrollBarPolicy(
+            Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
         active_mods_layout.addWidget(self.active_mods_list_view)
