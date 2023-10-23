@@ -1,7 +1,8 @@
 from pathlib import Path
 
 from PySide6.QtCore import QObject, Slot, Qt
-from PySide6.QtWidgets import QFileDialog, QMessageBox
+from PySide6.QtGui import QGuiApplication
+from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
 
 from models.settings_model import SettingsModel
 from utilities.event_bus import EventBus
@@ -51,6 +52,20 @@ class SettingsDialogController(QObject):
         )
         self.settings_dialog.locations_autodetect_button.clicked.connect(
             self._on_locations_autodetect_button_clicked
+        )
+
+        # Databases tab
+        self.settings_dialog.community_rules_db_none_radio.clicked.connect(
+            self._on_community_rules_db_radio_clicked
+        )
+        self.settings_dialog.community_rules_db_github_radio.clicked.connect(
+            self._on_community_rules_db_radio_clicked
+        )
+        self.settings_dialog.community_rules_db_local_file_radio.clicked.connect(
+            self._on_community_rules_db_radio_clicked
+        )
+        self.settings_dialog.community_rules_db_local_file_choose_button.clicked.connect(
+            self._on_community_rules_db_local_file_choose_button_clicked
         )
 
         # Sorting tab
@@ -194,6 +209,57 @@ class SettingsDialogController(QObject):
         self.settings_model.config_folder_location = ""
         self.settings_model.steam_mods_folder_location = ""
         self.settings_model.local_mods_folder_location = ""
+
+    @Slot()
+    def _on_community_rules_db_radio_clicked(self, checked: bool) -> None:
+        if (
+            self.sender() == self.settings_dialog.community_rules_db_none_radio
+            and checked
+        ):
+            self.settings_dialog.community_rules_db_github_url.setEnabled(False)
+            self.settings_dialog.community_rules_db_local_file.setEnabled(False)
+            self.settings_dialog.community_rules_db_local_file_choose_button.setEnabled(
+                False
+            )
+            app_instance = QApplication.instance()
+            if isinstance(app_instance, QApplication):
+                focused_widget = app_instance.focusWidget()
+                if focused_widget:
+                    focused_widget.clearFocus()
+            return
+
+        if (
+            self.sender() == self.settings_dialog.community_rules_db_github_radio
+            and checked
+        ):
+            self.settings_dialog.community_rules_db_github_url.setEnabled(True)
+            self.settings_dialog.community_rules_db_local_file.setEnabled(False)
+            self.settings_dialog.community_rules_db_local_file_choose_button.setEnabled(
+                False
+            )
+            self.settings_dialog.community_rules_db_github_url.setFocus()
+            return
+
+        if (
+            self.sender() == self.settings_dialog.community_rules_db_local_file_radio
+            and checked
+        ):
+            self.settings_dialog.community_rules_db_github_url.setEnabled(False)
+            self.settings_dialog.community_rules_db_local_file.setEnabled(True)
+            self.settings_dialog.community_rules_db_local_file_choose_button.setEnabled(
+                True
+            )
+            self.settings_dialog.community_rules_db_local_file.setFocus()
+            return
+
+    @Slot()
+    def _on_community_rules_db_local_file_choose_button_clicked(self) -> None:
+        file_name, _ = QFileDialog.getOpenFileName(
+            parent=self.settings_dialog,
+            dir=str(self.user_home_path),
+        )
+        if file_name != "":
+            self.settings_dialog.community_rules_db_local_file.setText(file_name)
 
     @Slot()
     def _on_sorting_algorithm_button_toggled(self, checked: bool) -> None:
