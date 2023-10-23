@@ -14,7 +14,7 @@ class MainWindowModel(QObject):
         self.mods_dictionary: Dict[uuid.UUID, Mod] = {}
 
         self.inactive_mods_list_model = QStandardItemModel()
-        self.inactive_mods_proxy_model = QSortFilterProxyModel(self)
+        self.inactive_mods_proxy_model = QSortFilterProxyModel()
 
         self.active_mods_list_model = QStandardItemModel()
-        self.active_mods_proxy_model = QSortFilterProxyModel(self)
+        self.active_mods_proxy_model = QSortFilterProxyModel()

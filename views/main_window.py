@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(AppInfo().app_name)
         self.setMinimumSize(1000, 600)
 
-        central_widget = QWidget(self)
+        central_widget = QWidget()
         self.setCentralWidget(central_widget)
 
         central_layout = QVBoxLayout(central_widget)
@@ -129,7 +129,7 @@ class MainWindow(QMainWindow):
         )
         selected_mod_table.setFixedHeight(total_height + 2)
 
-        self.selected_mod_description = QTextEdit(self)
+        self.selected_mod_description = QTextEdit()
         self.selected_mod_description.setReadOnly(True)
         self.selected_mod_description.setVerticalScrollBarPolicy(
             Qt.ScrollBarPolicy.ScrollBarAlwaysOff

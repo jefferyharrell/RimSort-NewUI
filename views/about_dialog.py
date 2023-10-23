@@ -34,7 +34,7 @@ class AboutDialog(QWidget):
         self.app_copyright_label.setFont(GUIInfo().smaller_font)
         self.app_copyright_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        layout = QVBoxLayout(self)
+        layout = QVBoxLayout()
         layout.addStretch(1)
         layout.addWidget(self.app_icon_label)
         layout.addWidget(self.app_name_label)

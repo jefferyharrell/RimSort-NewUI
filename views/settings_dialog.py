@@ -29,11 +29,11 @@ class SettingsDialog(QDialog):
         self.setWindowTitle("Settings")
         self.resize(800, 600)
 
-        main_layout = QVBoxLayout(self)
+        main_layout = QVBoxLayout()
         self.setLayout(main_layout)
 
         # Initialize the QTabWidget
-        self._tab_widget = QTabWidget(self)
+        self._tab_widget = QTabWidget()
         main_layout.addWidget(self._tab_widget)
 
         # Initialize the tabs
@@ -63,7 +63,7 @@ class SettingsDialog(QDialog):
         main_layout.addLayout(button_layout)
 
     def _do_locations_tab(self) -> None:
-        tab = QWidget(self)
+        tab = QWidget()
         tab_layout = QVBoxLayout(tab)
         tab_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
@@ -193,7 +193,7 @@ class SettingsDialog(QDialog):
         tab_layout.addLayout(box_layout)
 
     def _do_databases_tab(self) -> None:
-        tab = QWidget(self)
+        tab = QWidget()
         self._tab_widget.addTab(tab, "Databases")
 
         tab_layout = QVBoxLayout()
@@ -380,7 +380,7 @@ class SettingsDialog(QDialog):
         item_layout.addWidget(info_label)
 
     def _do_sorting_tab(self) -> None:
-        tab = QWidget(self)
+        tab = QWidget()
         tab_layout = QVBoxLayout(tab)
         tab_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
@@ -411,7 +411,7 @@ class SettingsDialog(QDialog):
         self._tab_widget.addTab(tab, "Sorting")
 
     def _do_advanced_tab(self) -> None:
-        tab = QWidget(self)
+        tab = QWidget()
         tab_layout = QVBoxLayout(tab)
         tab_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
