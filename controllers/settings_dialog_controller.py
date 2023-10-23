@@ -66,6 +66,15 @@ class SettingsDialogController(QObject):
         self.settings_dialog.community_rules_db_local_file_choose_button.clicked.connect(
             self._on_community_rules_db_local_file_choose_button_clicked
         )
+        self.settings_dialog.steam_workshop_db_none_radio.clicked.connect(
+            self._on_steam_workshop_db_radio_clicked
+        )
+        self.settings_dialog.steam_workshop_db_github_radio.clicked.connect(
+            self._on_steam_workshop_db_radio_clicked
+        )
+        self.settings_dialog.steam_workshop_db_local_file_radio.clicked.connect(
+            self._on_steam_workshop_db_radio_clicked
+        )
 
         # Sorting tab
         self.settings_dialog.alphabetical_button.toggled.connect(
@@ -259,6 +268,47 @@ class SettingsDialogController(QObject):
         )
         if file_name != "":
             self.settings_dialog.community_rules_db_local_file.setText(file_name)
+
+    def _on_steam_workshop_db_radio_clicked(self, checked: bool) -> None:
+        if (
+            self.sender() == self.settings_dialog.steam_workshop_db_none_radio
+            and checked
+        ):
+            self.settings_dialog.steam_workshop_db_github_url.setEnabled(False)
+            self.settings_dialog.steam_workshop_db_local_file.setEnabled(False)
+            self.settings_dialog.steam_workshop_db_local_file_choose_button.setEnabled(
+                False
+            )
+            app_instance = QApplication.instance()
+            if isinstance(app_instance, QApplication):
+                focused_widget = app_instance.focusWidget()
+                if focused_widget:
+                    focused_widget.clearFocus()
+            return
+
+        if (
+            self.sender() == self.settings_dialog.steam_workshop_db_github_radio
+            and checked
+        ):
+            self.settings_dialog.steam_workshop_db_github_url.setEnabled(True)
+            self.settings_dialog.steam_workshop_db_local_file.setEnabled(False)
+            self.settings_dialog.steam_mods_folder_location_choose_button.setEnabled(
+                False
+            )
+            self.settings_dialog.steam_workshop_db_github_url.setFocus()
+            return
+
+        if (
+            self.sender() == self.settings_dialog.steam_workshop_db_local_file_radio
+            and checked
+        ):
+            self.settings_dialog.steam_workshop_db_github_url.setEnabled(False)
+            self.settings_dialog.steam_workshop_db_local_file.setEnabled(True)
+            self.settings_dialog.steam_workshop_db_local_file_choose_button.setEnabled(
+                True
+            )
+            self.settings_dialog.steam_workshop_db_local_file.setFocus()
+            return
 
     @Slot()
     def _on_sorting_algorithm_button_toggled(self, checked: bool) -> None:

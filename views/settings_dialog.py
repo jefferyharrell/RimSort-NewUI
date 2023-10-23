@@ -200,9 +200,7 @@ class SettingsDialog(QDialog):
         tab.setLayout(tab_layout)
 
         self._do_community_rules_db_group(tab_layout)
-
-        group = QGroupBox()
-        tab_layout.addWidget(group, stretch=1)
+        self._do_steam_workshop_db_group(tab_layout)
 
     def _do_community_rules_db_group(self, tab_layout: QBoxLayout) -> None:
         group = QGroupBox()
@@ -241,6 +239,7 @@ class SettingsDialog(QDialog):
 
         item_layout = QHBoxLayout()
         section_layout.addLayout(item_layout, stretch=1)
+
         self.community_rules_db_github_radio = QRadioButton("GitHub")
         self.community_rules_db_github_radio.setMinimumSize(
             0, GUIInfo().default_font_line_height * 2
@@ -279,6 +278,106 @@ class SettingsDialog(QDialog):
         row_layout.addWidget(self.community_rules_db_local_file_choose_button)
 
         section_layout.addStretch(1)
+
+        item_layout = QHBoxLayout()
+        section_layout.addLayout(item_layout, stretch=1)
+
+        info_label = QLabel(
+            "Some explanatory information should go here. For instance we could explain what a community rules "
+            "database is and what it does. There's room for about two or three lines of text, so we should be concise. "
+            "But I think we need to explain these options in a clear and understandable way (because I don't fully "
+            "understand them myself)."
+        )
+        info_label.setWordWrap(True)
+        item_layout.addWidget(info_label)
+
+    def _do_steam_workshop_db_group(self, tab_layout: QBoxLayout) -> None:
+        group = QGroupBox()
+        tab_layout.addWidget(group, stretch=1)
+
+        group_layout = QVBoxLayout()
+        group_layout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        group.setLayout(group_layout)
+
+        section_label = QLabel("Steam Workshop Database")
+        section_label.setFont(GUIInfo().emphasis_font)
+        section_label.setSizePolicy(
+            QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed
+        )
+        group_layout.addWidget(section_label)
+
+        section_layout = QVBoxLayout()
+        section_layout.setSpacing(0)
+        group_layout.addLayout(section_layout)
+
+        item_layout = QHBoxLayout()
+        section_layout.addLayout(item_layout, stretch=1)
+
+        self.steam_workshop_db_none_radio = QRadioButton("None")
+        self.steam_workshop_db_none_radio.setMinimumSize(
+            0, GUIInfo().default_font_line_height * 2
+        )
+        self.steam_workshop_db_none_radio.setChecked(True)
+        item_layout.addWidget(self.steam_workshop_db_none_radio, stretch=2)
+
+        label = QLabel("No Steam workshop database will be used.")
+        label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
+        label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        label.setEnabled(False)
+        item_layout.addWidget(label, stretch=8)
+
+        item_layout = QHBoxLayout()
+        section_layout.addLayout(item_layout, stretch=1)
+
+        self.steam_workshop_db_github_radio = QRadioButton("GitHub")
+        self.steam_workshop_db_github_radio.setMinimumSize(
+            0, GUIInfo().default_font_line_height * 2
+        )
+        item_layout.addWidget(self.steam_workshop_db_github_radio, stretch=2)
+        self.steam_workshop_db_github_url = QLineEdit()
+        self.steam_workshop_db_github_url.setTextMargins(GUIInfo().text_field_margins)
+        self.steam_workshop_db_github_url.setPlaceholderText(
+            "https://github.com/RimSort/Steam-Workshop-Database or what have you"
+        )
+        self.steam_workshop_db_github_url.setClearButtonEnabled(True)
+        self.steam_workshop_db_github_url.setEnabled(False)
+        item_layout.addWidget(self.steam_workshop_db_github_url, stretch=8)
+
+        item_layout = QHBoxLayout()
+        section_layout.addLayout(item_layout, stretch=1)
+        self.steam_workshop_db_local_file_radio = QRadioButton("Local File")
+        self.steam_workshop_db_local_file_radio.setMinimumSize(
+            0, GUIInfo().default_font_line_height * 2
+        )
+        item_layout.addWidget(self.steam_workshop_db_local_file_radio, stretch=2)
+
+        row_layout = QHBoxLayout()
+        row_layout.setSpacing(8)
+        item_layout.addLayout(row_layout, stretch=8)
+
+        self.steam_workshop_db_local_file = QLineEdit()
+        self.steam_workshop_db_local_file.setTextMargins(GUIInfo().text_field_margins)
+        self.steam_workshop_db_local_file.setClearButtonEnabled(True)
+        self.steam_workshop_db_local_file.setEnabled(False)
+        row_layout.addWidget(self.steam_workshop_db_local_file)
+
+        self.steam_workshop_db_local_file_choose_button = QToolButton()
+        self.steam_workshop_db_local_file_choose_button.setText("Choose…")
+        self.steam_workshop_db_local_file_choose_button.setEnabled(False)
+        row_layout.addWidget(self.steam_workshop_db_local_file_choose_button)
+
+        section_layout.addStretch(1)
+
+        item_layout = QHBoxLayout()
+        section_layout.addLayout(item_layout, stretch=1)
+
+        info_label = QLabel(
+            "This is where we should explain what a Steam workshop database is and what it does. While we're on the "
+            'topic, is there any reason why "None" should be the default instead of "GitHub"? It seems like that\'s '
+            "what's intended, but I'm not sure."
+        )
+        info_label.setWordWrap(True)
+        item_layout.addWidget(info_label)
 
     def _do_sorting_tab(self) -> None:
         tab = QWidget(self)
