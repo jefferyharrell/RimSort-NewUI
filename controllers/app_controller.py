@@ -2,7 +2,6 @@ import sys
 
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QApplication
-from logger_tt import logger
 
 from controllers.about_dialog_controller import AboutDialogController
 from controllers.menu_bar_controller import MenuBarController
@@ -34,7 +33,6 @@ class AppController(QObject):
 
         stylesheet_path = PathInfo().application_folder / "resources" / "style.qss"
         stylesheet = stylesheet_path.read_text()
-        logger.info(f"Using stylesheet: {stylesheet_path}")
         self.app.setStyleSheet(stylesheet)
 
         # Uncomment to debug the UI
