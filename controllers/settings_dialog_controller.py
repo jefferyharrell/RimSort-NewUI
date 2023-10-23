@@ -1,7 +1,6 @@
 from pathlib import Path
 
 from PySide6.QtCore import QObject, Slot, Qt
-from PySide6.QtGui import QGuiApplication
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
 
 from models.settings_model import SettingsModel

@@ -1,5 +1,6 @@
 from typing import Optional
 
+from PySide6.QtCore import QMargins
 from PySide6.QtGui import QFont, QFontMetrics
 from PySide6.QtWidgets import QApplication
 
@@ -26,6 +27,8 @@ class GUIInfo:
         self._smaller_font = QFont(self._default_font)
         self._smaller_font.setPointSize(self._smaller_font.pointSize() - 1)
 
+        self._text_field_margins = QMargins(4, 4, 4, 4)
+
         self._is_initialized: bool = True
 
     @property
@@ -43,3 +46,7 @@ class GUIInfo:
     @property
     def smaller_font(self) -> QFont:
         return self._smaller_font
+
+    @property
+    def text_field_margins(self) -> QMargins:
+        return self._text_field_margins

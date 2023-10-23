@@ -2,6 +2,7 @@ import sys
 
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QApplication
+from logger_tt import logger
 
 from controllers.about_dialog_controller import AboutDialogController
 from controllers.menu_bar_controller import MenuBarController
@@ -10,6 +11,7 @@ from controllers.settings_dialog_controller import SettingsDialogController
 from models.main_window_model import MainWindowModel
 from models.settings_model import SettingsModel
 from utilities.event_bus import EventBus
+from utilities.path_info import PathInfo
 from utilities.system_info import SystemInfo
 from views.about_dialog import AboutDialog
 from views.menu_bar import MenuBar
@@ -30,8 +32,16 @@ class AppController(QObject):
         elif SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
             self.app.setStyle("macOS")
 
+        stylesheet_path = PathInfo().application_folder / "resources" / "style.qss"
+        stylesheet = stylesheet_path.read_text()
+        logger.info(f"Using stylesheet: {stylesheet_path}")
+        self.app.setStyleSheet(stylesheet)
+
         # Uncomment to debug the UI
         # self.app.setStyleSheet("QWidget { border: 1px solid red; }")
+        # self.app.setStyleSheet(
+        #     stylesheet + "QWidget { background-color: rgba(255, 255, 255, 25); }"
+        # )
 
         self.settings_model = SettingsModel()
         self.settings_dialog = SettingsDialog()

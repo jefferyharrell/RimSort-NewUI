@@ -1,4 +1,4 @@
-from PySide6.QtCore import Qt, QMargins
+from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QDialog,
     QHBoxLayout,
@@ -13,6 +13,8 @@ from PySide6.QtWidgets import (
     QCheckBox,
     QLineEdit,
     QGroupBox,
+    QToolButton,
+    QBoxLayout,
 )
 
 from utilities.gui_info import GUIInfo
@@ -191,14 +193,18 @@ class SettingsDialog(QDialog):
         tab_layout.addLayout(box_layout)
 
     def _do_databases_tab(self) -> None:
-        text_margins = QMargins(4, 4, 4, 4)
-
         tab = QWidget(self)
         self._tab_widget.addTab(tab, "Databases")
 
         tab_layout = QVBoxLayout()
         tab.setLayout(tab_layout)
 
+        self._do_community_rules_db_group(tab_layout)
+
+        group = QGroupBox()
+        tab_layout.addWidget(group, stretch=1)
+
+    def _do_community_rules_db_group(self, tab_layout: QBoxLayout) -> None:
         group = QGroupBox()
         tab_layout.addWidget(group, stretch=1)
 
@@ -214,7 +220,7 @@ class SettingsDialog(QDialog):
         group_layout.addWidget(section_label)
 
         section_layout = QVBoxLayout()
-        section_layout.setSpacing(10)
+        section_layout.setSpacing(0)
         group_layout.addLayout(section_layout)
 
         item_layout = QHBoxLayout()
@@ -228,7 +234,6 @@ class SettingsDialog(QDialog):
         item_layout.addWidget(self.community_rules_db_none_radio, stretch=2)
 
         label = QLabel("No community rules database will be used.")
-        label.setMinimumSize(0, GUIInfo().default_font_line_height * 2)
         label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)
         label.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         label.setEnabled(False)
@@ -236,20 +241,15 @@ class SettingsDialog(QDialog):
 
         item_layout = QHBoxLayout()
         section_layout.addLayout(item_layout, stretch=1)
-
         self.community_rules_db_github_radio = QRadioButton("GitHub")
         self.community_rules_db_github_radio.setMinimumSize(
             0, GUIInfo().default_font_line_height * 2
         )
         item_layout.addWidget(self.community_rules_db_github_radio, stretch=2)
-
         self.community_rules_db_github_url = QLineEdit()
-        self.community_rules_db_github_url.setMinimumSize(
-            0, GUIInfo().default_font_line_height * 2
-        )
-        self.community_rules_db_github_url.setTextMargins(text_margins)
+        self.community_rules_db_github_url.setTextMargins(GUIInfo().text_field_margins)
         self.community_rules_db_github_url.setPlaceholderText(
-            "https://github.com/RimSort/Community-Rules-Database"
+            "https://github.com/RimSort/Community-Rules-Database or whatever"
         )
         self.community_rules_db_github_url.setClearButtonEnabled(True)
         self.community_rules_db_github_url.setEnabled(False)
@@ -257,7 +257,6 @@ class SettingsDialog(QDialog):
 
         item_layout = QHBoxLayout()
         section_layout.addLayout(item_layout, stretch=1)
-
         self.community_rules_db_local_file_radio = QRadioButton("Local File")
         self.community_rules_db_local_file_radio.setMinimumSize(
             0, GUIInfo().default_font_line_height * 2
@@ -265,25 +264,21 @@ class SettingsDialog(QDialog):
         item_layout.addWidget(self.community_rules_db_local_file_radio, stretch=2)
 
         row_layout = QHBoxLayout()
+        row_layout.setSpacing(8)
         item_layout.addLayout(row_layout, stretch=8)
 
         self.community_rules_db_local_file = QLineEdit()
-        self.community_rules_db_local_file.setMinimumSize(
-            0, GUIInfo().default_font_line_height * 2
-        )
-        self.community_rules_db_local_file.setTextMargins(text_margins)
+        self.community_rules_db_local_file.setTextMargins(GUIInfo().text_field_margins)
         self.community_rules_db_local_file.setClearButtonEnabled(True)
         self.community_rules_db_local_file.setEnabled(False)
         row_layout.addWidget(self.community_rules_db_local_file)
 
-        self.community_rules_db_local_file_choose_button = QPushButton("Choose…")
+        self.community_rules_db_local_file_choose_button = QToolButton()
+        self.community_rules_db_local_file_choose_button.setText("Choose…")
         self.community_rules_db_local_file_choose_button.setEnabled(False)
         row_layout.addWidget(self.community_rules_db_local_file_choose_button)
 
         section_layout.addStretch(1)
-
-        group = QGroupBox()
-        tab_layout.addWidget(group, stretch=1)
 
     def _do_sorting_tab(self) -> None:
         tab = QWidget(self)
