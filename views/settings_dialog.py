@@ -40,6 +40,8 @@ class SettingsDialog(QDialog):
         self._do_locations_tab()
         self._do_databases_tab()
         self._do_sorting_tab()
+        self._do_steamcmd_tab()
+        self._do_todds_tab()
         self._do_advanced_tab()
 
         # "Cancel" and "Apply" buttons layout
@@ -409,6 +411,20 @@ class SettingsDialog(QDialog):
         tab_layout.addWidget(explanatory_label)
 
         self._tab_widget.addTab(tab, "Sorting")
+
+    def _do_steamcmd_tab(self) -> None:
+        tab = QWidget()
+        self._tab_widget.addTab(tab, "SteamCMD")
+
+        tab_layout = QVBoxLayout()
+        tab.setLayout(tab_layout)
+
+    def _do_todds_tab(self) -> None:
+        tab = QWidget()
+        self._tab_widget.addTab(tab, "todds")
+
+        tab_layout = QVBoxLayout()
+        tab.setLayout(tab_layout)
 
     def _do_advanced_tab(self) -> None:
         tab = QWidget()
