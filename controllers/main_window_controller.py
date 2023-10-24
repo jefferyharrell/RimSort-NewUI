@@ -35,8 +35,6 @@ class MainWindowController(QObject):
         self.main_window = view
         self.settings_dialog_controller = settings_dialog_controller
 
-        self.about_dialog = AboutDialog()
-
         EventBus().menu_bar_zoom_action_triggered.connect(
             self._on_zoom_action_triggered
         )
