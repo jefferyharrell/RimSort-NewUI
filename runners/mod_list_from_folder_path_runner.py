@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import List
 
 from PySide6.QtCore import QRunnable
-from logger_tt import logger
+from loguru import logger
 from lxml import etree
 
 from models.mod import Mod
