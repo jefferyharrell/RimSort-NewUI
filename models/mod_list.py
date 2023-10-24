@@ -7,13 +7,12 @@ from PySide6.QtCore import (
     QSortFilterProxyModel,
     Qt,
     QModelIndex,
-    QThreadPool,
-    Slot,
 )
 from PySide6.QtGui import QStandardItemModel
+from lxml import etree
 
 from models.mod import Mod
-from runners.mod_list_from_folder_path_runner import ModListFromFolderPathRunner
+from models.mod_database import ModDatabase
 
 
 class ModList(QObject):
@@ -94,27 +93,19 @@ class ModList(QObject):
         self._id_to_mod_map.clear()
 
     # I/O Methods
-    def from_folder_path(self, folder_path: Path) -> None:
-        """
-        Load Mod items into the list from a folder path.
 
-        :param folder_path: The path to the folder from which to load mods.
-        :type folder_path: Path
-        """
-        runner = ModListFromFolderPathRunner(folder_path)
-        runner.signals.data_ready.connect(self._on_from_folder_path_data_ready)
-        pool = QThreadPool.globalInstance()
-        pool.start(runner)
-
-    @Slot(object)
-    def _on_from_folder_path_data_ready(self, data: object) -> None:
-        if not isinstance(data, list) or not all(
-            isinstance(item, Mod) for item in data
-        ):
-            raise TypeError("Expected a list of Mod objects")
-        for mod in data:
-            self.append(mod)
-        self.sort(Qt.SortOrder.AscendingOrder)
+    def from_xml(self, xml_path: Path) -> None:
+        xml_data = xml_path.read_bytes()
+        root = etree.fromstring(xml_data)
+        results = root.xpath("./activeMods/li/text()")
+        if isinstance(results, list):
+            active_mods = [str(result) for result in results]
+        else:
+            active_mods = []
+        for package_id in active_mods:
+            mod = ModDatabase().get_mod_by_package_id(package_id.lower())
+            if mod is not None:
+                self.append(mod)
 
     def to_xml(self) -> str:
         return ""
@@ -129,7 +120,7 @@ class ModList(QObject):
         """
         return self._inner_model.rowCount()
 
-    def get_by_uuid(self, mod_id: uuid.UUID) -> Optional[Mod]:
+    def get_by_id(self, mod_id: uuid.UUID) -> Optional[Mod]:
         """
         Find a Mod item by its unique identifier.
 
@@ -249,3 +240,14 @@ class ModList(QObject):
             return mod
         else:
             raise StopIteration
+
+    def __contains__(self, mod: Mod) -> bool:
+        """
+        Check if the given Mod object exists in the ModList.
+
+        :param mod: The Mod object to check for existence.
+        :type mod: Mod
+        :return: True if the Mod object exists in the ModList, otherwise False.
+        :rtype: bool
+        """
+        return mod in self._id_to_mod_map.values()

@@ -14,17 +14,17 @@ class MenuBarController(QObject):
         self.menu_bar = view
 
         self.menu_bar.about_action.triggered.connect(
-            EventBus.instance().menu_bar_about_action_triggered.emit
+            EventBus().menu_bar_about_action_triggered.emit
         )
 
         self.menu_bar.settings_action.triggered.connect(
-            EventBus.instance().menu_bar_settings_action_triggered.emit
+            EventBus().menu_bar_settings_action_triggered.emit
         )
 
         self.menu_bar.quit_action.triggered.connect(
-            EventBus.instance().menu_bar_quit_action_triggered.emit
+            EventBus().menu_bar_quit_action_triggered.emit
         )
 
         self.menu_bar.zoom_action.triggered.connect(
-            EventBus.instance().menu_bar_zoom_action_triggered.emit
+            EventBus().menu_bar_zoom_action_triggered.emit
         )

@@ -11,10 +11,12 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import QPixmap, QStandardItemModel
 from PySide6.QtWidgets import QListView
+from loguru import logger
 
 from controllers.settings_dialog_controller import SettingsDialogController
 from models.main_window_model import MainWindowModel
 from models.mod import Mod
+from models.mod_database import ModDatabase
 from utilities.event_bus import EventBus
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
@@ -35,7 +37,7 @@ class MainWindowController(QObject):
 
         self.about_dialog = AboutDialog()
 
-        EventBus.instance().menu_bar_zoom_action_triggered.connect(
+        EventBus().menu_bar_zoom_action_triggered.connect(
             self._on_zoom_action_triggered
         )
 
@@ -73,16 +75,22 @@ class MainWindowController(QObject):
             self._on_mods_list_view_selection_changed
         )
 
-        # Populate the models
-        self.main_window_model.inactive_mod_list.from_folder_path(
-            self.settings_dialog_controller.settings_model.steam_mods_folder_location_path,
+        logger.info("Connecting to database_ready signal.")
+        EventBus().database_ready.connect(self._on_database_ready)
+
+    @Slot()
+    def _on_database_ready(self) -> None:
+        logger.info("Received database_ready signal.")
+        self.main_window_model.active_mod_list.from_xml(
+            self.settings_dialog_controller.settings_model.config_folder_location_path
+            / "ModsConfig.xml"
         )
-        self.main_window_model.inactive_mod_list.from_folder_path(
-            self.settings_dialog_controller.settings_model.local_mods_folder_location_path,
-        )
-        self.main_window_model.inactive_mod_list.from_folder_path(
-            self.settings_dialog_controller.settings_model.game_data_location_path
-        )
+
+        for mod in ModDatabase():
+            if mod not in self.main_window_model.active_mod_list:
+                self.main_window_model.inactive_mod_list.append(mod)
+
+        self.main_window_model.inactive_mod_list.sort()
 
     @Slot(str)
     def _update_inactive_mods_filter(self, text: str) -> None:
@@ -141,8 +149,8 @@ class MainWindowController(QObject):
                 self._clear_selected_mod_info()
 
     def _show_selected_mod_info_by_index(self, index: QModelIndex) -> None:
-        mod_uuid = index.data(Qt.ItemDataRole.UserRole)
-        mod = self.main_window_model.inactive_mod_list.get_by_uuid(mod_uuid)
+        mod_id = index.data(Qt.ItemDataRole.UserRole)
+        mod = self.main_window_model.inactive_mod_list.get_by_id(mod_id)
         if not isinstance(mod, Mod):
             return
 

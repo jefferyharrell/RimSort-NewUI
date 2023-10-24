@@ -8,6 +8,7 @@ from PySide6.QtCore import QObject, Signal
 from platformdirs import user_data_dir
 
 from utilities.app_info import AppInfo
+from utilities.system_info import SystemInfo
 
 
 class SettingsModel(QObject):
@@ -37,6 +38,8 @@ class SettingsModel(QObject):
         )
 
         self._debug_logging: bool = False
+
+        self._game_data_location: str = ""
 
         self._apply_default_settings()
 
@@ -129,6 +132,17 @@ class SettingsModel(QObject):
         if self._debug_logging != value:
             self._debug_logging = value
             self.changed.emit()
+
+    @property
+    def game_data_location(self) -> str:
+        if SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
+            return str(self.game_location_path / "Data")
+        else:
+            return str(self.game_location_path.parent / "Data")
+
+    @property
+    def game_data_location_path(self) -> Path:
+        return Path(self.game_data_location)
 
     def save(self) -> None:
         with open(str(self.settings_file_path), "w") as file:

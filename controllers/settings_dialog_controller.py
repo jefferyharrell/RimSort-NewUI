@@ -18,9 +18,7 @@ class SettingsDialogController(QObject):
 
         self.user_home_path: Path = Path.home()
 
-        EventBus.instance().menu_bar_settings_action_triggered.connect(
-            self.settings_dialog.exec
-        )
+        EventBus().menu_bar_settings_action_triggered.connect(self.settings_dialog.exec)
 
         # Global buttons
         self.settings_dialog.global_reset_to_defaults_button.clicked.connect(

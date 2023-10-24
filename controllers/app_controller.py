@@ -2,12 +2,14 @@ import sys
 
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QApplication
+from loguru import logger
 
 from controllers.about_dialog_controller import AboutDialogController
 from controllers.menu_bar_controller import MenuBarController
 from controllers.main_window_controller import MainWindowController
 from controllers.settings_dialog_controller import SettingsDialogController
 from models.main_window_model import MainWindowModel
+from models.mod_database import ModDatabase
 from models.settings_model import SettingsModel
 from utilities.event_bus import EventBus
 from utilities.path_info import PathInfo
@@ -47,6 +49,19 @@ class AppController(QObject):
             model=self.settings_model, view=self.settings_dialog
         )
 
+        logger.info("Initializing the event bus.")
+        EventBus()
+
+        logger.info("Initializing the mod database.")
+        ModDatabase(
+            from_folders=[
+                self.settings_model.game_data_location_path,
+                self.settings_model.local_mods_folder_location_path,
+                self.settings_model.steam_mods_folder_location_path,
+            ]
+        )
+
+        logger.info("Initializing the main window.")
         self.main_window_model = MainWindowModel()
         self.main_window = MainWindow()
         self.main_window_controller = MainWindowController(
@@ -61,7 +76,7 @@ class AppController(QObject):
         self.menu_bar = MenuBar(menu_bar=self.main_window.menuBar())
         self.menu_bar_controller = MenuBarController(view=self.menu_bar)
 
-        EventBus.instance().menu_bar_quit_action_triggered.connect(self.quit)
+        EventBus().menu_bar_quit_action_triggered.connect(self.quit)
 
     def run(self) -> int:
         self.main_window.show()
