@@ -41,6 +41,18 @@ class Mod(QStandardItem):
         self._description = description
         self._preview_image_path = preview_image_path
 
+        if self._name == "" and self._package_id.lower() == "ludeon.rimworld":
+            self._name = "Core"
+
+        if self._name == "" and self._package_id.lower() == "ludeon.rimworld.royalty":
+            self._name = "Royalty"
+
+        if self._name == "" and self._package_id.lower() == "ludeon.rimworld.ideology":
+            self._name = "Ideology"
+
+        if self._name == "" and self._package_id.lower() == "ludeon.rimworld.biotech":
+            self._name = "Biotech"
+
         self.setData(self.name, Qt.ItemDataRole.DisplayRole)
         self.setData(self.id, Qt.ItemDataRole.UserRole)
 

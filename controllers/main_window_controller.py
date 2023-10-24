@@ -80,6 +80,9 @@ class MainWindowController(QObject):
         self.main_window_model.inactive_mod_list.from_folder_path(
             self.settings_dialog_controller.settings_model.local_mods_folder_location_path,
         )
+        self.main_window_model.inactive_mod_list.from_folder_path(
+            self.settings_dialog_controller.settings_model.game_data_location_path
+        )
 
     @Slot(str)
     def _update_inactive_mods_filter(self, text: str) -> None:
