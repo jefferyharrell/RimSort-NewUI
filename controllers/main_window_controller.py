@@ -27,13 +27,13 @@ class MainWindowController(QObject):
         self,
         model: MainWindowModel,
         view: MainWindow,
-        settings_dialog_controller: SettingsController,
+        settings_controller: SettingsController,
     ) -> None:
         super().__init__()
 
         self.main_window_model = model
         self.main_window = view
-        self.settings_dialog_controller = settings_dialog_controller
+        self.settings_controller = settings_controller
 
         EventBus().menu_bar_zoom_action_triggered.connect(
             self._on_zoom_action_triggered
@@ -80,7 +80,7 @@ class MainWindowController(QObject):
     def _on_database_ready(self) -> None:
         logger.info("Received database_ready signal.")
         self.main_window_model.active_mod_list.from_xml(
-            self.settings_dialog_controller.settings_model.config_folder_location_path
+            self.settings_controller.settings_model.config_folder_location_path
             / "ModsConfig.xml"
         )
 

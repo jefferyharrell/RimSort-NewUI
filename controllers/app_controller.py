@@ -45,7 +45,7 @@ class AppController(QObject):
 
         self.settings_model = SettingsModel()
         self.settings_dialog = SettingsDialog()
-        self.settings_dialog_controller = SettingsController(
+        self.settings_controller = SettingsController(
             model=self.settings_model, view=self.settings_dialog
         )
 
@@ -67,7 +67,7 @@ class AppController(QObject):
         self.main_window_controller = MainWindowController(
             model=self.main_window_model,
             view=self.main_window,
-            settings_dialog_controller=self.settings_dialog_controller,
+            settings_controller=self.settings_controller,
         )
 
         self.about_dialog = AboutDialog()
