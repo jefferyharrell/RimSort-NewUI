@@ -1,20 +1,11 @@
-import uuid
-from typing import Dict
+from PySide6.QtCore import QObject
 
-from PySide6.QtCore import QObject, QSortFilterProxyModel
-from PySide6.QtGui import QStandardItemModel
-
-from models.mod import Mod
+from models.mod_list import ModList
 
 
 class MainWindowModel(QObject):
     def __init__(self) -> None:
         super().__init__()
 
-        self.mods_dictionary: Dict[uuid.UUID, Mod] = {}
-
-        self.inactive_mods_list_model = QStandardItemModel()
-        self.inactive_mods_proxy_model = QSortFilterProxyModel()
-
-        self.active_mods_list_model = QStandardItemModel()
-        self.active_mods_proxy_model = QSortFilterProxyModel()
+        self.inactive_mod_list = ModList()
+        self.active_mod_list = ModList()

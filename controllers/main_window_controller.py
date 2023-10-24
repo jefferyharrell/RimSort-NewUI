@@ -6,7 +6,6 @@ from PySide6.QtCore import (
     Qt,
     QModelIndex,
     QSortFilterProxyModel,
-    QThreadPool,
     QItemSelection,
     QItemSelectionModel,
 )
@@ -19,7 +18,6 @@ from models.mod import Mod
 from utilities.event_bus import EventBus
 from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
-from runners.load_mods_from_folders_runner import LoadModsFromFoldersRunner
 
 
 class MainWindowController(QObject):
@@ -56,33 +54,16 @@ class MainWindowController(QObject):
             self._on_mod_list_view_double_clicked
         )
 
-        # Set up the proxy models
-        self.main_window_model.inactive_mods_proxy_model.setSourceModel(
-            self.main_window_model.inactive_mods_list_model
-        )
-        self.main_window_model.inactive_mods_proxy_model.setFilterCaseSensitivity(
-            Qt.CaseSensitivity.CaseInsensitive
-        )
-        self.main_window.inactive_mods_filter_field.textChanged.connect(
-            self._update_inactive_mods_filter
-        )
-
-        self.main_window_model.active_mods_proxy_model.setSourceModel(
-            self.main_window_model.active_mods_list_model
-        )
-        self.main_window_model.active_mods_proxy_model.setFilterCaseSensitivity(
-            Qt.CaseSensitivity.CaseInsensitive
-        )
-        self.main_window.active_mods_filter_field.textChanged.connect(
-            self._update_active_mods_filter
-        )
-
         # Connect the models to their views
         self.main_window.inactive_mods_list_view.setModel(
-            self.main_window_model.inactive_mods_proxy_model
+            self.main_window_model.inactive_mod_list.proxy_model
         )
         self.main_window.active_mods_list_view.setModel(
-            self.main_window_model.active_mods_proxy_model
+            self.main_window_model.active_mod_list.proxy_model
+        )
+
+        self.main_window.inactive_mods_filter_field.textChanged.connect(
+            self._update_inactive_mods_filter
         )
 
         self.main_window.inactive_mods_list_view.selectionModel().selectionChanged.connect(
@@ -93,43 +74,22 @@ class MainWindowController(QObject):
         )
 
         # Populate the models
-        self._refresh_inactive_mods_list()
-
-    def _refresh_inactive_mods_list(self) -> None:
-        self.runner = LoadModsFromFoldersRunner(
-            [
-                self.settings_dialog_controller.settings_model.steam_mods_folder_location_path,
-                self.settings_dialog_controller.settings_model.local_mods_folder_location_path,
-            ]
+        self.main_window_model.inactive_mod_list.from_folder_path(
+            self.settings_dialog_controller.settings_model.steam_mods_folder_location_path,
         )
-        self.runner.signals.data_ready.connect(self._on_runner_data_ready)
-        pool = QThreadPool.globalInstance()
-        pool.start(self.runner)
-
-    @Slot(object)
-    def _on_runner_data_ready(self, data: object) -> None:
-        if not isinstance(data, list) or not all(
-            isinstance(item, Mod) for item in data
-        ):
-            raise TypeError("Expected a list of Mod objects")
-
-        self.main_window_model.mods_dictionary = {}
-        self.main_window_model.inactive_mods_list_model.clear()
-
-        for mod in data:
-            self.main_window_model.mods_dictionary[mod.id] = mod
-            self.main_window_model.inactive_mods_list_model.appendRow(mod)
-            self.main_window_model.inactive_mods_proxy_model.sort(0)
+        self.main_window_model.inactive_mod_list.from_folder_path(
+            self.settings_dialog_controller.settings_model.local_mods_folder_location_path,
+        )
 
     @Slot(str)
     def _update_inactive_mods_filter(self, text: str) -> None:
         """Update the filter based on the text in the QLineEdit."""
-        self.main_window_model.inactive_mods_proxy_model.setFilterFixedString(text)
+        self.main_window_model.inactive_mod_list.filter(text)
 
     @Slot(str)
     def _update_active_mods_filter(self, text: str) -> None:
         """Update the filter based on the text in the QLineEdit."""
-        self.main_window_model.active_mods_proxy_model.setFilterFixedString(text)
+        self.main_window_model.active_mod_list.filter(text)
 
     @Slot(QModelIndex)
     def _on_mod_list_view_clicked(self, index: QModelIndex) -> None:
@@ -179,18 +139,25 @@ class MainWindowController(QObject):
 
     def _show_selected_mod_info_by_index(self, index: QModelIndex) -> None:
         mod_uuid = index.data(Qt.ItemDataRole.UserRole)
-        mod = self.main_window_model.mods_dictionary[mod_uuid]
+        mod = self.main_window_model.inactive_mod_list.get_by_uuid(mod_uuid)
+        if not isinstance(mod, Mod):
+            return
+
         if mod.preview_image_path.exists():
             desired_width = self.main_window.selected_mod_preview_image.width()
             pixmap = QPixmap(str(mod.preview_image_path)).scaledToWidth(
                 desired_width, Qt.TransformationMode.SmoothTransformation
             )
             self.main_window.selected_mod_preview_image.setPixmap(pixmap)
+
         self.main_window.selected_mod_name_label.setText(mod.name)
+
         self.main_window.selected_mod_package_id_label.setText(str(mod.package_id))
+
         self.main_window.selected_mod_supported_versions_label.setText(
             ", ".join(mod.supported_versions)
         )
+
         if mod.description != "":
             self.main_window.selected_mod_description.show()
         else:
