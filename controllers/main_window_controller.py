@@ -13,7 +13,7 @@ from PySide6.QtGui import QPixmap, QStandardItemModel
 from PySide6.QtWidgets import QListView
 from loguru import logger
 
-from controllers.settings_dialog_controller import SettingsDialogController
+from controllers.settings_controller import SettingsController
 from models.main_window_model import MainWindowModel
 from models.mod import Mod
 from models.mod_database import ModDatabase
@@ -27,7 +27,7 @@ class MainWindowController(QObject):
         self,
         model: MainWindowModel,
         view: MainWindow,
-        settings_dialog_controller: SettingsDialogController,
+        settings_dialog_controller: SettingsController,
     ) -> None:
         super().__init__()
 

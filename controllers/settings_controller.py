@@ -9,7 +9,7 @@ from utilities.system_info import SystemInfo
 from views.settings_dialog import SettingsDialog
 
 
-class SettingsDialogController(QObject):
+class SettingsController(QObject):
     def __init__(self, model: SettingsModel, view: SettingsDialog) -> None:
         super().__init__()
 

@@ -7,7 +7,7 @@ from loguru import logger
 from controllers.about_dialog_controller import AboutDialogController
 from controllers.menu_bar_controller import MenuBarController
 from controllers.main_window_controller import MainWindowController
-from controllers.settings_dialog_controller import SettingsDialogController
+from controllers.settings_controller import SettingsController
 from models.main_window_model import MainWindowModel
 from models.mod_database import ModDatabase
 from models.settings_model import SettingsModel
@@ -45,7 +45,7 @@ class AppController(QObject):
 
         self.settings_model = SettingsModel()
         self.settings_dialog = SettingsDialog()
-        self.settings_dialog_controller = SettingsDialogController(
+        self.settings_dialog_controller = SettingsController(
             model=self.settings_model, view=self.settings_dialog
         )
 
