@@ -7,7 +7,6 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QRadioButton,
     QPushButton,
-    QSpacerItem,
     QSizePolicy,
     QTabWidget,
     QCheckBox,
@@ -96,94 +95,82 @@ class SettingsDialog(QDialog):
         self._tab_widget.addTab(tab, "Locations")
 
     def _do_game_location_area(self, tab_layout: QVBoxLayout) -> None:
+        header_layout = QHBoxLayout()
+        tab_layout.addLayout(header_layout)
+
         section_label = QLabel("Game Location")
         section_label.setFont(GUIInfo().emphasis_font)
-        tab_layout.addWidget(section_label)
-
-        self.game_location = QTextEdit()
-        self.game_location.setFixedHeight(GUIInfo().default_font_line_height * 3)
-        self.game_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        header_layout.addWidget(section_label)
 
         self.game_location_choose_button = QToolButton()
         self.game_location_choose_button.setText("Choose…")
+        header_layout.addWidget(self.game_location_choose_button)
 
-        box_layout = QHBoxLayout()
-        box_layout.addWidget(self.game_location)
-        box_layout.addSpacerItem(
-            QSpacerItem(12, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-        )
-        box_layout.addWidget(self.game_location_choose_button)
-
-        tab_layout.addLayout(box_layout)
+        self.game_location = QLineEdit()
+        self.game_location.setTextMargins(GUIInfo().text_field_margins)
+        self.game_location.setFixedHeight(GUIInfo().default_font_line_height * 2)
+        self.game_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        tab_layout.addWidget(self.game_location)
 
     def _do_config_folder_location_area(self, tab_layout: QVBoxLayout) -> None:
+        header_layout = QHBoxLayout()
+        tab_layout.addLayout(header_layout)
+
         section_label = QLabel("Config Folder Location")
         section_label.setFont(GUIInfo().emphasis_font)
-        tab_layout.addWidget(section_label)
-
-        self.config_folder_location = QTextEdit()
-        self.config_folder_location.setFixedHeight(
-            GUIInfo().default_font_line_height * 3
-        )
-        self.config_folder_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        header_layout.addWidget(section_label)
 
         self.config_folder_location_choose_button = QToolButton()
         self.config_folder_location_choose_button.setText("Choose…")
+        header_layout.addWidget(self.config_folder_location_choose_button)
 
-        box_layout = QHBoxLayout()
-        box_layout.addWidget(self.config_folder_location)
-        box_layout.addSpacerItem(
-            QSpacerItem(12, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.config_folder_location = QLineEdit()
+        self.config_folder_location.setTextMargins(GUIInfo().text_field_margins)
+        self.config_folder_location.setFixedHeight(
+            GUIInfo().default_font_line_height * 2
         )
-        box_layout.addWidget(self.config_folder_location_choose_button)
-
-        tab_layout.addLayout(box_layout)
+        self.config_folder_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        tab_layout.addWidget(self.config_folder_location)
 
     def _do_steam_mods_folder_location_area(self, tab_layout: QVBoxLayout) -> None:
+        header_layout = QHBoxLayout()
+        tab_layout.addLayout(header_layout)
+
         section_label = QLabel("Steam Mods Folder Location")
         section_label.setFont(GUIInfo().emphasis_font)
-        tab_layout.addWidget(section_label)
-
-        self.steam_mods_folder_location = QTextEdit()
-        self.steam_mods_folder_location.setFixedHeight(
-            GUIInfo().default_font_line_height * 3
-        )
-        self.steam_mods_folder_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        header_layout.addWidget(section_label)
 
         self.steam_mods_folder_location_choose_button = QToolButton()
         self.steam_mods_folder_location_choose_button.setText("Choose…")
+        header_layout.addWidget(self.steam_mods_folder_location_choose_button)
 
-        box_layout = QHBoxLayout()
-        box_layout.addWidget(self.steam_mods_folder_location)
-        box_layout.addSpacerItem(
-            QSpacerItem(12, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.steam_mods_folder_location = QLineEdit()
+        self.steam_mods_folder_location.setTextMargins(GUIInfo().text_field_margins)
+        self.steam_mods_folder_location.setFixedHeight(
+            GUIInfo().default_font_line_height * 2
         )
-        box_layout.addWidget(self.steam_mods_folder_location_choose_button)
-
-        tab_layout.addLayout(box_layout)
+        self.steam_mods_folder_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        tab_layout.addWidget(self.steam_mods_folder_location)
 
     def _do_local_mods_folder_location_area(self, tab_layout: QVBoxLayout) -> None:
+        header_layout = QHBoxLayout()
+        tab_layout.addLayout(header_layout)
+
         section_label = QLabel("Local Mods Folder Location")
         section_label.setFont(GUIInfo().emphasis_font)
-        tab_layout.addWidget(section_label)
-
-        self.local_mods_folder_location = QTextEdit()
-        self.local_mods_folder_location.setFixedHeight(
-            GUIInfo().default_font_line_height * 3
-        )
-        self.local_mods_folder_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        header_layout.addWidget(section_label)
 
         self.local_mods_folder_location_choose_button = QToolButton()
         self.local_mods_folder_location_choose_button.setText("Choose…")
+        header_layout.addWidget(self.local_mods_folder_location_choose_button)
 
-        box_layout = QHBoxLayout()
-        box_layout.addWidget(self.local_mods_folder_location)
-        box_layout.addSpacerItem(
-            QSpacerItem(12, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
+        self.local_mods_folder_location = QLineEdit()
+        self.local_mods_folder_location.setTextMargins(GUIInfo().text_field_margins)
+        self.local_mods_folder_location.setFixedHeight(
+            GUIInfo().default_font_line_height * 2
         )
-        box_layout.addWidget(self.local_mods_folder_location_choose_button)
-
-        tab_layout.addLayout(box_layout)
+        self.local_mods_folder_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
+        tab_layout.addWidget(self.local_mods_folder_location)
 
     def _do_databases_tab(self) -> None:
         tab = QWidget()

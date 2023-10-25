@@ -176,10 +176,10 @@ class SettingsController(QObject):
     @Slot()
     def _on_locations_autodetect_button_clicked(self) -> None:
         if (
-            self.settings_dialog.game_location.toPlainText() != ""
-            or self.settings_dialog.config_folder_location.toPlainText() != ""
-            or self.settings_dialog.steam_mods_folder_location.toPlainText() != ""
-            or self.settings_dialog.local_mods_folder_location.toPlainText() != ""
+            self.settings_dialog.game_location.text() != ""
+            or self.settings_dialog.config_folder_location.text() != ""
+            or self.settings_dialog.steam_mods_folder_location.text() != ""
+            or self.settings_dialog.local_mods_folder_location.text() != ""
         ):
             message_box = QMessageBox(self.settings_dialog)
             message_box.setWindowTitle("Autodetect locations")
@@ -342,18 +342,18 @@ class SettingsController(QObject):
 
     def _update_view_from_model(self) -> None:
         # Locations tab
-        self.settings_dialog.game_location.setPlainText(
+        self.settings_dialog.game_location.setText(
             str(self.settings_model.game_location)
             if self.settings_model.game_location is not None
             else ""
         )
-        self.settings_dialog.config_folder_location.setPlainText(
+        self.settings_dialog.config_folder_location.setText(
             self.settings_model.config_folder_location
         )
-        self.settings_dialog.steam_mods_folder_location.setPlainText(
+        self.settings_dialog.steam_mods_folder_location.setText(
             self.settings_model.steam_mods_folder_location
         )
-        self.settings_dialog.local_mods_folder_location.setPlainText(
+        self.settings_dialog.local_mods_folder_location.setText(
             self.settings_model.local_mods_folder_location
         )
 
