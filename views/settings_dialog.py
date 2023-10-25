@@ -164,8 +164,8 @@ class SettingsDialog(QDialog):
         section_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(section_label)
 
-        self.local_mods_folder_location_value_label = QTextEdit()
-        self.local_mods_folder_location_value_label.setFixedHeight(
+        self.local_mods_folder_location = QTextEdit()
+        self.local_mods_folder_location.setFixedHeight(
             GUIInfo().default_font_line_height * 3
         )
 
@@ -173,7 +173,7 @@ class SettingsDialog(QDialog):
         self.local_mods_folder_location_choose_button.setText("Choose…")
 
         box_layout = QHBoxLayout()
-        box_layout.addWidget(self.local_mods_folder_location_value_label)
+        box_layout.addWidget(self.local_mods_folder_location)
         box_layout.addSpacerItem(
             QSpacerItem(12, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
         )

@@ -179,8 +179,7 @@ class SettingsController(QObject):
             self.settings_dialog.game_location.toPlainText() != ""
             or self.settings_dialog.config_folder_location.toPlainText() != ""
             or self.settings_dialog.steam_mods_folder_location.toPlainText() != ""
-            or self.settings_dialog.local_mods_folder_location_value_label.toPlainText()
-            != ""
+            or self.settings_dialog.local_mods_folder_location.toPlainText() != ""
         ):
             message_box = QMessageBox(self.settings_dialog)
             message_box.setWindowTitle("Autodetect locations")
@@ -354,7 +353,7 @@ class SettingsController(QObject):
         self.settings_dialog.steam_mods_folder_location.setPlainText(
             self.settings_model.steam_mods_folder_location
         )
-        self.settings_dialog.local_mods_folder_location_value_label.setPlainText(
+        self.settings_dialog.local_mods_folder_location.setPlainText(
             self.settings_model.local_mods_folder_location
         )
 
