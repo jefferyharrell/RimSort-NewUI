@@ -157,6 +157,9 @@ class MenuBar(QObject):
 
         self.window_menu = self.menu_bar.addMenu("Window")
 
+        self.minimize_action = QAction("Minimize", self)
+        self.window_menu.addAction(self.minimize_action)
+
         self.zoom_action = QAction("Zoom", self)
         self.window_menu.addAction(self.zoom_action)
 
