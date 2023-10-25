@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 )
 
 from utilities.app_info import AppInfo
+from utilities.game_info import GameInfo
 from utilities.gui_info import GUIInfo
 from widgets.drag_drop_list_view import DragDropListView
 
@@ -42,6 +43,11 @@ class MainWindow(QMainWindow):
         central_layout.addLayout(self.horizontal_layout)
 
         button_layout = QHBoxLayout()
+
+        version_string = QLabel("RimWorld version " + GameInfo().version)
+        version_string.setFont(GUIInfo().smaller_font)
+        version_string.setEnabled(False)
+        button_layout.addWidget(version_string)
 
         button_layout.addStretch()
 
