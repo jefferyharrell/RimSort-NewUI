@@ -79,10 +79,11 @@ class MainWindowController(QObject):
 
     @Slot()
     def _on_database_ready(self) -> None:
-        self.main_window_model.active_mod_list.from_xml(
-            self.settings_controller.settings_model.config_folder_location_path
-            / "ModsConfig.xml"
-        )
+        if self.settings_controller.settings_model.config_folder_location is not None:
+            self.main_window_model.active_mod_list.from_xml(
+                self.settings_controller.settings_model.config_folder_location
+                / "ModsConfig.xml"
+            )
 
         for mod in ModDatabase():
             if mod not in self.main_window_model.active_mod_list:

@@ -14,14 +14,14 @@ class TestSettings(TestCase):
 
     def test_apply_default_settings(self) -> None:
         self.prefs.game_location = Path(".")
-        self.prefs.config_folder_location = "non_default_value"
+        self.prefs.config_folder_location = Path(".")
         self.prefs.steam_mods_folder_location = "non_default_value"
         self.prefs.local_mods_folder_location = "non_default_value"
         self.prefs.sorting_algorithm = SettingsModel.SortingAlgorithm.TOPOLOGICAL
         self.prefs.debug_logging = True
         self.prefs.apply_default_settings()
         self.assertEqual(self.prefs.game_location, None)
-        self.assertEqual(self.prefs.config_folder_location, "")
+        self.assertEqual(self.prefs.config_folder_location, None)
         self.assertEqual(self.prefs.steam_mods_folder_location, "")
         self.assertEqual(self.prefs.local_mods_folder_location, "")
         self.assertEqual(
@@ -30,12 +30,12 @@ class TestSettings(TestCase):
         self.assertEqual(self.prefs.debug_logging, False)
 
     def test_game_folder(self) -> None:
-        self.prefs.game_location = Path()
-        self.assertEqual(self.prefs.game_location, Path())
+        self.prefs.game_location = Path(".")
+        self.assertEqual(self.prefs.game_location, Path("."))
 
     def test_config_folder(self) -> None:
-        self.prefs.config_folder_location = "test_path"
-        self.assertEqual(self.prefs.config_folder_location, "test_path")
+        self.prefs.config_folder_location = Path(".")
+        self.assertEqual(self.prefs.config_folder_location, Path("."))
 
     def test_steam_mods_folder(self) -> None:
         self.prefs.steam_mods_folder_location = "test_path"

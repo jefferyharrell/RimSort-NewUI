@@ -29,7 +29,7 @@ class SettingsModel(QObject):
         self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
 
         self._game_location: Optional[Path] = None
-        self._config_folder_location: str = str()
+        self._config_folder_location: Optional[Path] = None
         self._steam_mods_folder_location: str = str()
         self._local_mods_folder_location: str = str()
 
@@ -45,7 +45,7 @@ class SettingsModel(QObject):
 
     def _apply_default_settings(self) -> None:
         self._game_location = None
-        self._config_folder_location = ""
+        self._config_folder_location = None
         self._steam_mods_folder_location = ""
         self._local_mods_folder_location = ""
 
@@ -62,24 +62,20 @@ class SettingsModel(QObject):
         return self._game_location
 
     @game_location.setter
-    def game_location(self, value: Path) -> None:
+    def game_location(self, value: Optional[Path]) -> None:
         if self._game_location != value:
             self._game_location = value
             self.changed.emit()
 
     @property
-    def config_folder_location(self) -> str:
+    def config_folder_location(self) -> Optional[Path]:
         return self._config_folder_location
 
     @config_folder_location.setter
-    def config_folder_location(self, value: str) -> None:
+    def config_folder_location(self, value: Optional[Path]) -> None:
         if self._config_folder_location != value:
             self._config_folder_location = value
             self.changed.emit()
-
-    @property
-    def config_folder_location_path(self) -> Path:
-        return Path(self._config_folder_location)
 
     @property
     def steam_mods_folder_location(self) -> str:
@@ -157,7 +153,9 @@ class SettingsModel(QObject):
     def to_dict(self) -> Dict[str, Any]:
         return {
             "game_location": str(self._game_location) if self._game_location else "",
-            "config_folder_location": self._config_folder_location,
+            "config_folder_location": str(self._config_folder_location)
+            if self._config_folder_location
+            else "",
             "steam_mods_folder_location": self._steam_mods_folder_location,
             "local_mods_folder_location": self._local_mods_folder_location,
             "sorting_algorithm": self._sorting_algorithm.name,
@@ -166,11 +164,17 @@ class SettingsModel(QObject):
 
     def from_dict(self, data: Dict[str, str]) -> None:
         if data.get("game_location") != "":
-            self._game_location = Path(data["game_location"])
+            self._game_location = Path(data["game_location"]).resolve()
         else:
             self._game_location = None
 
-        self._config_folder_location = data.get("config_folder_location", "")
+        if data.get("config_folder_location") != "":
+            self._config_folder_location = Path(
+                data["config_folder_location"]
+            ).resolve()
+        else:
+            self._config_folder_location = None
+
         self._steam_mods_folder_location = data.get("steam_mods_folder_location", "")
         self._local_mods_folder_location = data.get("local_mods_folder_location", "")
 

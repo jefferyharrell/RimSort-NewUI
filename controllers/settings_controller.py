@@ -153,7 +153,9 @@ class SettingsController(QObject):
             dir=str(self.user_home_path),
         )
         if config_folder_location != "":
-            self.settings_model.config_folder_location = config_folder_location
+            self.settings_model.config_folder_location = Path(
+                config_folder_location
+            ).resolve()
 
     @Slot()
     def _on_choose_steam_mods_folder_location(self) -> None:
@@ -217,7 +219,7 @@ class SettingsController(QObject):
             return
 
         self.settings_model.game_location = None
-        self.settings_model.config_folder_location = ""
+        self.settings_model.config_folder_location = None
         self.settings_model.steam_mods_folder_location = ""
         self.settings_model.local_mods_folder_location = ""
 
@@ -348,7 +350,9 @@ class SettingsController(QObject):
             else ""
         )
         self.settings_dialog.config_folder_location.setText(
-            self.settings_model.config_folder_location
+            str(self.settings_model.config_folder_location)
+            if self.settings_model.config_folder_location is not None
+            else ""
         )
         self.settings_dialog.steam_mods_folder_location.setText(
             self.settings_model.steam_mods_folder_location
@@ -382,19 +386,19 @@ class SettingsController(QObject):
 
     def _autodetect_locations_windows(self) -> None:
         self.settings_model.game_location = None
-        self.settings_model.config_folder_location = ""
+        self.settings_model.config_folder_location = None
         self.settings_model.steam_mods_folder_location = ""
         self.settings_model.local_mods_folder_location = ""
 
     def _autodetect_locations_linux(self) -> None:
         self.settings_model.game_location = None
-        self.settings_model.config_folder_location = ""
+        self.settings_model.config_folder_location = None
         self.settings_model.steam_mods_folder_location = ""
         self.settings_model.local_mods_folder_location = ""
 
     def _autodetect_locations_macos(self) -> None:
         self.settings_model.game_location = None
-        self.settings_model.config_folder_location = ""
+        self.settings_model.config_folder_location = None
         self.settings_model.steam_mods_folder_location = ""
         self.settings_model.local_mods_folder_location = ""
 
@@ -414,7 +418,7 @@ class SettingsController(QObject):
             app_support_candidate_path / "RimWorld/Config"
         )
         if config_folder_location_candidate.exists():
-            self.settings_model.config_folder_location = str(
+            self.settings_model.config_folder_location = (
                 config_folder_location_candidate
             )
 
