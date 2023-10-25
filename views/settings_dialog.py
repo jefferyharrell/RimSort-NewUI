@@ -14,7 +14,6 @@ from PySide6.QtWidgets import (
     QGroupBox,
     QToolButton,
     QBoxLayout,
-    QTextEdit,
 )
 
 from utilities.gui_info import GUIInfo
