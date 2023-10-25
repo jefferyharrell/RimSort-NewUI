@@ -61,6 +61,9 @@ class MainWindowController(QObject):
         self.main_window.inactive_mods_filter_field.textChanged.connect(
             self._update_inactive_mods_filter
         )
+        self.main_window.active_mods_filter_field.textChanged.connect(
+            self._update_active_mods_filter
+        )
 
         self.main_window.inactive_mods_list_view.selectionModel().selectionChanged.connect(
             self._on_mods_list_view_selection_changed
