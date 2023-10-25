@@ -102,6 +102,7 @@ class SettingsDialog(QDialog):
 
         self.game_location = QTextEdit()
         self.game_location.setFixedHeight(GUIInfo().default_font_line_height * 3)
+        self.game_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
 
         self.game_location_choose_button = QToolButton()
         self.game_location_choose_button.setText("Choose…")
@@ -124,6 +125,7 @@ class SettingsDialog(QDialog):
         self.config_folder_location.setFixedHeight(
             GUIInfo().default_font_line_height * 3
         )
+        self.config_folder_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
 
         self.config_folder_location_choose_button = QToolButton()
         self.config_folder_location_choose_button.setText("Choose…")
@@ -146,6 +148,7 @@ class SettingsDialog(QDialog):
         self.steam_mods_folder_location.setFixedHeight(
             GUIInfo().default_font_line_height * 3
         )
+        self.steam_mods_folder_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
 
         self.steam_mods_folder_location_choose_button = QToolButton()
         self.steam_mods_folder_location_choose_button.setText("Choose…")
@@ -168,6 +171,7 @@ class SettingsDialog(QDialog):
         self.local_mods_folder_location.setFixedHeight(
             GUIInfo().default_font_line_height * 3
         )
+        self.local_mods_folder_location.setFocusPolicy(Qt.FocusPolicy.ClickFocus)
 
         self.local_mods_folder_location_choose_button = QToolButton()
         self.local_mods_folder_location_choose_button.setText("Choose…")
