@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
     QGroupBox,
     QToolButton,
     QBoxLayout,
+    QTextEdit,
 )
 
 from utilities.gui_info import GUIInfo
@@ -99,19 +100,14 @@ class SettingsDialog(QDialog):
         section_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(section_label)
 
-        self.game_location_value_label = QLabel()
-        self.game_location_value_label.setWordWrap(True)
-        self.game_location_value_label.setMinimumHeight(
-            GUIInfo().default_font_line_height * 2
-        )
+        self.game_location = QTextEdit()
+        self.game_location.setFixedHeight(GUIInfo().default_font_line_height * 3)
 
-        self.game_location_choose_button = QPushButton("Choose…")
-        self.game_location_choose_button.setFixedWidth(
-            self.game_location_choose_button.sizeHint().width()
-        )
+        self.game_location_choose_button = QToolButton()
+        self.game_location_choose_button.setText("Choose…")
 
         box_layout = QHBoxLayout()
-        box_layout.addWidget(self.game_location_value_label)
+        box_layout.addWidget(self.game_location)
         box_layout.addSpacerItem(
             QSpacerItem(12, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
         )
@@ -124,19 +120,16 @@ class SettingsDialog(QDialog):
         section_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(section_label)
 
-        self.config_folder_location_value_label = QLabel()
-        self.config_folder_location_value_label.setWordWrap(True)
-        self.config_folder_location_value_label.setMinimumHeight(
-            GUIInfo().default_font_line_height * 2
+        self.config_folder_location = QTextEdit()
+        self.config_folder_location.setFixedHeight(
+            GUIInfo().default_font_line_height * 3
         )
 
-        self.config_folder_location_choose_button = QPushButton("Choose…")
-        self.config_folder_location_choose_button.setFixedWidth(
-            self.config_folder_location_choose_button.sizeHint().width()
-        )
+        self.config_folder_location_choose_button = QToolButton()
+        self.config_folder_location_choose_button.setText("Choose…")
 
         box_layout = QHBoxLayout()
-        box_layout.addWidget(self.config_folder_location_value_label)
+        box_layout.addWidget(self.config_folder_location)
         box_layout.addSpacerItem(
             QSpacerItem(12, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
         )
@@ -149,19 +142,16 @@ class SettingsDialog(QDialog):
         section_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(section_label)
 
-        self.steam_mods_folder_location_value_label = QLabel()
-        self.steam_mods_folder_location_value_label.setWordWrap(True)
-        self.steam_mods_folder_location_value_label.setMinimumHeight(
-            GUIInfo().default_font_line_height * 2
+        self.steam_mods_folder_location = QTextEdit()
+        self.steam_mods_folder_location.setFixedHeight(
+            GUIInfo().default_font_line_height * 3
         )
 
-        self.steam_mods_folder_location_choose_button = QPushButton("Choose…")
-        self.steam_mods_folder_location_choose_button.setFixedWidth(
-            self.steam_mods_folder_location_choose_button.sizeHint().width()
-        )
+        self.steam_mods_folder_location_choose_button = QToolButton()
+        self.steam_mods_folder_location_choose_button.setText("Choose…")
 
         box_layout = QHBoxLayout()
-        box_layout.addWidget(self.steam_mods_folder_location_value_label)
+        box_layout.addWidget(self.steam_mods_folder_location)
         box_layout.addSpacerItem(
             QSpacerItem(12, 0, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
         )
@@ -174,16 +164,13 @@ class SettingsDialog(QDialog):
         section_label.setFont(GUIInfo().emphasis_font)
         tab_layout.addWidget(section_label)
 
-        self.local_mods_folder_location_value_label = QLabel()
-        self.local_mods_folder_location_value_label.setWordWrap(True)
-        self.local_mods_folder_location_value_label.setMinimumHeight(
-            GUIInfo().default_font_line_height * 2
+        self.local_mods_folder_location_value_label = QTextEdit()
+        self.local_mods_folder_location_value_label.setFixedHeight(
+            GUIInfo().default_font_line_height * 3
         )
 
-        self.local_mods_folder_location_choose_button = QPushButton("Choose…")
-        self.local_mods_folder_location_choose_button.setFixedWidth(
-            self.local_mods_folder_location_choose_button.sizeHint().width()
-        )
+        self.local_mods_folder_location_choose_button = QToolButton()
+        self.local_mods_folder_location_choose_button.setText("Choose…")
 
         box_layout = QHBoxLayout()
         box_layout.addWidget(self.local_mods_folder_location_value_label)
