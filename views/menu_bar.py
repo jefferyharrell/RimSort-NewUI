@@ -138,6 +138,20 @@ class MenuBar(QObject):
         self.quit_action.setShortcut(QKeySequence("Ctrl+Q"))
         file_menu.addAction(self.quit_action)
 
+        edit_menu = self.menu_bar.addMenu("Edit")
+
+        self.cut_action = QAction("Cut", self)
+        self.cut_action.setShortcut(QKeySequence("Ctrl+X"))
+        edit_menu.addAction(self.cut_action)
+
+        self.copy_action = QAction("Copy", self)
+        self.copy_action.setShortcut(QKeySequence("Ctrl+C"))
+        edit_menu.addAction(self.copy_action)
+
+        self.paste_action = QAction("Paste", self)
+        self.paste_action.setShortcut(QKeySequence("Ctrl+V"))
+        edit_menu.addAction(self.paste_action)
+
         window_menu = self.menu_bar.addMenu("Window")
 
         self.zoom_action = QAction("Zoom", self)
@@ -147,6 +161,11 @@ class MenuBar(QObject):
 
         self.wiki_action = QAction("RimSort Wiki…", self)
         help_menu.addAction(self.wiki_action)
+
+        help_menu.addSeparator()
+
+        self.check_for_updates_action = QAction("Check for Updates…", self)
+        help_menu.addAction(self.check_for_updates_action)
 
         help_menu.addSeparator()
 
