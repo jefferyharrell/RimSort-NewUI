@@ -71,6 +71,11 @@ class MenuBar(QObject):
         self.zoom_action = QAction("Zoom", self)
         window_menu.addAction(self.zoom_action)
 
+        help_menu = self.menu_bar.addMenu("Help")
+
+        self.wiki_action = QAction("RimSort Wiki…", self)
+        help_menu.addAction(self.wiki_action)
+
     def _do_menu_bar_non_macos(self) -> None:
         file_menu = self.menu_bar.addMenu("File")
 
@@ -121,6 +126,11 @@ class MenuBar(QObject):
         window_menu.addAction(self.zoom_action)
 
         help_menu = self.menu_bar.addMenu("Help")
+
+        self.wiki_action = QAction("RimSort Wiki…", self)
+        help_menu.addAction(self.wiki_action)
+
+        help_menu.addSeparator()
 
         self.about_action = QAction(f"About {AppInfo().app_name}", self)
         help_menu.addAction(self.about_action)
