@@ -18,7 +18,6 @@ from models.main_window_model import MainWindowModel
 from models.mod import Mod
 from models.mod_database import ModDatabase
 from utilities.event_bus import EventBus
-from views.about_dialog import AboutDialog
 from views.main_window import MainWindow
 
 

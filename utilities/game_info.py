@@ -1,5 +1,4 @@
-from pathlib import Path
-from typing import Optional, Self
+from typing import Optional
 
 from loguru import logger
 
@@ -35,9 +34,6 @@ class GameInfo:
                 "GameInfo must be initialized once with a SettingsController."
             )
 
-        logger.info(
-            f"settings_controller.game_location: {settings_controller.game_location}"
-        )
         if settings_controller.game_location is not None:
             if SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
                 version_path = settings_controller.game_location / "version.txt"

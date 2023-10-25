@@ -2,7 +2,7 @@ import json
 from enum import Enum, unique, auto
 from json import JSONDecodeError
 from pathlib import Path
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 from PySide6.QtCore import QObject, Signal
 from platformdirs import user_data_dir
@@ -28,7 +28,7 @@ class SettingsModel(QObject):
         user_data_folder_location.mkdir(parents=True, exist_ok=True)
         self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
 
-        self._game_location: str = str()
+        self._game_location: Optional[Path] = None
         self._config_folder_location: str = str()
         self._steam_mods_folder_location: str = str()
         self._local_mods_folder_location: str = str()
@@ -44,7 +44,7 @@ class SettingsModel(QObject):
         self._apply_default_settings()
 
     def _apply_default_settings(self) -> None:
-        self._game_location = ""
+        self._game_location = None
         self._config_folder_location = ""
         self._steam_mods_folder_location = ""
         self._local_mods_folder_location = ""
@@ -58,18 +58,14 @@ class SettingsModel(QObject):
         self.changed.emit()
 
     @property
-    def game_location(self) -> str:
+    def game_location(self) -> Optional[Path]:
         return self._game_location
 
     @game_location.setter
-    def game_location(self, value: str) -> None:
+    def game_location(self, value: Path) -> None:
         if self._game_location != value:
             self._game_location = value
             self.changed.emit()
-
-    @property
-    def game_location_path(self) -> Path:
-        return Path(self._game_location)
 
     @property
     def config_folder_location(self) -> str:
@@ -135,10 +131,12 @@ class SettingsModel(QObject):
 
     @property
     def game_data_location(self) -> str:
+        if self.game_location is None:
+            return ""
         if SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
-            return str(self.game_location_path / "Data")
+            return str(self.game_location / "Data")
         else:
-            return str(self.game_location_path.parent / "Data")
+            return str(self.game_location.parent / "Data")
 
     @property
     def game_data_location_path(self) -> Path:
@@ -167,7 +165,7 @@ class SettingsModel(QObject):
         }
 
     def from_dict(self, data: Dict[str, str]) -> None:
-        self._game_location = data.get("game_location", "")
+        self._game_location = Path(data.get("game_location", ""))
         self._config_folder_location = data.get("config_folder_location", "")
         self._steam_mods_folder_location = data.get("steam_mods_folder_location", "")
         self._local_mods_folder_location = data.get("local_mods_folder_location", "")

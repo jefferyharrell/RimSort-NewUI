@@ -12,6 +12,7 @@ from models.main_window_model import MainWindowModel
 from models.mod_database import ModDatabase
 from models.settings_model import SettingsModel
 from utilities.event_bus import EventBus
+from utilities.game_info import GameInfo
 from utilities.path_info import PathInfo
 from utilities.system_info import SystemInfo
 from views.about_dialog import AboutDialog
@@ -48,6 +49,11 @@ class AppController(QObject):
         self.settings_controller = SettingsController(
             model=self.settings_model, view=self.settings_dialog
         )
+
+        logger.info("Initializing GameInfo.")
+        GameInfo(self.settings_controller)
+
+        logger.info(f"GameInfo version: {GameInfo().version}")
 
         logger.info("Initializing the event bus.")
         EventBus()
