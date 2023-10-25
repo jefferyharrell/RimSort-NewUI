@@ -10,9 +10,9 @@ from controllers.settings_controller import SettingsController
 from models.main_window_model import MainWindowModel
 from models.mod_database import ModDatabase
 from models.settings_model import SettingsModel
+from utilities.app_info import AppInfo
 from utilities.event_bus import EventBus
 from utilities.game_info import GameInfo
-from utilities.path_info import PathInfo
 from utilities.system_info import SystemInfo
 from views.about_dialog import AboutDialog
 from views.menu_bar import MenuBar
@@ -33,7 +33,7 @@ class AppController(QObject):
         elif SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
             self.app.setStyle("macOS")
 
-        stylesheet_path = PathInfo().application_folder / "resources" / "style.qss"
+        stylesheet_path = AppInfo().application_folder / "resources" / "style.qss"
         stylesheet = stylesheet_path.read_text()
         self.app.setStyleSheet(stylesheet)
 

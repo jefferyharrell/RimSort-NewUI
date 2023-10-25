@@ -4,12 +4,12 @@ from unittest import TestCase
 from unittest.mock import mock_open, patch
 
 from models.settings_model import SettingsModel
-from utilities.path_info import PathInfo
+from utilities.app_info import AppInfo
 
 
 class TestSettings(TestCase):
     def setUp(self) -> None:
-        PathInfo(__file__)
+        AppInfo(__file__)
         self.prefs = SettingsModel()
 
     def test_apply_default_settings(self) -> None:
