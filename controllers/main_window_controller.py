@@ -145,7 +145,7 @@ class MainWindowController(QObject):
 
     def _show_selected_mod_info_by_index(self, index: QModelIndex) -> None:
         mod_id = index.data(Qt.ItemDataRole.UserRole)
-        mod = self.main_window_model.inactive_mod_list.get_by_id(mod_id)
+        mod = ModDatabase().get_mod_by_id(mod_id)
         if not isinstance(mod, Mod):
             return
 
