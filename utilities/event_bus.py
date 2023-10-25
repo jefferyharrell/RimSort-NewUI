@@ -4,10 +4,16 @@ from PySide6.QtCore import QObject, Signal
 class EventBus(QObject):
     database_ready = Signal()
 
-    menu_bar_about_action_triggered = Signal()
-    menu_bar_settings_action_triggered = Signal()
-    menu_bar_zoom_action_triggered = Signal()
+    menu_bar_about_triggered = Signal()
+    menu_bar_check_for_update_triggered = Signal()
+    menu_bar_settings_triggered = Signal()
     menu_bar_quit_action_triggered = Signal()
+
+    menu_bar_cut_triggered = Signal()
+    menu_bar_copy_triggered = Signal()
+    menu_bar_paste_triggered = Signal()
+
+    menu_bar_zoom_triggered = Signal()
 
     _instance = None
 

@@ -95,6 +95,8 @@ class ModList(QObject):
     # I/O Methods
 
     def from_xml(self, xml_path: Path) -> None:
+        if not xml_path.exists() or not xml_path.is_file():
+            return
         xml_data = xml_path.read_bytes()
         root = etree.fromstring(xml_data)
         results = root.xpath("./activeMods/li/text()")

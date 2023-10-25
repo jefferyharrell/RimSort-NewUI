@@ -156,7 +156,7 @@ class SettingsModel(QObject):
 
     def to_dict(self) -> Dict[str, Any]:
         return {
-            "game_location": self._game_location,
+            "game_location": str(self._game_location) if self._game_location else "",
             "config_folder_location": self._config_folder_location,
             "steam_mods_folder_location": self._steam_mods_folder_location,
             "local_mods_folder_location": self._local_mods_folder_location,
@@ -165,7 +165,11 @@ class SettingsModel(QObject):
         }
 
     def from_dict(self, data: Dict[str, str]) -> None:
-        self._game_location = Path(data.get("game_location", ""))
+        if data.get("game_location") != "":
+            self._game_location = Path(data["game_location"])
+        else:
+            self._game_location = None
+
         self._config_folder_location = data.get("config_folder_location", "")
         self._steam_mods_folder_location = data.get("steam_mods_folder_location", "")
         self._local_mods_folder_location = data.get("local_mods_folder_location", "")

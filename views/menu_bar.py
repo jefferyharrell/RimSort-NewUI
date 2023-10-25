@@ -23,10 +23,15 @@ class MenuBar(QObject):
         self.about_action = QAction("About", self)
         app_menu.addAction(self.about_action)
 
+        self.check_for_updates_action = QAction("Check for Updates…", self)
+        self.check_for_updates_action.setMenuRole(
+            QAction.MenuRole.ApplicationSpecificRole
+        )
+        app_menu.addAction(self.check_for_updates_action)
+
         app_menu.addSeparator()
 
         self.settings_action = QAction("Settings…", self)
-        self.settings_action.setShortcut(QKeySequence("Ctrl+,"))
         self.settings_action.setMenuRole(QAction.MenuRole.ApplicationSpecificRole)
         app_menu.addAction(self.settings_action)
 
@@ -65,6 +70,20 @@ class MenuBar(QObject):
         self.export_to_rentry_action = QAction("To Rentry.co…", self)
         self.export_to_rentry_action.setEnabled(False)
         export_submenu.addAction(self.export_to_rentry_action)
+
+        edit_menu = self.menu_bar.addMenu("Edit")
+
+        self.cut_action = QAction("Cut", self)
+        self.cut_action.setShortcut(QKeySequence("Ctrl+X"))
+        edit_menu.addAction(self.cut_action)
+
+        self.copy_action = QAction("Copy", self)
+        self.copy_action.setShortcut(QKeySequence("Ctrl+C"))
+        edit_menu.addAction(self.copy_action)
+
+        self.paste_action = QAction("Paste", self)
+        self.paste_action.setShortcut(QKeySequence("Ctrl+V"))
+        edit_menu.addAction(self.paste_action)
 
         window_menu = self.menu_bar.addMenu("Window")
 
@@ -111,7 +130,6 @@ class MenuBar(QObject):
         file_menu.addSeparator()
 
         self.settings_action = QAction("Settings…", self)
-        self.settings_action.setShortcut(QKeySequence("Ctrl+,"))
         file_menu.addAction(self.settings_action)
 
         file_menu.addSeparator()

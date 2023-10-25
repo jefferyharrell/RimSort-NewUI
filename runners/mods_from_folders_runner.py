@@ -19,6 +19,9 @@ class ModsFromFoldersRunner(QRunnable):
         data: List[Mod] = []
 
         for folder in self.from_folders:
+            if not folder.exists() or not folder.is_dir():
+                continue
+
             for sub_folder in folder.iterdir():
                 if not sub_folder.is_dir():
                     continue

@@ -34,9 +34,7 @@ class MainWindowController(QObject):
         self.main_window = view
         self.settings_controller = settings_controller
 
-        EventBus().menu_bar_zoom_action_triggered.connect(
-            self._on_zoom_action_triggered
-        )
+        EventBus().menu_bar_zoom_triggered.connect(self._on_zoom_action_triggered)
 
         # Connect the main window's signals
         self.main_window.inactive_mods_list_view.clicked.connect(
