@@ -3,7 +3,6 @@ from typing import Optional, Dict, List
 
 import uuid
 from PySide6.QtCore import QObject, Slot, QThreadPool
-from loguru import logger
 
 from models.mod import Mod
 from runners.mods_from_folders_runner import ModsFromFoldersRunner

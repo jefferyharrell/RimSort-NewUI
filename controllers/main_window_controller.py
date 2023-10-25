@@ -11,7 +11,6 @@ from PySide6.QtCore import (
 )
 from PySide6.QtGui import QPixmap, QStandardItemModel
 from PySide6.QtWidgets import QListView
-from loguru import logger
 
 from controllers.settings_controller import SettingsController
 from models.main_window_model import MainWindowModel

@@ -1,7 +1,5 @@
 from typing import Optional
 
-from loguru import logger
-
 from controllers.settings_controller import SettingsController
 from utilities.system_info import SystemInfo
 

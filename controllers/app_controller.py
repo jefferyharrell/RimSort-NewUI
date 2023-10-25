@@ -2,7 +2,6 @@ import sys
 
 from PySide6.QtCore import QObject
 from PySide6.QtWidgets import QApplication
-from loguru import logger
 
 from controllers.about_dialog_controller import AboutDialogController
 from controllers.menu_bar_controller import MenuBarController
