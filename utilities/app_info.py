@@ -3,7 +3,6 @@ from typing import Optional
 
 from PySide6.QtCore import QSize
 from PySide6.QtGui import QPixmap, Qt
-from loguru import logger
 from platformdirs import PlatformDirs
 
 
@@ -34,9 +33,7 @@ class AppInfo:
 
         platform_dirs = PlatformDirs(appname=self._app_name)
         self._user_data_folder = Path(platform_dirs.user_data_dir)
-        logger.info(f"User data folder: {self._user_data_folder}")
         self._user_log_folder = Path(platform_dirs.user_log_dir)
-        logger.info(f"User log folder: {self._user_log_folder}")
 
         self._is_initialized: bool = True
 
