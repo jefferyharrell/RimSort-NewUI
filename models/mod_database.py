@@ -108,9 +108,7 @@ class ModDatabase(QObject):
         :type from_folders: List[Path]
         """
         runner = ModsFromFoldersRunner(from_folders)
-        logger.info("Connecting to data_ready signal.")
         runner.signals.data_ready.connect(self._on_data_ready)
-        logger.info("Starting runner.")
         QThreadPool.globalInstance().start(runner)
 
     @Slot(object)
@@ -121,7 +119,6 @@ class ModDatabase(QObject):
         :param data: The ModDatabase instance.
         :type data: object
         """
-        logger.info("Received data_ready signal.")
         if not isinstance(data, list) or not all(
             isinstance(item, Mod) for item in data
         ):

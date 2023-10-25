@@ -16,8 +16,6 @@ class ModsFromFoldersRunner(QRunnable):
         self.from_folders = from_folders
 
     def run(self) -> None:
-        logger.info(f"Searching for mods in {len(self.from_folders)} folders")
-
         data: List[Mod] = []
 
         for folder in self.from_folders:
@@ -73,8 +71,6 @@ class ModsFromFoldersRunner(QRunnable):
                         preview_image_path=preview_image_path,
                     )
                     data.append(mod)
-
-        logger.info(f"Found {len(data)} mods")
 
         self.signals.data_ready.emit(data)
         self.signals.finished.emit()

@@ -50,15 +50,10 @@ class AppController(QObject):
             model=self.settings_model, view=self.settings_dialog
         )
 
-        logger.info("Initializing GameInfo.")
         GameInfo(self.settings_controller)
 
-        logger.info(f"GameInfo version: {GameInfo().version}")
-
-        logger.info("Initializing the event bus.")
         EventBus()
 
-        logger.info("Initializing the mod database.")
         ModDatabase(
             from_folders=[
                 self.settings_model.game_data_location_path,
@@ -67,7 +62,6 @@ class AppController(QObject):
             ]
         )
 
-        logger.info("Initializing the main window.")
         self.main_window_model = MainWindowModel()
         self.main_window = MainWindow()
         self.main_window_controller = MainWindowController(

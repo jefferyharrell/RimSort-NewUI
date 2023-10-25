@@ -72,12 +72,10 @@ class MainWindowController(QObject):
             self._on_mods_list_view_selection_changed
         )
 
-        logger.info("Connecting to database_ready signal.")
         EventBus().database_ready.connect(self._on_database_ready)
 
     @Slot()
     def _on_database_ready(self) -> None:
-        logger.info("Received database_ready signal.")
         self.main_window_model.active_mod_list.from_xml(
             self.settings_controller.settings_model.config_folder_location_path
             / "ModsConfig.xml"
