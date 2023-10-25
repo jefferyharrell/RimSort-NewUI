@@ -33,6 +33,9 @@ class MainWindowController(QObject):
         self.main_window = view
         self.settings_controller = settings_controller
 
+        EventBus().menu_bar_minimize_triggered.connect(
+            self._on_minimize_action_triggered
+        )
         EventBus().menu_bar_zoom_triggered.connect(self._on_zoom_action_triggered)
 
         # Connect the main window's signals
@@ -231,3 +234,8 @@ class MainWindowController(QObject):
             self.main_window.showNormal()
         else:
             self.main_window.showMaximized()
+
+    @Slot()
+    def _on_minimize_action_triggered(self) -> None:
+        if not self.main_window.isMinimized():
+            self.main_window.showMinimized()

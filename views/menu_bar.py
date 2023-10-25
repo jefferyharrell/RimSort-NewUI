@@ -40,134 +40,137 @@ class MenuBar(QObject):
         self.quit_action = QAction("Quit", self)
         app_menu.addAction(self.quit_action)
 
-        file_menu = self.menu_bar.addMenu("File")
+        self.file_menu = self.menu_bar.addMenu("File")
 
         self.open_mod_list_action = QAction("Open Mod List", self)
         self.open_mod_list_action.setShortcut(QKeySequence("Ctrl+O"))
         self.open_mod_list_action.setEnabled(False)
-        file_menu.addAction(self.open_mod_list_action)
+        self.file_menu.addAction(self.open_mod_list_action)
 
-        file_menu.addSeparator()
+        self.file_menu.addSeparator()
 
         self.save_mod_list_action = QAction("Save Mod List", self)
         self.save_mod_list_action.setShortcut(QKeySequence("Ctrl+S"))
         self.save_mod_list_action.setEnabled(False)
-        file_menu.addAction(self.save_mod_list_action)
+        self.file_menu.addAction(self.save_mod_list_action)
 
-        file_menu.addSeparator()
+        self.file_menu.addSeparator()
 
-        export_submenu = QMenu("Export")
-        file_menu.addMenu(export_submenu)
+        self.export_submenu = QMenu("Export")
+        self.file_menu.addMenu(self.export_submenu)
 
         self.export_to_clipboard_action = QAction("To Clipboard…", self)
         self.export_to_clipboard_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_clipboard_action)
+        self.export_submenu.addAction(self.export_to_clipboard_action)
 
         self.export_to_file_action = QAction("To Text File…", self)
         self.export_to_file_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_file_action)
+        self.export_submenu.addAction(self.export_to_file_action)
 
         self.export_to_rentry_action = QAction("To Rentry.co…", self)
         self.export_to_rentry_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_rentry_action)
+        self.export_submenu.addAction(self.export_to_rentry_action)
 
-        edit_menu = self.menu_bar.addMenu("Edit")
+        self.edit_menu = self.menu_bar.addMenu("Edit")
 
         self.cut_action = QAction("Cut", self)
         self.cut_action.setShortcut(QKeySequence("Ctrl+X"))
-        edit_menu.addAction(self.cut_action)
+        self.edit_menu.addAction(self.cut_action)
 
         self.copy_action = QAction("Copy", self)
         self.copy_action.setShortcut(QKeySequence("Ctrl+C"))
-        edit_menu.addAction(self.copy_action)
+        self.edit_menu.addAction(self.copy_action)
 
         self.paste_action = QAction("Paste", self)
         self.paste_action.setShortcut(QKeySequence("Ctrl+V"))
-        edit_menu.addAction(self.paste_action)
+        self.edit_menu.addAction(self.paste_action)
 
-        window_menu = self.menu_bar.addMenu("Window")
+        self.window_menu = self.menu_bar.addMenu("Window")
+
+        self.minimize_action = QAction("Minimize", self)
+        self.window_menu.addAction(self.minimize_action)
 
         self.zoom_action = QAction("Zoom", self)
-        window_menu.addAction(self.zoom_action)
+        self.window_menu.addAction(self.zoom_action)
 
-        help_menu = self.menu_bar.addMenu("Help")
+        self.help_menu = self.menu_bar.addMenu("Help")
 
         self.wiki_action = QAction("RimSort Wiki…", self)
-        help_menu.addAction(self.wiki_action)
+        self.help_menu.addAction(self.wiki_action)
 
     def _do_menu_bar_non_macos(self) -> None:
-        file_menu = self.menu_bar.addMenu("File")
+        self.file_menu = self.menu_bar.addMenu("File")
 
         self.open_mod_list_action = QAction("Open Mod List", self)
         self.open_mod_list_action.setShortcut(QKeySequence("Ctrl+O"))
         self.open_mod_list_action.setEnabled(False)
-        file_menu.addAction(self.open_mod_list_action)
+        self.file_menu.addAction(self.open_mod_list_action)
 
-        file_menu.addSeparator()
+        self.file_menu.addSeparator()
 
         self.save_mod_list_action = QAction("Save Mod List", self)
         self.save_mod_list_action.setShortcut(QKeySequence("Ctrl+S"))
         self.save_mod_list_action.setEnabled(False)
-        file_menu.addAction(self.save_mod_list_action)
+        self.file_menu.addAction(self.save_mod_list_action)
 
-        file_menu.addSeparator()
+        self.file_menu.addSeparator()
 
-        export_submenu = QMenu("Export")
-        file_menu.addMenu(export_submenu)
+        self.export_submenu = QMenu("Export")
+        self.file_menu.addMenu(self.export_submenu)
 
         self.export_to_clipboard_action = QAction("To Clipboard…", self)
         self.export_to_clipboard_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_clipboard_action)
+        self.export_submenu.addAction(self.export_to_clipboard_action)
 
         self.export_to_file_action = QAction("To Text File…", self)
         self.export_to_file_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_file_action)
+        self.export_submenu.addAction(self.export_to_file_action)
 
         self.export_to_rentry_action = QAction("To Rentry.co…", self)
         self.export_to_rentry_action.setEnabled(False)
-        export_submenu.addAction(self.export_to_rentry_action)
+        self.export_submenu.addAction(self.export_to_rentry_action)
 
-        file_menu.addSeparator()
+        self.file_menu.addSeparator()
 
         self.settings_action = QAction("Settings…", self)
-        file_menu.addAction(self.settings_action)
+        self.file_menu.addAction(self.settings_action)
 
-        file_menu.addSeparator()
+        self.file_menu.addSeparator()
 
         self.quit_action = QAction("Exit", self)
         self.quit_action.setShortcut(QKeySequence("Ctrl+Q"))
-        file_menu.addAction(self.quit_action)
+        self.file_menu.addAction(self.quit_action)
 
-        edit_menu = self.menu_bar.addMenu("Edit")
+        self.edit_menu = self.menu_bar.addMenu("Edit")
 
         self.cut_action = QAction("Cut", self)
         self.cut_action.setShortcut(QKeySequence("Ctrl+X"))
-        edit_menu.addAction(self.cut_action)
+        self.edit_menu.addAction(self.cut_action)
 
         self.copy_action = QAction("Copy", self)
         self.copy_action.setShortcut(QKeySequence("Ctrl+C"))
-        edit_menu.addAction(self.copy_action)
+        self.edit_menu.addAction(self.copy_action)
 
         self.paste_action = QAction("Paste", self)
         self.paste_action.setShortcut(QKeySequence("Ctrl+V"))
-        edit_menu.addAction(self.paste_action)
+        self.edit_menu.addAction(self.paste_action)
 
-        window_menu = self.menu_bar.addMenu("Window")
+        self.window_menu = self.menu_bar.addMenu("Window")
 
         self.zoom_action = QAction("Zoom", self)
-        window_menu.addAction(self.zoom_action)
+        self.window_menu.addAction(self.zoom_action)
 
-        help_menu = self.menu_bar.addMenu("Help")
+        self.help_menu = self.menu_bar.addMenu("Help")
 
         self.wiki_action = QAction("RimSort Wiki…", self)
-        help_menu.addAction(self.wiki_action)
+        self.help_menu.addAction(self.wiki_action)
 
-        help_menu.addSeparator()
+        self.help_menu.addSeparator()
 
         self.check_for_updates_action = QAction("Check for Updates…", self)
-        help_menu.addAction(self.check_for_updates_action)
+        self.help_menu.addAction(self.check_for_updates_action)
 
-        help_menu.addSeparator()
+        self.help_menu.addSeparator()
 
         self.about_action = QAction(f"About {AppInfo().app_name}", self)
-        help_menu.addAction(self.about_action)
+        self.help_menu.addAction(self.about_action)

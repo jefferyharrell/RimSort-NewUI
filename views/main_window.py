@@ -1,3 +1,4 @@
+from PySide6.QtCore import QEvent
 from PySide6.QtGui import Qt
 from PySide6.QtWidgets import (
     QMainWindow,
@@ -17,6 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from utilities.app_info import AppInfo
+from utilities.event_bus import EventBus
 from utilities.game_info import GameInfo
 from utilities.gui_info import GUIInfo
 from widgets.drag_drop_list_view import DragDropListView
@@ -201,3 +203,8 @@ class MainWindow(QMainWindow):
             Qt.ScrollBarPolicy.ScrollBarAlwaysOff
         )
         active_mods_layout.addWidget(self.active_mods_list_view)
+
+    def changeEvent(self, event: QEvent) -> None:
+        if event.type() == QEvent.Type.WindowStateChange:
+            EventBus().main_window_state_changed.emit(self.windowState())
+        super().changeEvent(event)

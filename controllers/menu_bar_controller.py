@@ -1,4 +1,4 @@
-from PySide6.QtCore import QObject, Slot
+from PySide6.QtCore import QObject, Slot, Qt
 from PySide6.QtWidgets import QApplication, QLineEdit
 
 from utilities.event_bus import EventBus
@@ -36,9 +36,15 @@ class MenuBarController(QObject):
 
         self.menu_bar.paste_action.triggered.connect(self._on_menu_bar_paste_triggered)
 
+        self.menu_bar.minimize_action.triggered.connect(
+            EventBus().menu_bar_minimize_triggered.emit
+        )
+
         self.menu_bar.zoom_action.triggered.connect(
             EventBus().menu_bar_zoom_triggered.emit
         )
+
+        EventBus().main_window_state_changed.connect(self._on_main_window_state_changed)
 
     @Slot()
     def _on_menu_bar_cut_triggered(self) -> None:
@@ -63,3 +69,21 @@ class MenuBarController(QObject):
             focused_widget = app_instance.focusWidget()
             if focused_widget and isinstance(focused_widget, QLineEdit):
                 focused_widget.paste()
+
+    @Slot(Qt.WindowState)
+    def _on_main_window_state_changed(self, state: Qt.WindowState) -> None:
+        if state == Qt.WindowState.WindowMinimized:
+            for action in self.menu_bar.window_menu.actions():
+                action.setEnabled(False)
+
+        if state == Qt.WindowState.WindowMaximized:
+            for action in self.menu_bar.window_menu.actions():
+                action.setEnabled(True)
+
+        if state == Qt.WindowState.WindowNoState:
+            for action in self.menu_bar.window_menu.actions():
+                action.setEnabled(True)
+
+        if state == Qt.WindowState.WindowFullScreen:
+            for action in self.menu_bar.window_menu.actions():
+                action.setEnabled(True)

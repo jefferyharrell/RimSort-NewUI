@@ -1,4 +1,4 @@
-from PySide6.QtCore import QObject, Signal
+from PySide6.QtCore import QObject, Signal, Qt
 
 
 class EventBus(QObject):
@@ -13,7 +13,10 @@ class EventBus(QObject):
     menu_bar_copy_triggered = Signal()
     menu_bar_paste_triggered = Signal()
 
+    menu_bar_minimize_triggered = Signal()
     menu_bar_zoom_triggered = Signal()
+
+    main_window_state_changed = Signal(Qt.WindowState)
 
     _instance = None
 
