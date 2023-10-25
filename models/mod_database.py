@@ -25,7 +25,7 @@ class ModDatabase(QObject):
             cls._instance._is_initialized = False
         return cls._instance
 
-    def __init__(self, from_folders: Optional[List[Path]] = None) -> None:
+    def __init__(self, from_folders: Optional[List[Optional[Path]]] = None) -> None:
         """
         Initialize the ModDatabase.
         """
@@ -99,7 +99,7 @@ class ModDatabase(QObject):
         self._mods_by_id.clear()
         self._mods_by_package_id.clear()
 
-    def _load_mods(self, from_folders: List[Path]) -> None:
+    def _load_mods(self, from_folders: List[Optional[Path]]) -> None:
         """
         Load Mod items into the database from a list of folders.
 

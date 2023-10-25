@@ -55,9 +55,9 @@ class AppController(QObject):
 
         ModDatabase(
             from_folders=[
-                self.settings_model.game_data_location_path,
-                self.settings_model.local_mods_folder_location_path,
-                self.settings_model.steam_mods_folder_location_path,
+                self.settings_model.game_data_location,
+                self.settings_model.local_mods_folder_location,
+                self.settings_model.steam_mods_folder_location,
             ]
         )
 

@@ -30,8 +30,8 @@ class SettingsModel(QObject):
 
         self._game_location: Optional[Path] = None
         self._config_folder_location: Optional[Path] = None
-        self._steam_mods_folder_location: str = str()
-        self._local_mods_folder_location: str = str()
+        self._steam_mods_folder_location: Optional[Path] = None
+        self._local_mods_folder_location: Optional[Path] = None
 
         self._sorting_algorithm: "SettingsModel.SortingAlgorithm" = (
             SettingsModel.SortingAlgorithm.NONE
@@ -46,8 +46,8 @@ class SettingsModel(QObject):
     def _apply_default_settings(self) -> None:
         self._game_location = None
         self._config_folder_location = None
-        self._steam_mods_folder_location = ""
-        self._local_mods_folder_location = ""
+        self._steam_mods_folder_location = None
+        self._local_mods_folder_location = None
 
         self._sorting_algorithm = SettingsModel.SortingAlgorithm.ALPHABETICAL
 
@@ -78,32 +78,24 @@ class SettingsModel(QObject):
             self.changed.emit()
 
     @property
-    def steam_mods_folder_location(self) -> str:
+    def steam_mods_folder_location(self) -> Optional[Path]:
         return self._steam_mods_folder_location
 
     @steam_mods_folder_location.setter
-    def steam_mods_folder_location(self, value: str) -> None:
+    def steam_mods_folder_location(self, value: Optional[Path]) -> None:
         if self._steam_mods_folder_location != value:
             self._steam_mods_folder_location = value
             self.changed.emit()
 
     @property
-    def steam_mods_folder_location_path(self) -> Path:
-        return Path(self._steam_mods_folder_location)
-
-    @property
-    def local_mods_folder_location(self) -> str:
+    def local_mods_folder_location(self) -> Optional[Path]:
         return self._local_mods_folder_location
 
     @local_mods_folder_location.setter
-    def local_mods_folder_location(self, value: str) -> None:
+    def local_mods_folder_location(self, value: Optional[Path]) -> None:
         if self._local_mods_folder_location != value:
             self._local_mods_folder_location = value
             self.changed.emit()
-
-    @property
-    def local_mods_folder_location_path(self) -> Path:
-        return Path(self._local_mods_folder_location)
 
     @property
     def sorting_algorithm(self) -> "SettingsModel.SortingAlgorithm":
@@ -126,17 +118,13 @@ class SettingsModel(QObject):
             self.changed.emit()
 
     @property
-    def game_data_location(self) -> str:
+    def game_data_location(self) -> Optional[Path]:
         if self.game_location is None:
-            return ""
+            return None
         if SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
-            return str(self.game_location / "Data")
+            return self.game_location / "Data"
         else:
-            return str(self.game_location.parent / "Data")
-
-    @property
-    def game_data_location_path(self) -> Path:
-        return Path(self.game_data_location)
+            return self.game_location.parent / "Data"
 
     def save(self) -> None:
         with open(str(self.settings_file_path), "w") as file:
@@ -156,8 +144,12 @@ class SettingsModel(QObject):
             "config_folder_location": str(self._config_folder_location)
             if self._config_folder_location
             else "",
-            "steam_mods_folder_location": self._steam_mods_folder_location,
-            "local_mods_folder_location": self._local_mods_folder_location,
+            "steam_mods_folder_location": str(self._steam_mods_folder_location)
+            if self._steam_mods_folder_location
+            else "",
+            "local_mods_folder_location": str(self._local_mods_folder_location)
+            if self._local_mods_folder_location
+            else "",
             "sorting_algorithm": self._sorting_algorithm.name,
             "debug_logging": self._debug_logging,
         }
@@ -175,8 +167,19 @@ class SettingsModel(QObject):
         else:
             self._config_folder_location = None
 
-        self._steam_mods_folder_location = data.get("steam_mods_folder_location", "")
-        self._local_mods_folder_location = data.get("local_mods_folder_location", "")
+        if data.get("steam_mods_folder_location") != "":
+            self._steam_mods_folder_location = Path(
+                data["steam_mods_folder_location"]
+            ).resolve()
+        else:
+            self._steam_mods_folder_location = None
+
+        if data.get("local_mods_folder_location") != "":
+            self._local_mods_folder_location = Path(
+                data["local_mods_folder_location"]
+            ).resolve()
+        else:
+            self._local_mods_folder_location = None
 
         sorting_algorithm_str = data.get("sorting_algorithm", "ALPHABETICAL")
         self._sorting_algorithm = SettingsModel.SortingAlgorithm[sorting_algorithm_str]

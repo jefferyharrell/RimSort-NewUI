@@ -13,37 +13,37 @@ class TestSettings(TestCase):
         self.prefs = SettingsModel()
 
     def test_apply_default_settings(self) -> None:
-        self.prefs.game_location = Path(".")
-        self.prefs.config_folder_location = Path(".")
-        self.prefs.steam_mods_folder_location = "non_default_value"
-        self.prefs.local_mods_folder_location = "non_default_value"
+        self.prefs.game_location = Path("non-default value")
+        self.prefs.config_folder_location = Path("non-default value")
+        self.prefs.steam_mods_folder_location = Path("non-default value")
+        self.prefs.local_mods_folder_location = Path("non-default value")
         self.prefs.sorting_algorithm = SettingsModel.SortingAlgorithm.TOPOLOGICAL
         self.prefs.debug_logging = True
         self.prefs.apply_default_settings()
         self.assertEqual(self.prefs.game_location, None)
         self.assertEqual(self.prefs.config_folder_location, None)
-        self.assertEqual(self.prefs.steam_mods_folder_location, "")
-        self.assertEqual(self.prefs.local_mods_folder_location, "")
+        self.assertEqual(self.prefs.steam_mods_folder_location, None)
+        self.assertEqual(self.prefs.local_mods_folder_location, None)
         self.assertEqual(
             self.prefs.sorting_algorithm, SettingsModel.SortingAlgorithm.ALPHABETICAL
         )
         self.assertEqual(self.prefs.debug_logging, False)
 
     def test_game_folder(self) -> None:
-        self.prefs.game_location = Path(".")
-        self.assertEqual(self.prefs.game_location, Path("."))
+        self.prefs.game_location = Path("test path")
+        self.assertEqual(self.prefs.game_location, Path("test path"))
 
     def test_config_folder(self) -> None:
-        self.prefs.config_folder_location = Path(".")
-        self.assertEqual(self.prefs.config_folder_location, Path("."))
+        self.prefs.config_folder_location = Path("test path")
+        self.assertEqual(self.prefs.config_folder_location, Path("test path"))
 
     def test_steam_mods_folder(self) -> None:
-        self.prefs.steam_mods_folder_location = "test_path"
-        self.assertEqual(self.prefs.steam_mods_folder_location, "test_path")
+        self.prefs.steam_mods_folder_location = Path("test path")
+        self.assertEqual(self.prefs.steam_mods_folder_location, Path("test path"))
 
     def test_local_mods_folder(self) -> None:
-        self.prefs.local_mods_folder_location = "test_path"
-        self.assertEqual(self.prefs.local_mods_folder_location, "test_path")
+        self.prefs.local_mods_folder_location = Path("test path")
+        self.assertEqual(self.prefs.local_mods_folder_location, Path("test path"))
 
     def test_sorting_algorithm(self) -> None:
         self.prefs.sorting_algorithm = SettingsModel.SortingAlgorithm.TOPOLOGICAL
@@ -63,7 +63,7 @@ class TestSettings(TestCase):
 
     def test_load(self) -> None:
         mock_data = {
-            "game_location": ".",
+            "game_location": "mock_game_location",
             "config_folder_location": "mock_config_folder_location",
             "steam_mods_folder_location": "mock_steam_mods_folder_location",
             "local_mods_folder_location": "mock_local_mods_folder_location",
@@ -74,15 +74,18 @@ class TestSettings(TestCase):
         with patch("builtins.open", m):
             self.prefs.load()
         m.assert_called_once_with(str(self.prefs.settings_file_path), "r")
-        self.assertEqual(self.prefs.game_location, Path())
+        self.assertEqual(self.prefs.game_location, Path("mock_game_location").resolve())
         self.assertEqual(
-            self.prefs.config_folder_location, "mock_config_folder_location"
+            self.prefs.config_folder_location,
+            Path("mock_config_folder_location").resolve(),
         )
         self.assertEqual(
-            self.prefs.steam_mods_folder_location, "mock_steam_mods_folder_location"
+            self.prefs.steam_mods_folder_location,
+            Path("mock_steam_mods_folder_location").resolve(),
         )
         self.assertEqual(
-            self.prefs.local_mods_folder_location, "mock_local_mods_folder_location"
+            self.prefs.local_mods_folder_location,
+            Path("mock_local_mods_folder_location").resolve(),
         )
         self.assertEqual(
             self.prefs.sorting_algorithm, SettingsModel.SortingAlgorithm.ALPHABETICAL

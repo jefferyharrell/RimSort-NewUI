@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from PySide6.QtCore import QRunnable
 from loguru import logger
@@ -10,7 +10,7 @@ from runners.runner_signals import RunnerSignals
 
 
 class ModsFromFoldersRunner(QRunnable):
-    def __init__(self, from_folders: List[Path]) -> None:
+    def __init__(self, from_folders: List[Optional[Path]]) -> None:
         super().__init__()
         self.signals = RunnerSignals()
         self.from_folders = from_folders
@@ -19,7 +19,7 @@ class ModsFromFoldersRunner(QRunnable):
         data: List[Mod] = []
 
         for folder in self.from_folders:
-            if not folder.exists() or not folder.is_dir():
+            if folder is None or not folder.exists() or not folder.is_dir():
                 continue
 
             for sub_folder in folder.iterdir():
