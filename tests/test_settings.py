@@ -10,56 +10,56 @@ from utilities.app_info import AppInfo
 class TestSettings(TestCase):
     def setUp(self) -> None:
         AppInfo(__file__)
-        self.prefs = Settings()
+        self.settings = Settings()
 
     def test_apply_default_settings(self) -> None:
-        self.prefs.game_location = Path("non-default value")
-        self.prefs.config_folder_location = Path("non-default value")
-        self.prefs.steam_mods_folder_location = Path("non-default value")
-        self.prefs.local_mods_folder_location = Path("non-default value")
-        self.prefs.sorting_algorithm = Settings.SortingAlgorithm.TOPOLOGICAL
-        self.prefs.debug_logging = True
-        self.prefs.apply_default_settings()
-        self.assertEqual(self.prefs.game_location, None)
-        self.assertEqual(self.prefs.config_folder_location, None)
-        self.assertEqual(self.prefs.steam_mods_folder_location, None)
-        self.assertEqual(self.prefs.local_mods_folder_location, None)
+        self.settings.game_location = Path("non-default value")
+        self.settings.config_folder_location = Path("non-default value")
+        self.settings.steam_mods_folder_location = Path("non-default value")
+        self.settings.local_mods_folder_location = Path("non-default value")
+        self.settings.sorting_algorithm = Settings.SortingAlgorithm.TOPOLOGICAL
+        self.settings.debug_logging = True
+        self.settings.apply_default_settings()
+        self.assertEqual(self.settings.game_location, None)
+        self.assertEqual(self.settings.config_folder_location, None)
+        self.assertEqual(self.settings.steam_mods_folder_location, None)
+        self.assertEqual(self.settings.local_mods_folder_location, None)
         self.assertEqual(
-            self.prefs.sorting_algorithm, Settings.SortingAlgorithm.ALPHABETICAL
+            self.settings.sorting_algorithm, Settings.SortingAlgorithm.ALPHABETICAL
         )
-        self.assertEqual(self.prefs.debug_logging, False)
+        self.assertEqual(self.settings.debug_logging, False)
 
     def test_game_folder(self) -> None:
-        self.prefs.game_location = Path("test path")
-        self.assertEqual(self.prefs.game_location, Path("test path"))
+        self.settings.game_location = Path("test path")
+        self.assertEqual(self.settings.game_location, Path("test path"))
 
     def test_config_folder(self) -> None:
-        self.prefs.config_folder_location = Path("test path")
-        self.assertEqual(self.prefs.config_folder_location, Path("test path"))
+        self.settings.config_folder_location = Path("test path")
+        self.assertEqual(self.settings.config_folder_location, Path("test path"))
 
     def test_steam_mods_folder(self) -> None:
-        self.prefs.steam_mods_folder_location = Path("test path")
-        self.assertEqual(self.prefs.steam_mods_folder_location, Path("test path"))
+        self.settings.steam_mods_folder_location = Path("test path")
+        self.assertEqual(self.settings.steam_mods_folder_location, Path("test path"))
 
     def test_local_mods_folder(self) -> None:
-        self.prefs.local_mods_folder_location = Path("test path")
-        self.assertEqual(self.prefs.local_mods_folder_location, Path("test path"))
+        self.settings.local_mods_folder_location = Path("test path")
+        self.assertEqual(self.settings.local_mods_folder_location, Path("test path"))
 
     def test_sorting_algorithm(self) -> None:
-        self.prefs.sorting_algorithm = Settings.SortingAlgorithm.TOPOLOGICAL
+        self.settings.sorting_algorithm = Settings.SortingAlgorithm.TOPOLOGICAL
         self.assertEqual(
-            self.prefs.sorting_algorithm, Settings.SortingAlgorithm.TOPOLOGICAL
+            self.settings.sorting_algorithm, Settings.SortingAlgorithm.TOPOLOGICAL
         )
 
     def test_debug_logging(self) -> None:
-        self.prefs.debug_logging = True
-        self.assertEqual(self.prefs.debug_logging, True)
+        self.settings.debug_logging = True
+        self.assertEqual(self.settings.debug_logging, True)
 
     def test_save(self) -> None:
         m = mock_open()
         with patch("builtins.open", m):
-            self.prefs.save()
-        m.assert_called_once_with(str(self.prefs.settings_file), "w")
+            self.settings.save()
+        m.assert_called_once_with(str(self.settings.settings_file), "w")
 
     def test_load(self) -> None:
         mock_data = {
@@ -72,22 +72,24 @@ class TestSettings(TestCase):
         }
         m = mock_open(read_data=json.dumps(mock_data))
         with patch("builtins.open", m):
-            self.prefs.load()
-        m.assert_called_once_with(str(self.prefs.settings_file), "r")
-        self.assertEqual(self.prefs.game_location, Path("mock_game_location").resolve())
+            self.settings.load()
+        m.assert_called_once_with(str(self.settings.settings_file), "r")
         self.assertEqual(
-            self.prefs.config_folder_location,
+            self.settings.game_location, Path("mock_game_location").resolve()
+        )
+        self.assertEqual(
+            self.settings.config_folder_location,
             Path("mock_config_folder_location").resolve(),
         )
         self.assertEqual(
-            self.prefs.steam_mods_folder_location,
+            self.settings.steam_mods_folder_location,
             Path("mock_steam_mods_folder_location").resolve(),
         )
         self.assertEqual(
-            self.prefs.local_mods_folder_location,
+            self.settings.local_mods_folder_location,
             Path("mock_local_mods_folder_location").resolve(),
         )
         self.assertEqual(
-            self.prefs.sorting_algorithm, Settings.SortingAlgorithm.ALPHABETICAL
+            self.settings.sorting_algorithm, Settings.SortingAlgorithm.ALPHABETICAL
         )
-        self.assertEqual(self.prefs.debug_logging, False)
+        self.assertEqual(self.settings.debug_logging, False)
