@@ -95,7 +95,7 @@ class MenuBar(QObject):
 
         self.help_menu = self.menu_bar.addMenu("Help")
 
-        self.wiki_action = QAction("RimSort Wiki…", self)
+        self.wiki_action = QAction(f"{AppInfo().app_name} Wiki…", self)
         self.help_menu.addAction(self.wiki_action)
 
     def _do_menu_bar_non_macos(self) -> None:
@@ -165,7 +165,7 @@ class MenuBar(QObject):
 
         self.help_menu = self.menu_bar.addMenu("Help")
 
-        self.wiki_action = QAction("RimSort Wiki…", self)
+        self.wiki_action = QAction(f"{AppInfo().app_name} Wiki…", self)
         self.help_menu.addAction(self.wiki_action)
 
         self.help_menu.addSeparator()
