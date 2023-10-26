@@ -5,7 +5,6 @@ from pathlib import Path
 from typing import Dict, Any, Optional
 
 from PySide6.QtCore import QObject, Signal
-from platformdirs import user_data_dir
 
 from utilities.app_info import AppInfo
 from utilities.system_info import SystemInfo
@@ -24,9 +23,10 @@ class Settings(QObject):
     def __init__(self) -> None:
         super().__init__()
 
-        user_data_folder_location: Path = Path(user_data_dir(AppInfo().app_name))
-        user_data_folder_location.mkdir(parents=True, exist_ok=True)
-        self.settings_file_path: Path = Path(user_data_folder_location, "settings.json")
+        AppInfo().user_data_folder.mkdir(parents=True, exist_ok=True)
+        self.settings_file_path: Path = Path(
+            AppInfo().user_data_folder, "settings.json"
+        )
 
         self._game_location: Optional[Path] = None
         self._config_folder_location: Optional[Path] = None
