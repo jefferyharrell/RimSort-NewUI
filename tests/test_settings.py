@@ -59,7 +59,7 @@ class TestSettings(TestCase):
         m = mock_open()
         with patch("builtins.open", m):
             self.prefs.save()
-        m.assert_called_once_with(str(self.prefs.settings_file_path), "w")
+        m.assert_called_once_with(str(self.prefs.settings_file), "w")
 
     def test_load(self) -> None:
         mock_data = {
@@ -73,7 +73,7 @@ class TestSettings(TestCase):
         m = mock_open(read_data=json.dumps(mock_data))
         with patch("builtins.open", m):
             self.prefs.load()
-        m.assert_called_once_with(str(self.prefs.settings_file_path), "r")
+        m.assert_called_once_with(str(self.prefs.settings_file), "r")
         self.assertEqual(self.prefs.game_location, Path("mock_game_location").resolve())
         self.assertEqual(
             self.prefs.config_folder_location,

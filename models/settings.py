@@ -24,7 +24,7 @@ class Settings(QObject):
         super().__init__()
 
         AppInfo().user_data_folder.mkdir(parents=True, exist_ok=True)
-        self.settings_file_path: Path = Path(
+        self.settings_file: Path = Path(
             AppInfo().user_data_folder, "settings.json"
         )
 
@@ -127,12 +127,12 @@ class Settings(QObject):
             return self.game_location.parent / "Data"
 
     def save(self) -> None:
-        with open(str(self.settings_file_path), "w") as file:
+        with open(str(self.settings_file), "w") as file:
             json.dump(self.to_dict(), file, indent=4)
 
     def load(self) -> None:
         try:
-            with open(str(self.settings_file_path), "r") as file:
+            with open(str(self.settings_file), "r") as file:
                 data = json.load(file)
                 self.from_dict(data)
         except (FileNotFoundError, JSONDecodeError):
