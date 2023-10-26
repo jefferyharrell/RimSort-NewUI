@@ -11,7 +11,7 @@ from utilities.app_info import AppInfo
 from utilities.system_info import SystemInfo
 
 
-class SettingsModel(QObject):
+class Settings(QObject):
     @unique
     class SortingAlgorithm(Enum):
         NONE = auto()
@@ -33,8 +33,8 @@ class SettingsModel(QObject):
         self._steam_mods_folder_location: Optional[Path] = None
         self._local_mods_folder_location: Optional[Path] = None
 
-        self._sorting_algorithm: "SettingsModel.SortingAlgorithm" = (
-            SettingsModel.SortingAlgorithm.NONE
+        self._sorting_algorithm: "Settings.SortingAlgorithm" = (
+            Settings.SortingAlgorithm.NONE
         )
 
         self._debug_logging: bool = False
@@ -49,7 +49,7 @@ class SettingsModel(QObject):
         self._steam_mods_folder_location = None
         self._local_mods_folder_location = None
 
-        self._sorting_algorithm = SettingsModel.SortingAlgorithm.ALPHABETICAL
+        self._sorting_algorithm = Settings.SortingAlgorithm.ALPHABETICAL
 
         self._debug_logging = False
 
@@ -98,11 +98,11 @@ class SettingsModel(QObject):
             self.changed.emit()
 
     @property
-    def sorting_algorithm(self) -> "SettingsModel.SortingAlgorithm":
+    def sorting_algorithm(self) -> "Settings.SortingAlgorithm":
         return self._sorting_algorithm
 
     @sorting_algorithm.setter
-    def sorting_algorithm(self, value: "SettingsModel.SortingAlgorithm") -> None:
+    def sorting_algorithm(self, value: "Settings.SortingAlgorithm") -> None:
         if self._sorting_algorithm != value:
             self._sorting_algorithm = value
             self.changed.emit()
@@ -182,6 +182,6 @@ class SettingsModel(QObject):
             self._local_mods_folder_location = None
 
         sorting_algorithm_str = data.get("sorting_algorithm", "ALPHABETICAL")
-        self._sorting_algorithm = SettingsModel.SortingAlgorithm[sorting_algorithm_str]
+        self._sorting_algorithm = Settings.SortingAlgorithm[sorting_algorithm_str]
 
         self._debug_logging = bool(data.get("debug_logging", False))

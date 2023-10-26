@@ -3,14 +3,14 @@ from pathlib import Path
 from PySide6.QtCore import QObject, Slot, Qt
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
 
-from models.settings_model import SettingsModel
+from models.settings import Settings
 from utilities.event_bus import EventBus
 from utilities.system_info import SystemInfo
 from views.settings_dialog import SettingsDialog
 
 
 class SettingsController(QObject):
-    def __init__(self, model: SettingsModel, view: SettingsDialog) -> None:
+    def __init__(self, model: Settings, view: SettingsDialog) -> None:
         super().__init__()
 
         self.settings = model
@@ -245,17 +245,11 @@ class SettingsController(QObject):
     def _on_sorting_algorithm_button_toggled(self, checked: bool) -> None:
         if checked:
             if self.sender() == self.settings_dialog.alphabetical_button:
-                self.settings.sorting_algorithm = (
-                    SettingsModel.SortingAlgorithm.ALPHABETICAL
-                )
+                self.settings.sorting_algorithm = Settings.SortingAlgorithm.ALPHABETICAL
             elif self.sender() == self.settings_dialog.topological_button:
-                self.settings.sorting_algorithm = (
-                    SettingsModel.SortingAlgorithm.TOPOLOGICAL
-                )
+                self.settings.sorting_algorithm = Settings.SortingAlgorithm.TOPOLOGICAL
             elif self.sender() == self.settings_dialog.radiological_button:
-                self.settings.sorting_algorithm = (
-                    SettingsModel.SortingAlgorithm.RADIOLOGICAL
-                )
+                self.settings.sorting_algorithm = Settings.SortingAlgorithm.RADIOLOGICAL
 
     @Slot()
     def _on_debug_logging_button_toggled(self, checked: bool) -> None:
@@ -363,20 +357,11 @@ class SettingsController(QObject):
         )
 
         # Sorting tab
-        if (
-            self.settings.sorting_algorithm
-            == SettingsModel.SortingAlgorithm.ALPHABETICAL
-        ):
+        if self.settings.sorting_algorithm == Settings.SortingAlgorithm.ALPHABETICAL:
             self.settings_dialog.alphabetical_button.setChecked(True)
-        elif (
-            self.settings.sorting_algorithm
-            == SettingsModel.SortingAlgorithm.TOPOLOGICAL
-        ):
+        elif self.settings.sorting_algorithm == Settings.SortingAlgorithm.TOPOLOGICAL:
             self.settings_dialog.topological_button.setChecked(True)
-        elif (
-            self.settings.sorting_algorithm
-            == SettingsModel.SortingAlgorithm.RADIOLOGICAL
-        ):
+        elif self.settings.sorting_algorithm == Settings.SortingAlgorithm.RADIOLOGICAL:
             self.settings_dialog.radiological_button.setChecked(True)
 
         # Advanced tab

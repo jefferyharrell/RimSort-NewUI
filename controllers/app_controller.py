@@ -9,7 +9,7 @@ from controllers.main_window_controller import MainWindowController
 from controllers.settings_controller import SettingsController
 from models.main_window_model import MainWindowModel
 from models.mod_database import ModDatabase
-from models.settings_model import SettingsModel
+from models.settings import Settings
 from utilities.app_info import AppInfo
 from utilities.event_bus import EventBus
 from utilities.game_info import GameInfo
@@ -43,7 +43,7 @@ class AppController(QObject):
         #     stylesheet + "QWidget { background-color: rgba(255, 255, 255, 25); }"
         # )
 
-        self.settings_model = SettingsModel()
+        self.settings_model = Settings()
         self.settings_dialog = SettingsDialog()
         self.settings_controller = SettingsController(
             model=self.settings_model, view=self.settings_dialog
