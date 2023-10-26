@@ -10,9 +10,6 @@ class GameInfo:
     def __new__(
         cls, settings_controller: Optional[SettingsController] = None
     ) -> "GameInfo":
-        """
-        Ensure a single instance of ModDatabase is created (Singleton pattern).
-        """
         if cls._instance is None:
             cls._instance = super(GameInfo, cls).__new__(cls)
             cls._instance._is_initialized = False
@@ -21,9 +18,6 @@ class GameInfo:
     def __init__(
         self, settings_controller: Optional[SettingsController] = None
     ) -> None:
-        """
-        Initialize the ModDatabase.
-        """
         if hasattr(self, "_is_initialized") and self._is_initialized:
             return
 
