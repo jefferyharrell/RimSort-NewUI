@@ -28,15 +28,14 @@ class GameInfo:
 
         self._version: str = ""
 
-        if settings_controller.settings_model.game_location is not None:
+        if settings_controller.settings.game_location is not None:
             if SystemInfo().operating_system == SystemInfo.OperatingSystem.MACOS:
                 version_path = (
-                    settings_controller.settings_model.game_location / "version.txt"
+                    settings_controller.settings.game_location / "version.txt"
                 )
             else:
                 version_path = (
-                    settings_controller.settings_model.game_location.parent
-                    / "version.txt"
+                    settings_controller.settings.game_location.parent / "version.txt"
                 )
             if version_path.exists() and version_path.is_file():
                 version_text = version_path.read_text()

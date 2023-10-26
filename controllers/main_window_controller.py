@@ -79,9 +79,9 @@ class MainWindowController(QObject):
 
     @Slot()
     def _on_database_ready(self) -> None:
-        if self.settings_controller.settings_model.config_folder_location is not None:
+        if self.settings_controller.settings.config_folder_location is not None:
             self.main_window_model.active_mod_list.from_xml(
-                self.settings_controller.settings_model.config_folder_location
+                self.settings_controller.settings.config_folder_location
                 / "ModsConfig.xml"
             )
 
