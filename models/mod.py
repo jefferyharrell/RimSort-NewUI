@@ -2,7 +2,7 @@ import uuid
 from pathlib import Path
 from typing import Optional, List
 
-from PySide6.QtGui import QStandardItem, Qt
+from PySide6.QtGui import QStandardItem, Qt, QPixmap
 
 
 class Mod(QStandardItem):
@@ -40,6 +40,8 @@ class Mod(QStandardItem):
         )
         self._description = description
         self._preview_image_path = preview_image_path
+
+        self._preview_pixmap: Optional[QPixmap] = None
 
         if self._name == "" and self._package_id.lower() == "ludeon.rimworld":
             self._name = "Core"
@@ -124,6 +126,12 @@ class Mod(QStandardItem):
     @preview_image_path.setter
     def preview_image_path(self, value: Path) -> None:
         self._preview_image_path = value
+
+    @property
+    def preview_pixmap(self) -> Optional[QPixmap]:
+        if self._preview_pixmap is None and self._preview_image_path.exists():
+            self._preview_pixmap = QPixmap(str(self._preview_image_path))
+        return self._preview_pixmap
 
     def __str__(self) -> str:
         """
