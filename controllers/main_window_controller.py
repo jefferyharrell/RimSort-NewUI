@@ -1,5 +1,3 @@
-from typing import cast
-
 from PySide6.QtCore import (
     QObject,
     Slot,
@@ -128,7 +126,13 @@ class MainWindowController(QObject):
             else self.main_window.inactive_mods_list_view
         )
 
-        self._move_mod_to_list_view(index, source_list_view, target_list_view)
+        source_model = source_list_view.model()
+        if isinstance(source_model, QSortFilterProxyModel):
+            index = source_model.mapToSource(index)
+
+        MainWindowController.move_mod_between_list_views(
+            source_list_view, index, target_list_view
+        )
 
     @Slot(QItemSelection, QItemSelection)
     def _on_mods_list_view_selection_changed(
@@ -185,48 +189,48 @@ class MainWindowController(QObject):
         self.main_window.selected_mod_description.hide()
 
     @staticmethod
-    def _move_mod_to_list_view(
-        index: QModelIndex,
+    def get_standard_item_model(view: QListView) -> QStandardItemModel:
+        """Retrieve the underlying QStandardItemModel from a QListView."""
+        model = view.model()
+
+        if isinstance(model, QSortFilterProxyModel):
+            model = model.sourceModel()
+
+        if not isinstance(model, QStandardItemModel):
+            raise TypeError(
+                f"Expected model of type QStandardItemModel, but got {type(model)}"
+            )
+
+        return model
+
+    @staticmethod
+    def move_mod_between_list_views(
         source_list_view: QListView,
+        index: QModelIndex,
         target_list_view: QListView,
     ) -> None:
-        # Ensure the source_list_view and target_list_view are of type QListView
-        if not isinstance(source_list_view, QListView):
+        # Ensure the views are of type QListView
+        if not isinstance(source_list_view, QListView) or not isinstance(
+            target_list_view, QListView
+        ):
             raise TypeError(
-                f"Expected source_list_view of type QListView, but got {type(source_list_view)}"
-            )
-        if not isinstance(target_list_view, QListView):
-            raise TypeError(
-                f"Expected target_list_view of type QListView, but got {type(target_list_view)}"
+                "Both source_list_view and target_list_view must be of type QListView"
             )
 
         # Retrieve the item from the source model
-        source_model = cast(QStandardItemModel, source_list_view.model())
+        source_model = MainWindowController.get_standard_item_model(source_list_view)
 
-        # If the model is a QSortFilterProxyModel, get its source model
-        if isinstance(source_model, QSortFilterProxyModel):
-            index = source_model.mapToSource(index)
-            source_model = cast(QStandardItemModel, source_model.sourceModel())
-
-        # Ensure the source model is a QStandardItemModel
-        if not isinstance(source_model, QStandardItemModel):
-            raise TypeError(
-                f"Expected source_model of type QStandardItemModel, but got {type(source_model)}"
-            )
-
-        # Retrieve the item from the source model
+        # Retrieve and clone the item
         item = source_model.itemFromIndex(index)
-
-        # Clone the item
         item_clone = item.clone()
 
         # Remove the item from the source model
         source_model.removeRow(index.row())
 
-        # Add the item to the bottom of the target model
-        target_model = cast(QStandardItemModel, target_list_view.model())
-        if isinstance(target_model, QSortFilterProxyModel):
-            target_model = cast(QStandardItemModel, target_model.sourceModel())
+        # Add the item to the target model
+        target_model = MainWindowController.get_standard_item_model(
+            target_list_view
+        )  # Use the class name to call the static method
         target_model.appendRow(item_clone)
 
     @Slot()
