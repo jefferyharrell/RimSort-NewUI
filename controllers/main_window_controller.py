@@ -157,12 +157,13 @@ class MainWindowController(QObject):
         if not isinstance(mod, Mod):
             return
 
-        if mod.preview_image_path.exists():
+        if mod.preview_pixmap is not None:
             desired_width = self.main_window.selected_mod_preview_image.width()
-            pixmap = QPixmap(str(mod.preview_image_path)).scaledToWidth(
-                desired_width, Qt.TransformationMode.SmoothTransformation
+            self.main_window.selected_mod_preview_image.setPixmap(
+                mod.preview_pixmap.scaledToWidth(
+                    desired_width, Qt.TransformationMode.SmoothTransformation
+                )
             )
-            self.main_window.selected_mod_preview_image.setPixmap(pixmap)
 
         self.main_window.selected_mod_name_label.setText(mod.name)
 
