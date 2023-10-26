@@ -1,5 +1,4 @@
 from pathlib import Path
-from typing import Optional
 
 from PySide6.QtCore import QObject, Slot, Qt
 from PySide6.QtWidgets import QFileDialog, QMessageBox, QApplication
@@ -19,91 +18,13 @@ class SettingsController(QObject):
 
         self.user_home_path: Path = Path.home()
 
-        EventBus().menu_bar_settings_triggered.connect(self.settings_dialog.exec)
-
-        # Global buttons
-        self.settings_dialog.global_reset_to_defaults_button.clicked.connect(
-            self._on_global_reset_to_defaults_button_clicked
-        )
-        self.settings_dialog.global_cancel_button.clicked.connect(
-            self._on_global_cancel_button_clicked
-        )
-        self.settings_dialog.global_ok_button.clicked.connect(
-            self._on_global_ok_button_clicked
-        )
-
-        # Locations tab
-        self.settings_dialog.game_location_choose_button.clicked.connect(
-            self._on_choose_game_location
-        )
-        self.settings_dialog.config_folder_location_choose_button.clicked.connect(
-            self._on_choose_config_folder_location
-        )
-        self.settings_dialog.steam_mods_folder_location_choose_button.clicked.connect(
-            self._on_choose_steam_mods_folder_location
-        )
-        self.settings_dialog.local_mods_folder_location_choose_button.clicked.connect(
-            self._on_choose_local_mods_folder_location
-        )
-        self.settings_dialog.locations_clear_button.clicked.connect(
-            self._on_locations_clear_button_clicked
-        )
-        self.settings_dialog.locations_autodetect_button.clicked.connect(
-            self._on_locations_autodetect_button_clicked
-        )
-
-        # Databases tab
-        self.settings_dialog.community_rules_db_none_radio.clicked.connect(
-            self._on_community_rules_db_radio_clicked
-        )
-        self.settings_dialog.community_rules_db_github_radio.clicked.connect(
-            self._on_community_rules_db_radio_clicked
-        )
-        self.settings_dialog.community_rules_db_local_file_radio.clicked.connect(
-            self._on_community_rules_db_radio_clicked
-        )
-        self.settings_dialog.community_rules_db_local_file_choose_button.clicked.connect(
-            self._on_community_rules_db_local_file_choose_button_clicked
-        )
-        self.settings_dialog.steam_workshop_db_none_radio.clicked.connect(
-            self._on_steam_workshop_db_radio_clicked
-        )
-        self.settings_dialog.steam_workshop_db_github_radio.clicked.connect(
-            self._on_steam_workshop_db_radio_clicked
-        )
-        self.settings_dialog.steam_workshop_db_local_file_radio.clicked.connect(
-            self._on_steam_workshop_db_radio_clicked
-        )
-
-        # Sorting tab
-        self.settings_dialog.alphabetical_button.toggled.connect(
-            self._on_sorting_algorithm_button_toggled
-        )
-        self.settings_dialog.topological_button.toggled.connect(
-            self._on_sorting_algorithm_button_toggled
-        )
-        self.settings_dialog.radiological_button.toggled.connect(
-            self._on_sorting_algorithm_button_toggled
-        )
-
-        # Advanced tab
-        self.settings_dialog.debug_logging_checkbox.toggled.connect(
-            self._on_debug_logging_button_toggled
-        )
-
-        self.settings_model.changed.connect(self._on_settings_changed)
+        self._connect_signals()
 
         self.settings_model.load()
         self._update_view_from_model()
 
     def show_settings_dialog(self) -> None:
         self.settings_dialog.exec()
-
-    @property
-    def game_location(self) -> Optional[Path]:
-        return self.settings_model.game_location
-
-    # region Slots
 
     @Slot()
     def _on_settings_changed(self) -> None:
@@ -278,6 +199,7 @@ class SettingsController(QObject):
         if file_name != "":
             self.settings_dialog.community_rules_db_local_file.setText(file_name)
 
+    @Slot()
     def _on_steam_workshop_db_radio_clicked(self, checked: bool) -> None:
         if (
             self.sender() == self.settings_dialog.steam_workshop_db_none_radio
@@ -342,9 +264,80 @@ class SettingsController(QObject):
         else:
             self.settings_model.debug_logging = False
 
-    # endregion
+    def _connect_signals(self) -> None:
+        EventBus().menu_bar_settings_triggered.connect(self.settings_dialog.exec)
 
-    # region Private methods
+        # Global buttons
+        self.settings_dialog.global_reset_to_defaults_button.clicked.connect(
+            self._on_global_reset_to_defaults_button_clicked
+        )
+        self.settings_dialog.global_cancel_button.clicked.connect(
+            self._on_global_cancel_button_clicked
+        )
+        self.settings_dialog.global_ok_button.clicked.connect(
+            self._on_global_ok_button_clicked
+        )
+
+        # Locations tab
+        self.settings_dialog.game_location_choose_button.clicked.connect(
+            self._on_choose_game_location
+        )
+        self.settings_dialog.config_folder_location_choose_button.clicked.connect(
+            self._on_choose_config_folder_location
+        )
+        self.settings_dialog.steam_mods_folder_location_choose_button.clicked.connect(
+            self._on_choose_steam_mods_folder_location
+        )
+        self.settings_dialog.local_mods_folder_location_choose_button.clicked.connect(
+            self._on_choose_local_mods_folder_location
+        )
+        self.settings_dialog.locations_clear_button.clicked.connect(
+            self._on_locations_clear_button_clicked
+        )
+        self.settings_dialog.locations_autodetect_button.clicked.connect(
+            self._on_locations_autodetect_button_clicked
+        )
+
+        # Databases tab
+        self.settings_dialog.community_rules_db_none_radio.clicked.connect(
+            self._on_community_rules_db_radio_clicked
+        )
+        self.settings_dialog.community_rules_db_github_radio.clicked.connect(
+            self._on_community_rules_db_radio_clicked
+        )
+        self.settings_dialog.community_rules_db_local_file_radio.clicked.connect(
+            self._on_community_rules_db_radio_clicked
+        )
+        self.settings_dialog.community_rules_db_local_file_choose_button.clicked.connect(
+            self._on_community_rules_db_local_file_choose_button_clicked
+        )
+        self.settings_dialog.steam_workshop_db_none_radio.clicked.connect(
+            self._on_steam_workshop_db_radio_clicked
+        )
+        self.settings_dialog.steam_workshop_db_github_radio.clicked.connect(
+            self._on_steam_workshop_db_radio_clicked
+        )
+        self.settings_dialog.steam_workshop_db_local_file_radio.clicked.connect(
+            self._on_steam_workshop_db_radio_clicked
+        )
+
+        # Sorting tab
+        self.settings_dialog.alphabetical_button.toggled.connect(
+            self._on_sorting_algorithm_button_toggled
+        )
+        self.settings_dialog.topological_button.toggled.connect(
+            self._on_sorting_algorithm_button_toggled
+        )
+        self.settings_dialog.radiological_button.toggled.connect(
+            self._on_sorting_algorithm_button_toggled
+        )
+
+        # Advanced tab
+        self.settings_dialog.debug_logging_checkbox.toggled.connect(
+            self._on_debug_logging_button_toggled
+        )
+
+        self.settings_model.changed.connect(self._on_settings_changed)
 
     def _update_view_from_model(self) -> None:
         # Locations tab
@@ -443,5 +436,3 @@ class SettingsController(QObject):
             self.settings_model.local_mods_folder_location = (
                 local_mods_folder_location_candidate
             )
-
-    # endregion
