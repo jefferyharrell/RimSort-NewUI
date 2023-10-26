@@ -63,10 +63,10 @@ class TestSettings(TestCase):
 
     def test_load(self) -> None:
         mock_data = {
-            "game_location": "mock_game_location",
-            "config_folder_location": "mock_config_folder_location",
-            "steam_mods_folder_location": "mock_steam_mods_folder_location",
-            "local_mods_folder_location": "mock_local_mods_folder_location",
+            "game_location": "/mock_game_location",
+            "config_folder_location": "/mock_config_folder_location",
+            "steam_mods_folder_location": "/mock_steam_mods_folder_location",
+            "local_mods_folder_location": "/mock_local_mods_folder_location",
             "sorting_algorithm": "ALPHABETICAL",
             "debug_logging": False,
         }
@@ -74,20 +74,18 @@ class TestSettings(TestCase):
         with patch("builtins.open", m):
             self.settings.load()
         m.assert_called_once_with(str(self.settings.settings_file), "r")
-        self.assertEqual(
-            self.settings.game_location, Path("mock_game_location").resolve()
-        )
+        self.assertEqual(self.settings.game_location, Path("/mock_game_location"))
         self.assertEqual(
             self.settings.config_folder_location,
-            Path("mock_config_folder_location").resolve(),
+            Path("/mock_config_folder_location"),
         )
         self.assertEqual(
             self.settings.steam_mods_folder_location,
-            Path("mock_steam_mods_folder_location").resolve(),
+            Path("/mock_steam_mods_folder_location"),
         )
         self.assertEqual(
             self.settings.local_mods_folder_location,
-            Path("mock_local_mods_folder_location").resolve(),
+            Path("/mock_local_mods_folder_location"),
         )
         self.assertEqual(
             self.settings.sorting_algorithm, Settings.SortingAlgorithm.ALPHABETICAL
