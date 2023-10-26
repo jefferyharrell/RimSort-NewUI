@@ -13,7 +13,6 @@ from utilities.system_info import SystemInfo
 class Settings(QObject):
     @unique
     class SortingAlgorithm(Enum):
-        NONE = auto()
         ALPHABETICAL = auto()
         TOPOLOGICAL = auto()
         RADIOLOGICAL = auto()
@@ -23,10 +22,7 @@ class Settings(QObject):
     def __init__(self) -> None:
         super().__init__()
 
-        AppInfo().user_data_folder.mkdir(parents=True, exist_ok=True)
-        self.settings_file: Path = Path(
-            AppInfo().user_data_folder, "settings.json"
-        )
+        self.settings_file: Path = Path(AppInfo().user_data_folder, "settings.json")
 
         self._game_location: Optional[Path] = None
         self._config_folder_location: Optional[Path] = None
@@ -34,12 +30,12 @@ class Settings(QObject):
         self._local_mods_folder_location: Optional[Path] = None
 
         self._sorting_algorithm: "Settings.SortingAlgorithm" = (
-            Settings.SortingAlgorithm.NONE
+            Settings.SortingAlgorithm.ALPHABETICAL
         )
 
         self._debug_logging: bool = False
 
-        self._game_data_location: str = ""
+        self._game_data_location: Optional[Path] = None
 
         self._apply_default_settings()
 
@@ -155,26 +151,26 @@ class Settings(QObject):
         }
 
     def from_dict(self, data: Dict[str, str]) -> None:
-        if data.get("game_location") != "":
+        if data.get("game_location", "") != "":
             self._game_location = Path(data["game_location"]).resolve()
         else:
             self._game_location = None
 
-        if data.get("config_folder_location") != "":
+        if data.get("config_folder_location", "") != "":
             self._config_folder_location = Path(
                 data["config_folder_location"]
             ).resolve()
         else:
             self._config_folder_location = None
 
-        if data.get("steam_mods_folder_location") != "":
+        if data.get("steam_mods_folder_location", "") != "":
             self._steam_mods_folder_location = Path(
                 data["steam_mods_folder_location"]
             ).resolve()
         else:
             self._steam_mods_folder_location = None
 
-        if data.get("local_mods_folder_location") != "":
+        if data.get("local_mods_folder_location", "") != "":
             self._local_mods_folder_location = Path(
                 data["local_mods_folder_location"]
             ).resolve()

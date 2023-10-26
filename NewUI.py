@@ -10,8 +10,6 @@ if __name__ == "__main__":
     AppInfo(__file__)
 
     log_path = AppInfo().user_log_folder / f"{AppInfo().app_name}.log"
-    if not AppInfo().user_log_folder.exists():
-        AppInfo().user_log_folder.mkdir(parents=True, exist_ok=True)
 
     logger.info("Starting application")
 

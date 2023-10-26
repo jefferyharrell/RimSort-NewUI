@@ -35,6 +35,9 @@ class AppInfo:
         self._user_data_folder = Path(platform_dirs.user_data_dir)
         self._user_log_folder = Path(platform_dirs.user_log_dir)
 
+        self._user_data_folder.mkdir(parents=True, exist_ok=True)
+        self._user_log_folder.mkdir(parents=True, exist_ok=True)
+
         self._is_initialized: bool = True
 
     @property
